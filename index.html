@@ -131,11 +131,13 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 #stage { position: absolute; inset: -6px -6px -6px 0; border-radius: 8px; overflow: hidden; cursor: pointer; background: #0d0a26; border: 1px solid rgba(70,160,255,.25); box-shadow: inset 0 0 40px rgba(31,123,255,.25); }
 #stage canvas { display: block; width: 100%; height: 100%; }
 .stage-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
-.stage-fallback i { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #fff 0%, #FFE08A 12%, #FF9E45 32%, rgba(255, 79, 176, .35) 55%, transparent 70%); box-shadow: 0 0 80px rgba(255, 79, 176, .55); }
+.stage-fallback i { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #9ff3ff 0%, #2FE6C8 18%, #1f7bff 40%, rgba(180, 140, 255, .3) 58%, transparent 70%); box-shadow: 0 0 80px rgba(255, 79, 176, .55); }
 .coretxt { position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
-.coretxt b { display: block; font: 800 clamp(26px, 3.4vw, 44px)/1 var(--head); letter-spacing: .16em; color: #fff; text-shadow: 0 0 16px #FF9E45, 0 0 38px rgba(255, 79, 176, .9); padding-left: .16em; }
-.coretxt small { display: block; margin-top: 8px; font: 700 clamp(11px, 1.1vw, 14px)/1 var(--head); letter-spacing: .3em; color: #FFE08A; text-shadow: 0 0 10px #FF4FB0; padding-left: .3em; }
-.coretxt em { display: block; margin-top: 6px; font: 600 11px/1 var(--mono); font-style: normal; color: var(--mut); }
+.coretxt b { display: block; font: 800 clamp(26px, 3.4vw, 44px)/1 var(--head); letter-spacing: .16em; color: #fff; padding-left: .16em;
+  text-shadow: 0 2px 4px rgba(7, 5, 26, .95), 0 0 2px rgba(7, 5, 26, 1), 0 0 18px #2FE6C8, 0 0 40px rgba(111, 195, 255, .9); }
+.coretxt small { display: inline-block; margin-top: 10px; padding: 5px 10px 5px calc(10px + .3em); border-radius: 6px; font: 700 clamp(11px, 1.1vw, 14px)/1 var(--head); letter-spacing: .3em; color: #FFD25A; background: rgba(7, 5, 26, .72); border: 1px solid rgba(255, 210, 90, .55); text-shadow: 0 0 8px rgba(255, 210, 90, .6); }
+.coretxt em { display: table; margin: 8px auto 0; padding: 6px 12px; border-radius: 999px; font: 700 clamp(11px, 1vw, 13px)/1 var(--body); letter-spacing: .06em; font-style: normal; color: #fff; text-transform: uppercase;
+  background: rgba(7, 5, 26, .78); border: 1px solid rgba(47, 230, 200, .65); box-shadow: 0 0 14px rgba(47, 230, 200, .35); }
 .corelink { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); all: unset; }
 .enter-core { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); cursor: pointer; padding: 10px 18px; font: 700 11px/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: #0B0822;
   background: linear-gradient(180deg, #FFE08A, #FF9E45); border: 0; border-radius: 6px; box-shadow: 0 0 18px rgba(255, 210, 90, .55); text-decoration: none; white-space: nowrap; }
@@ -699,7 +701,7 @@ const camera = new THREE.PerspectiveCamera(36, 1, .1, 200);
 camera.position.set(0, 1.4, 12.5); camera.lookAt(0, .3, 0);
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .6, .35, .82);
+const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .5, .35, .85);
 composer.addPass(bloom); composer.addPass(new OutputPass());
 const C = h => new THREE.Color(h);
 const add = THREE.AdditiveBlending;
@@ -708,7 +710,7 @@ const root = new THREE.Group(); root.position.y = .5; scene.add(root);
 // inner glow sphere (fresnel)
 const glowMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: add, uniforms: { uT: { value: 0 } },
   vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vN = normalize(mat3(modelMatrix)*normal); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix*viewMatrix*w; }',
-  fragmentShader: 'varying vec3 vN; varying vec3 vV; uniform float uT; void main(){ float d = clamp(dot(vN,vV),0.0,1.0); float f = pow(max(1.0-d,0.0),2.2); float p = 0.9+0.1*sin(uT*2.0); vec3 c = vec3(1.0,0.45,0.12)*(0.05+f*1.7) + vec3(1.0,0.88,0.55)*pow(d,5.0)*0.8*p + vec3(1.0,0.25,0.6)*f*0.5; gl_FragColor = vec4(c,1.0); }' });
+  fragmentShader: 'varying vec3 vN; varying vec3 vV; uniform float uT; void main(){ float d = clamp(dot(vN,vV),0.0,1.0); float f = pow(max(1.0-d,0.0),2.2); float p = 0.9+0.1*sin(uT*2.0); vec3 c = vec3(0.12,0.62,1.0)*(0.035+f*1.7) + vec3(0.18,0.9,0.8)*f*0.45 + vec3(0.65,0.92,1.0)*pow(d,6.0)*0.28*p; gl_FragColor = vec4(c,1.0); }' });
 root.add(new THREE.Mesh(new THREE.SphereGeometry(1.55, 64, 48), glowMat));
 // globe grid
 const wire = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2.05, 3)), new THREE.LineBasicMaterial({ color: C('#FF4FB0').multiplyScalar(1.3), transparent: true, opacity: .4, blending: add, depthWrite: false }));
@@ -747,7 +749,7 @@ const disc = new THREE.Mesh(new THREE.CircleGeometry(5.2, 96), new THREE.ShaderM
 disc.rotation.x = -Math.PI / 2; plat.add(disc);
 const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 2.6, 2.6, 48, 1, true), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: add, side: THREE.DoubleSide, uniforms: { uT: { value: 0 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ float v = pow(clamp(1.0-vUv.y,0.0,1.0),1.6)*0.22; float s = 0.6+0.4*sin(vUv.y*30.0-uT*3.0); gl_FragColor = vec4(vec3(1.0,0.62,0.25)*v*s,1.0); }' }));
+  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ float v = pow(clamp(1.0-vUv.y,0.0,1.0),1.6)*0.22; float s = 0.6+0.4*sin(vUv.y*30.0-uT*3.0); gl_FragColor = vec4(vec3(0.2,0.75,1.0)*v*s,1.0); }' }));
 beam.position.y = -1.45; scene.add(beam);
 // sparks
 const N = 420, sp = new Float32Array(N * 3), sv = [];
