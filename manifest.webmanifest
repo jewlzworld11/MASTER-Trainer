@@ -1,14 +1,14 @@
 {
   "name": "Master Trainer",
   "short_name": "Trainer",
-  "description": "Jewlz OS · every class trainer in one place, built around the FDE end goal.",
+  "description": "Jewlz World · every class trainer in one place, built around the FDE end goal.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#01040d",
-  "theme_color": "#030b1e",
+  "background_color": "#0B0822",
+  "theme_color": "#0B0822",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

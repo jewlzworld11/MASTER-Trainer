@@ -1,6 +1,6 @@
 # Master Trainer
 
-Jewlz OS · Applied AI · Miami
+Jewlz World · Applied AI · Miami
 
 Every class trainer in one place, built around one end goal: **Forward Deployed Engineer**.
 

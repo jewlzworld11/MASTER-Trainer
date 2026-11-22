@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#030b1e">
+<meta name="theme-color" content="#0B0822">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon-48.png">
@@ -13,43 +13,45 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
-/* VOICE: a private AI command center for one student. Calm, precise, all signal.
+/* VOICE: Jewlz World, a private AI command center for one student. Calm, precise, all signal.
    IDEA: mission control for a semester. Every class is a module reporting in; the FDE Lab is the core.
    PICTURE: a live 3D energy core in the middle, glass HUD panels around it with real progress and real deadlines.
-   COLOUR and TYPE: electric-blue glass on near-black navy; each class keeps its own accent. Orbitron labels, Exo 2 text, mono numbers.
+   COLOUR and TYPE: neon on deep indigo (pink, orange, teal, sky, violet, gold); every panel has its own neon. Orbitron labels, Exo 2 text, mono numbers.
    LAYOUT: header bar, four columns of panels (overview | core + command | next steps + deadlines | quick actions), status bar. One column on phones, core first. */
 :root {
   color-scheme: dark;
-  --bg0: #01040d; --bg1: #030b1e;
-  --edge: rgba(70, 160, 255, .32); --edge2: rgba(90, 205, 255, .75);
-  --cy: #3fd2ff; --cy2: #8be9ff; --blue: #1f7bff; --ink: #e8f5ff; --mut: #9bbbdc; --dim: #6a8cb3;
-  --ok: #3cf0a8; --warn: #ffb347; --hot: #ff5468; --gold: #FFD25A;
+  --bg0: #07051a; --bg1: #0B0822;
+  --pink: #FF4FB0; --orange: #FF9E45; --teal: #2FE6C8; --sky: #6FC3FF; --violet: #B48CFF; --gold: #FFD25A;
+  --pc: var(--pink);
+  --edge: rgba(180, 140, 255, .3); --edge2: color-mix(in srgb, var(--pc) 70%, transparent);
+  --cy: var(--pc); --cy2: color-mix(in srgb, var(--pc) 55%, #fff); --blue: var(--violet); --ink: #F8F4FF; --mut: #C4BDE6; --dim: #8A80B4;
+  --ok: #2FE6C8; --warn: #FF9E45; --hot: #FF5C5C;
   --head: 'Orbitron', 'Exo 2', system-ui, sans-serif; --body: 'Exo 2', system-ui, -apple-system, sans-serif; --mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 * { box-sizing: border-box; min-width: 0; }
 html, body { margin: 0; min-height: 100%; background: var(--bg0); color: var(--ink); font: 400 15px/1.45 var(--body); }
 body { overflow-x: clip;
   background:
-    radial-gradient(60% 50% at 50% 38%, rgba(31, 123, 255, .16), transparent 70%),
-    radial-gradient(40% 40% at 10% 0%, rgba(63, 210, 255, .08), transparent 70%),
-    radial-gradient(40% 40% at 90% 100%, rgba(63, 120, 255, .1), transparent 70%),
-    repeating-linear-gradient(0deg, rgba(80, 160, 255, .035) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(90deg, rgba(80, 160, 255, .035) 0 1px, transparent 1px 44px),
+    radial-gradient(55% 45% at 50% 35%, rgba(255, 79, 176, .12), transparent 70%),
+    radial-gradient(40% 40% at 8% 0%, rgba(47, 230, 200, .08), transparent 70%),
+    radial-gradient(45% 45% at 95% 100%, rgba(180, 140, 255, .14), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(180, 140, 255, .035) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, rgba(180, 140, 255, .035) 0 1px, transparent 1px 44px),
     linear-gradient(180deg, var(--bg1), var(--bg0)); background-attachment: fixed; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- glass panel ---------- */
-.panel { position: relative; border: 1px solid var(--edge); border-radius: 10px; padding: 12px 14px 14px;
-  background: linear-gradient(180deg, rgba(10, 34, 76, .72), rgba(3, 13, 34, .82));
-  box-shadow: inset 0 1px 0 rgba(140, 210, 255, .12), inset 0 0 24px rgba(30, 110, 255, .08), 0 0 22px rgba(20, 100, 255, .12);
+.panel { --edge: color-mix(in srgb, var(--pc) 42%, transparent); --edge2: color-mix(in srgb, var(--pc) 75%, transparent); --cy: var(--pc); --cy2: color-mix(in srgb, var(--pc) 55%, #fff); position: relative; border: 1px solid var(--edge); border-radius: 10px; padding: 12px 14px 14px;
+  background: linear-gradient(180deg, rgba(29, 22, 68, .72), rgba(21, 16, 51, .82));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), inset 0 0 26px color-mix(in srgb, var(--pc) 7%, transparent), 0 0 22px color-mix(in srgb, var(--pc) 16%, transparent);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .panel::before, .panel::after { content: ""; position: absolute; width: 14px; height: 14px; border: 2px solid var(--cy); opacity: .8; pointer-events: none; }
 .panel::before { left: -1px; top: -1px; border-right: 0; border-bottom: 0; border-top-left-radius: 10px; }
 .panel::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; border-bottom-right-radius: 10px; }
 .ph { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; }
-.ph h2 { margin: 0; font: 700 12px/1.2 var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--cy2); text-shadow: 0 0 10px rgba(63, 210, 255, .45); }
+.ph h2 { margin: 0; font: 700 12px/1.2 var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--pc); text-shadow: 0 0 10px color-mix(in srgb, var(--pc) 55%, transparent); }
 .ph .meta { font: 600 11px/1 var(--mono); letter-spacing: .06em; color: var(--ok); text-transform: uppercase; white-space: nowrap; }
 .ph .meta.link { all: unset; cursor: pointer; font: 700 10px/1 var(--head); letter-spacing: .12em; color: var(--cy); text-transform: uppercase; white-space: nowrap; }
 .ph .meta.link:hover, .ph .meta.link:focus-visible { color: #fff; }
@@ -58,34 +60,34 @@ button { font: inherit; color: inherit; }
 /* ---------- header ---------- */
 .top { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: auto auto 1fr auto auto; align-items: center; gap: 18px;
   padding: max(10px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
-  background: linear-gradient(180deg, rgba(4, 16, 40, .95), rgba(3, 11, 28, .9)); border-bottom: 1px solid var(--edge); box-shadow: 0 6px 30px rgba(0, 20, 60, .5);
+  background: linear-gradient(180deg, rgba(21, 16, 51, .95), rgba(11, 8, 34, .9)); border-bottom: 1px solid var(--edge); box-shadow: 0 6px 30px rgba(5, 3, 20, .5);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .mark { width: 46px; height: 46px; flex: none; }
-.brand b { display: block; font: 800 19px/1 var(--head); letter-spacing: .2em; color: #fff; text-shadow: 0 0 14px rgba(63, 210, 255, .6); }
+.brand b { display: block; font: 800 19px/1 var(--head); letter-spacing: .16em; white-space: nowrap; background: linear-gradient(90deg, #FFE08A, #FF9E45 35%, #FF4FB0 70%, #B48CFF); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 10px rgba(255, 79, 176, .45)); }
 .brand small { display: block; margin-top: 5px; font: 600 9.5px/1 var(--head); letter-spacing: .2em; color: var(--cy); text-transform: uppercase; }
 .clock { border-left: 1px solid var(--edge); padding-left: 16px; }
 .clock small { display: block; font: 600 10px/1 var(--head); letter-spacing: .14em; color: var(--mut); text-transform: uppercase; }
 .clock b { display: block; margin-top: 4px; font: 600 21px/1 var(--mono); color: #fff; letter-spacing: .02em; }
 .tabs { display: flex; justify-content: center; gap: 6px; }
 .tab { all: unset; cursor: pointer; padding: 11px 18px; font: 700 11px/1 var(--head); letter-spacing: .12em; text-transform: uppercase; color: var(--mut);
-  border: 1px solid rgba(70, 160, 255, .25); background: rgba(6, 22, 52, .6); clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: color .15s, background .15s; white-space: nowrap; }
-.tab:hover, .tab:focus-visible { color: #fff; background: rgba(31, 123, 255, .22); }
-.tab[aria-current="page"] { color: #fff; background: linear-gradient(180deg, rgba(40, 140, 255, .55), rgba(20, 80, 200, .5)); box-shadow: inset 0 0 14px rgba(63, 210, 255, .5); }
-.status { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid rgba(60, 240, 168, .35); border-radius: 8px; background: rgba(4, 40, 40, .35); }
-.status i { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ok); display: grid; place-items: center; color: var(--ok); box-shadow: 0 0 10px rgba(60, 240, 168, .5); }
+  border: 1px solid rgba(180, 140, 255, .25); background: rgba(21, 16, 51, .6); clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: color .15s, background .15s; white-space: nowrap; }
+.tab:hover, .tab:focus-visible { color: #fff; background: rgba(255, 79, 176, .22); }
+.tab[aria-current="page"] { color: #0B0822; background: var(--pink); box-shadow: 0 0 18px rgba(255, 79, 176, .5); }
+.status { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid rgba(47, 230, 200, .35); border-radius: 8px; background: rgba(47, 230, 200, .08); }
+.status i { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ok); display: grid; place-items: center; color: var(--ok); box-shadow: 0 0 10px rgba(47, 230, 200, .5); }
 .status small { display: block; font: 600 9.5px/1 var(--head); letter-spacing: .14em; color: var(--mut); text-transform: uppercase; }
 .status b { display: block; margin-top: 4px; font: 700 11px/1 var(--head); letter-spacing: .08em; color: var(--ok); text-transform: uppercase; }
 .who { display: flex; align-items: center; gap: 10px; }
 .ib { all: unset; cursor: pointer; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 8px; color: var(--mut); border: 1px solid transparent; }
-.ib:hover, .ib:focus-visible { color: #fff; border-color: var(--edge); background: rgba(31, 123, 255, .15); }
+.ib:hover, .ib:focus-visible { color: #fff; border-color: var(--edge); background: rgba(255, 79, 176, .15); }
 .ib[hidden] { display: none; }
 .ib.gold { color: var(--gold); }
 .cmdr { display: flex; align-items: center; gap: 10px; padding-left: 12px; border-left: 1px solid var(--edge); }
 .cmdr small { display: block; font: 600 9.5px/1 var(--head); letter-spacing: .14em; color: var(--mut); text-transform: uppercase; text-align: right; }
 .cmdr b { display: block; margin-top: 4px; font: 600 14px/1 var(--body); color: #fff; text-align: right; }
 .av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 800 13px/1 var(--head); letter-spacing: .04em; color: #fff;
-  background: radial-gradient(circle at 35% 30%, #2f8cff, #0a2a66); border: 2px solid var(--cy); box-shadow: 0 0 12px rgba(63, 210, 255, .55); }
+  background: radial-gradient(circle at 35% 30%, #FF4FB0, #3a1460); border: 2px solid var(--cy); box-shadow: 0 0 12px rgba(255, 79, 176, .55); }
 
 /* ---------- grid ---------- */
 main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left)); }
@@ -105,7 +107,7 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 /* ---------- modules ---------- */
 .mods { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .mod { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px; text-decoration: none; border: 1px solid transparent; }
-.mod:hover, .mod:focus-visible { background: rgba(31, 123, 255, .14); border-color: var(--edge); }
+.mod:hover, .mod:focus-visible { background: rgba(255, 79, 176, .14); border-color: var(--edge); }
 .mod .ic { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); }
 .mod .nm { font: 600 13.5px/1.2 var(--body); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mod .nm small { display: block; font: 500 11px/1.2 var(--body); color: var(--dim); }
@@ -117,73 +119,73 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 /* ---------- core ---------- */
 .core { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 10px; min-height: 470px; padding-bottom: 12px; }
 @media (min-width: 1501px) { .core { min-height: 560px; } }
-.core h2.big { margin: 2px 0 2px; font: 800 24px/1.05 var(--head); letter-spacing: .06em; color: #fff; text-transform: uppercase; text-shadow: 0 0 14px rgba(63, 210, 255, .45); }
+.core h2.big { margin: 2px 0 2px; font: 800 24px/1.05 var(--head); letter-spacing: .06em; color: #fff; text-transform: uppercase; text-shadow: 0 0 14px rgba(255, 79, 176, .45); }
 .core .sub { margin: 0 0 14px; font: 700 10.5px/1.2 var(--head); letter-spacing: .14em; color: var(--cy); text-transform: uppercase; }
 .diag { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.diag li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 2px 10px; align-items: center; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(70, 160, 255, .18); background: rgba(4, 18, 44, .55); }
-.diag li i { grid-row: span 2; width: 34px; height: 34px; border-radius: 7px; display: grid; place-items: center; color: var(--cy); border: 1px solid rgba(63, 210, 255, .4); background: rgba(31, 123, 255, .12); }
+.diag li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 2px 10px; align-items: center; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(180, 140, 255, .18); background: rgba(11, 8, 34, .55); }
+.diag li i { grid-row: span 2; width: 34px; height: 34px; border-radius: 7px; display: grid; place-items: center; color: var(--cy); border: 1px solid rgba(255, 79, 176, .4); background: rgba(255, 79, 176, .12); }
 .diag li span { font: 500 12px/1.2 var(--body); color: var(--mut); }
 .diag li b { font: 600 13px/1.2 var(--body); color: #fff; }
 .diag li b em { font-style: normal; color: var(--ok); }
 .stagewrap { position: relative; min-height: 420px; }
-#stage { position: absolute; inset: -6px -6px -6px 0; border-radius: 8px; overflow: hidden; cursor: pointer; background: #020a1e; border: 1px solid rgba(70,160,255,.25); box-shadow: inset 0 0 40px rgba(31,123,255,.25); }
+#stage { position: absolute; inset: -6px -6px -6px 0; border-radius: 8px; overflow: hidden; cursor: pointer; background: #0d0a26; border: 1px solid rgba(70,160,255,.25); box-shadow: inset 0 0 40px rgba(31,123,255,.25); }
 #stage canvas { display: block; width: 100%; height: 100%; }
 .stage-fallback { position: absolute; inset: 0; display: grid; place-items: center; }
-.stage-fallback i { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #fff 0%, #9ef1ff 12%, #2fb8ff 32%, rgba(31, 123, 255, .35) 55%, transparent 70%); box-shadow: 0 0 80px rgba(63, 210, 255, .55); }
+.stage-fallback i { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 50% 45%, #fff 0%, #FFE08A 12%, #FF9E45 32%, rgba(255, 79, 176, .35) 55%, transparent 70%); box-shadow: 0 0 80px rgba(255, 79, 176, .55); }
 .coretxt { position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
-.coretxt b { display: block; font: 800 clamp(26px, 3.4vw, 44px)/1 var(--head); letter-spacing: .16em; color: #fff; text-shadow: 0 0 18px #3fd2ff, 0 0 40px rgba(31, 123, 255, .9); padding-left: .16em; }
-.coretxt small { display: block; margin-top: 8px; font: 700 clamp(11px, 1.1vw, 14px)/1 var(--head); letter-spacing: .3em; color: var(--cy2); text-shadow: 0 0 10px #3fd2ff; padding-left: .3em; }
+.coretxt b { display: block; font: 800 clamp(26px, 3.4vw, 44px)/1 var(--head); letter-spacing: .16em; color: #fff; text-shadow: 0 0 16px #FF9E45, 0 0 38px rgba(255, 79, 176, .9); padding-left: .16em; }
+.coretxt small { display: block; margin-top: 8px; font: 700 clamp(11px, 1.1vw, 14px)/1 var(--head); letter-spacing: .3em; color: #FFE08A; text-shadow: 0 0 10px #FF4FB0; padding-left: .3em; }
 .coretxt em { display: block; margin-top: 6px; font: 600 11px/1 var(--mono); font-style: normal; color: var(--mut); }
 .corelink { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); all: unset; }
-.enter-core { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); cursor: pointer; padding: 10px 18px; font: 700 11px/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: #07101f;
-  background: linear-gradient(180deg, #ffe48a, #ffbf3a); border: 0; border-radius: 6px; box-shadow: 0 0 18px rgba(255, 210, 90, .55); text-decoration: none; white-space: nowrap; }
+.enter-core { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); cursor: pointer; padding: 10px 18px; font: 700 11px/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: #0B0822;
+  background: linear-gradient(180deg, #FFE08A, #FF9E45); border: 0; border-radius: 6px; box-shadow: 0 0 18px rgba(255, 210, 90, .55); text-decoration: none; white-space: nowrap; }
 .enter-core:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .online { position: absolute; left: 0; bottom: 0; font: 700 10.5px/1 var(--head); letter-spacing: .14em; color: var(--mut); text-transform: uppercase; }
 .online b { color: var(--ok); margin-left: 6px; }
 
 /* ---------- command bar ---------- */
 .cmd { display: grid; grid-template-columns: 92px minmax(0, 1fr) 150px; gap: 14px; align-items: center; }
-.emb { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--cy); box-shadow: 0 0 22px rgba(63, 210, 255, .45), inset 0 0 18px rgba(63, 210, 255, .35);
-  background: radial-gradient(circle, rgba(31, 123, 255, .35), rgba(3, 13, 34, .9) 70%); }
+.emb { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--cy); box-shadow: 0 0 22px rgba(255, 79, 176, .45), inset 0 0 18px rgba(255, 79, 176, .35);
+  background: radial-gradient(circle, rgba(255, 79, 176, .35), rgba(21, 16, 51, .9) 70%); }
 .cmid { display: grid; gap: 8px; text-align: center; }
-.cmid h3 { margin: 0; font: 800 15px/1 var(--head); letter-spacing: .22em; color: #fff; text-shadow: 0 0 12px rgba(63, 210, 255, .6); }
+.cmid h3 { margin: 0; font: 800 15px/1 var(--head); letter-spacing: .22em; color: #fff; text-shadow: 0 0 12px rgba(255, 79, 176, .6); }
 .cmid .state { font: 700 10.5px/1 var(--head); letter-spacing: .2em; color: var(--cy); text-transform: uppercase; }
 #wave { width: 100%; height: 46px; display: block; }
 .cin { display: flex; gap: 8px; }
-.cin input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--edge2); background: rgba(2, 10, 28, .85); color: #fff; font: 500 16px/1 var(--body); outline: none; }
+.cin input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--edge2); background: rgba(11, 8, 34, .85); color: #fff; font: 500 16px/1 var(--body); outline: none; }
 .cin input::placeholder { color: var(--dim); }
-.cin input:focus { box-shadow: 0 0 0 3px rgba(63, 210, 255, .25); }
+.cin input:focus { box-shadow: 0 0 0 3px rgba(255, 79, 176, .25); }
 .cin button { all: unset; cursor: pointer; height: 44px; padding: 0 16px; border-radius: 8px; font: 700 11px/44px var(--head); letter-spacing: .14em; color: #fff; text-transform: uppercase;
-  background: linear-gradient(180deg, #2a8cff, #1556d8); box-shadow: 0 0 14px rgba(31, 123, 255, .5); }
+  background: linear-gradient(180deg, #FF4FB0, #c2318a); box-shadow: 0 0 14px rgba(255, 79, 176, .5); }
 .cin button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .reply { margin: 0; min-height: 1.4em; font: 500 13px/1.4 var(--body); color: var(--mut); }
 .reply b { color: #fff; }
 .steps-st { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .steps-st li { display: flex; align-items: center; gap: 9px; font: 700 10.5px/1 var(--head); letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
 .steps-st li i { width: 24px; height: 24px; border-radius: 50%; border: 1px solid currentColor; display: grid; place-items: center; }
-.steps-st li.on { color: var(--cy2); text-shadow: 0 0 8px rgba(63, 210, 255, .6); }
-.steps-st li.on i { background: rgba(63, 210, 255, .18); box-shadow: 0 0 10px rgba(63, 210, 255, .5); }
+.steps-st li.on { color: var(--cy2); text-shadow: 0 0 8px rgba(255, 79, 176, .6); }
+.steps-st li.on i { background: rgba(255, 79, 176, .18); box-shadow: 0 0 10px rgba(255, 79, 176, .5); }
 
 /* ---------- next steps ---------- */
 .tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .task { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 30px minmax(0, 1fr) 38px; gap: 3px 10px; align-items: center; width: 100%; padding: 8px 9px; border-radius: 8px;
-  border: 1px solid rgba(70, 160, 255, .18); background: rgba(4, 18, 44, .55); }
-.task:hover, .task:focus-visible { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, rgba(4, 18, 44, .7)); }
+  border: 1px solid rgba(180, 140, 255, .18); background: rgba(11, 8, 34, .55); }
+.task:hover, .task:focus-visible { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, rgba(11, 8, 34, .7)); }
 .task .ic { grid-row: span 2; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); }
 .task .t { font: 600 13.5px/1.25 var(--body); color: #fff; }
 .task .t small { display: block; font: 500 11px/1.3 var(--body); color: var(--dim); }
 .task .pc { grid-row: span 2; text-align: right; font: 600 12px/1 var(--mono); color: var(--c); }
-.bar { height: 5px; border-radius: 3px; background: rgba(120, 170, 230, .16); overflow: hidden; }
-.bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 60%, #1f7bff), var(--c)); box-shadow: 0 0 8px var(--c); }
+.bar { height: 5px; border-radius: 3px; background: rgba(196, 189, 230, .16); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 60%, #B48CFF), var(--c)); box-shadow: 0 0 8px var(--c); }
 
 /* ---------- deadlines ---------- */
-.need { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 4px 10px; align-items: center; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255, 84, 104, .5);
-  background: linear-gradient(90deg, rgba(255, 84, 104, .14), rgba(4, 18, 44, .6)); }
-.need i { grid-row: span 2; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: var(--hot); border: 1px solid rgba(255, 84, 104, .6); }
+.need { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 4px 10px; align-items: center; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid rgba(255, 92, 92, .5);
+  background: linear-gradient(90deg, rgba(255, 92, 92, .14), rgba(11, 8, 34, .6)); }
+.need i { grid-row: span 2; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: var(--hot); border: 1px solid rgba(255, 92, 92, .6); }
 .need small { font: 700 9.5px/1 var(--head); letter-spacing: .14em; color: var(--hot); text-transform: uppercase; }
 .need b { font: 600 13.5px/1.3 var(--body); color: #fff; }
 .dues { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.due { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 8px; border-radius: 8px; border: 1px solid rgba(70, 160, 255, .16); background: rgba(4, 18, 44, .5); }
+.due { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 8px; border-radius: 8px; border: 1px solid rgba(180, 140, 255, .16); background: rgba(11, 8, 34, .5); }
 .due.done { opacity: .45; }
 .due.done .dt b, .due.done .dx b { text-decoration: line-through; }
 .dt { text-align: center; padding: 5px 0; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--c) 50%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent); }
@@ -193,47 +195,47 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 .dx small { display: block; margin-top: 2px; font: 500 11px/1.3 var(--body); color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dx small em { font-style: normal; color: var(--c); font-weight: 600; }
 .dl { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-.left { font: 600 11px/1 var(--mono); padding: 4px 6px; border-radius: 5px; color: var(--cy2); background: rgba(63, 210, 255, .12); white-space: nowrap; }
-.left.soon { color: #fff; background: rgba(255, 84, 104, .55); }
-.left.tba { color: var(--warn); background: rgba(255, 179, 71, .14); }
+.left { font: 600 11px/1 var(--mono); padding: 4px 6px; border-radius: 5px; color: var(--cy2); background: rgba(255, 79, 176, .12); white-space: nowrap; }
+.left.soon { color: #fff; background: rgba(255, 92, 92, .55); }
+.left.tba { color: var(--warn); background: rgba(255, 158, 69, .14); }
 .chk { all: unset; cursor: pointer; width: 22px; height: 22px; border-radius: 5px; border: 1px solid var(--edge2); display: grid; place-items: center; color: transparent; }
-.chk[aria-pressed="true"] { color: #07101f; background: var(--ok); border-color: var(--ok); }
+.chk[aria-pressed="true"] { color: #0B0822; background: var(--ok); border-color: var(--ok); }
 .chk:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* ---------- quick actions + protocol ---------- */
 .qa { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .qbtn { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 0 10px; align-items: center; padding: 9px 11px; border-radius: 8px;
-  border: 1px solid rgba(70, 160, 255, .3); background: rgba(6, 22, 52, .6); }
-.qbtn:hover, .qbtn:focus-visible { border-color: var(--c); background: color-mix(in srgb, var(--c) 12%, rgba(6, 22, 52, .7)); }
+  border: 1px solid rgba(180, 140, 255, .3); background: rgba(21, 16, 51, .6); }
+.qbtn:hover, .qbtn:focus-visible { border-color: var(--c); background: color-mix(in srgb, var(--c) 12%, rgba(21, 16, 51, .7)); }
 .qbtn i { grid-row: span 2; color: var(--c); display: grid; place-items: center; }
 .qbtn b { font: 700 11.5px/1.25 var(--head); letter-spacing: .08em; color: #fff; text-transform: uppercase; }
 .qbtn small { font: 500 11px/1.3 var(--body); color: var(--dim); }
 .proto { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; counter-reset: s; }
 .proto li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 0 10px; align-items: center; font-size: 13px; color: var(--mut); }
 .proto li b { color: #fff; font-weight: 600; }
-.proto li::before { counter-increment: s; content: counter(s); grid-row: span 2; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 800 12px/1 var(--head); color: #07101f; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.proto li::before { counter-increment: s; content: counter(s); grid-row: span 2; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 800 12px/1 var(--head); color: #0B0822; background: var(--c); box-shadow: 0 0 10px var(--c); }
 .bigbtn { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; border-radius: 8px; text-decoration: none; cursor: pointer; border: 1px solid;
   font: 800 12px/1 var(--head); letter-spacing: .14em; text-transform: uppercase; width: 100%; }
-.bigbtn.gold { color: #1a1203; background: linear-gradient(180deg, #ffe48a, #ffb92e); border-color: #ffd25a; box-shadow: 0 0 22px rgba(255, 210, 90, .45); }
-.bigbtn.ghost { color: var(--cy2); background: rgba(6, 22, 52, .6); border-color: var(--edge2); }
-.bigbtn.ghost:hover, .bigbtn.ghost:focus-visible { background: rgba(31, 123, 255, .2); }
+.bigbtn.gold { color: #0B0822; background: linear-gradient(180deg, #FFE08A, #FF9E45); border-color: #FFD25A; box-shadow: 0 0 22px rgba(255, 210, 90, .45); }
+.bigbtn.ghost { color: var(--cy2); background: rgba(21, 16, 51, .6); border-color: var(--edge2); }
+.bigbtn.ghost:hover, .bigbtn.ghost:focus-visible { background: rgba(255, 79, 176, .2); }
 .bigbtn[hidden] { display: none; }
 .bigbtn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* ---------- status bar ---------- */
 .bottom { position: sticky; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(3, auto) minmax(0, 1fr) repeat(2, auto); gap: 22px; align-items: center;
   padding: 9px max(16px, env(safe-area-inset-right)) max(9px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  background: linear-gradient(0deg, rgba(4, 16, 40, .97), rgba(3, 11, 28, .92)); border-top: 1px solid var(--edge); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  background: linear-gradient(0deg, rgba(21, 16, 51, .97), rgba(11, 8, 34, .92)); border-top: 1px solid var(--edge); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .sb { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
 .sb svg { color: var(--cy); flex: none; }
 .sb small { display: block; font: 600 9px/1 var(--head); letter-spacing: .14em; color: var(--mut); text-transform: uppercase; }
 .sb b { display: block; margin-top: 3px; font: 600 12.5px/1 var(--body); color: #fff; }
 .talk { all: unset; cursor: pointer; justify-self: center; display: flex; align-items: center; gap: 12px; padding: 10px 26px; border-radius: 30px; border: 1px solid var(--edge2);
-  background: radial-gradient(120% 140% at 50% 0%, rgba(31, 123, 255, .45), rgba(4, 16, 40, .8)); box-shadow: 0 0 22px rgba(31, 123, 255, .45); font: 800 12px/1 var(--head); letter-spacing: .2em; color: #fff; text-transform: uppercase; }
+  background: radial-gradient(120% 140% at 50% 0%, rgba(255, 79, 176, .45), rgba(21, 16, 51, .8)); box-shadow: 0 0 22px rgba(255, 79, 176, .45); font: 800 12px/1 var(--head); letter-spacing: .2em; color: #fff; text-transform: uppercase; }
 .talk:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
 /* ---------- modal ---------- */
-.modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(1, 4, 13, .72); }
+.modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(5, 3, 20, .72); }
 .modal[hidden] { display: none; }
 .modal .panel { width: min(480px, 100%); padding: 20px; }
 .modal h2 { margin: 0 0 4px; font: 800 20px/1.1 var(--head); letter-spacing: .08em; text-transform: uppercase; }
@@ -289,11 +291,11 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="index.html" aria-label="Jewlz OS Master Trainer, command center">
-    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="mg" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#8be9ff"/><stop offset=".7" stop-color="#1f7bff"/><stop offset="1" stop-color="#062a6e"/></radialGradient></defs>
-      <circle cx="24" cy="24" r="22" fill="none" stroke="#3fd2ff" stroke-width="1.5" opacity=".7"/><circle cx="24" cy="24" r="17" fill="none" stroke="#3fd2ff" stroke-width="2.5" stroke-dasharray="10 5"/>
-      <path d="M24 9 L37 30 L24 39 L11 30 Z" fill="url(#mg)" stroke="#bff4ff" stroke-width="1"/><path d="M24 9 L24 39 M11 30 L37 30" stroke="#04204e" stroke-width="1.2"/></svg>
-    <span><b>JEWLZ OS</b><small>Master Trainer · Command Center</small></span>
+  <a class="brand" href="index.html" aria-label="Jewlz World Master Trainer, command center">
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE08A"/><stop offset=".45" stop-color="#FF9E45"/><stop offset="1" stop-color="#FF4FB0"/></linearGradient></defs>
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#2FE6C8" stroke-width="1.5" opacity=".8"/><circle cx="24" cy="24" r="17" fill="none" stroke="#B48CFF" stroke-width="2.5" stroke-dasharray="10 5"/>
+      <path d="M24 9 L37 30 L24 39 L11 30 Z" fill="url(#mg)" stroke="#FFF3C4" stroke-width="1"/><path d="M24 9 L24 39 M11 30 L37 30" stroke="#0B0822" stroke-width="1.2" opacity=".7"/></svg>
+    <span><b>JEWLZ WORLD</b><small>Master Trainer · Command Center</small></span>
   </a>
   <div class="clock"><small id="date"></small><b id="time">--:--</b></div>
   <nav class="tabs" aria-label="Sections">
@@ -314,22 +316,22 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
   <div class="cols">
     <!-- column 1 -->
     <div class="col c1">
-      <section class="panel p-ov" aria-labelledby="h-ov">
+      <section class="panel p-ov" style="--pc:var(--pink)" aria-labelledby="h-ov">
         <div class="ph"><h2 id="h-ov">Study overview</h2><span class="meta" id="ov-meta"></span></div>
         <div class="ov">
           <ul class="rows" id="ov-rows"></ul>
           <div class="gauge" aria-hidden="true">
             <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(120,170,230,.16)" stroke-width="9"/>
-              <circle id="g-arc" cx="60" cy="60" r="50" fill="none" stroke="url(#gg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 400" transform="rotate(-90 60 60)" style="filter:drop-shadow(0 0 6px #3fd2ff)"/>
+              <circle id="g-arc" cx="60" cy="60" r="50" fill="none" stroke="url(#gg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 400" transform="rotate(-90 60 60)" style="filter:drop-shadow(0 0 6px #FF4FB0)"/>
               <circle cx="60" cy="60" r="38" fill="none" stroke="rgba(63,210,255,.35)" stroke-width="1" stroke-dasharray="2 4"/>
-              <defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#1f7bff"/><stop offset="1" stop-color="#3cf0a8"/></linearGradient></defs>
+              <defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#B48CFF"/><stop offset="1" stop-color="#2FE6C8"/></linearGradient></defs>
               <text id="g-pct" x="60" y="64" text-anchor="middle" fill="#fff" font-family="Orbitron, sans-serif" font-weight="800" font-size="22">0%</text>
-              <text x="60" y="80" text-anchor="middle" fill="#9bbbdc" font-family="Orbitron, sans-serif" font-weight="600" font-size="7.5" letter-spacing="1.2">OVERALL</text></svg>
+              <text x="60" y="80" text-anchor="middle" fill="#C4BDE6" font-family="Orbitron, sans-serif" font-weight="600" font-size="7.5" letter-spacing="1.2">OVERALL</text></svg>
             <small>Study health</small>
           </div>
         </div>
       </section>
-      <section class="panel p-mod" id="p-mod" aria-labelledby="h-mod">
+      <section class="panel p-mod" style="--pc:var(--orange)" id="p-mod" aria-labelledby="h-mod">
         <div class="ph"><h2 id="h-mod">Class modules</h2><span class="meta" id="mod-meta"></span></div>
         <ul class="mods" id="mods"></ul>
         <p class="foot">Progress is read from each trainer on this device. A grey dot means open that trainer once so it can report in.</p>
@@ -338,7 +340,7 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 
     <!-- column 2 -->
     <div class="col c2">
-      <section class="panel core p-core" aria-labelledby="h-core">
+      <section class="panel core p-core" style="--pc:var(--gold)" aria-labelledby="h-core">
         <div class="left-info">
           <h2 class="big" id="h-core">FDE Lab</h2>
           <p class="sub">End goal · core diagnostics</p>
@@ -350,10 +352,10 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
           <a class="enter-core" href="fde-lab.html">Enter the lab</a>
         </div>
       </section>
-      <section class="panel cmd p-cmd" aria-labelledby="h-cmd">
-        <div class="emb" aria-hidden="true"><svg viewBox="0 0 48 48" width="56" height="56"><path d="M24 7 L39 31 L24 41 L9 31 Z" fill="none" stroke="#8be9ff" stroke-width="2"/><path d="M24 7 L24 41 M9 31 L39 31" stroke="#3fd2ff" stroke-width="1.4"/><circle cx="24" cy="24" r="4" fill="#bff4ff"/></svg></div>
+      <section class="panel cmd p-cmd" style="--pc:var(--teal)" aria-labelledby="h-cmd">
+        <div class="emb" aria-hidden="true"><svg viewBox="0 0 48 48" width="56" height="56"><path d="M24 7 L39 31 L24 41 L9 31 Z" fill="none" stroke="#FFD25A" stroke-width="2"/><path d="M24 7 L24 41 M9 31 L39 31" stroke="#FF4FB0" stroke-width="1.4"/><circle cx="24" cy="24" r="4" fill="#FFF3C4"/></svg></div>
         <div class="cmid">
-          <h3 id="h-cmd">Jewlz OS · Command</h3>
+          <h3 id="h-cmd">Jewlz World · Command</h3>
           <div class="state" id="cstate">Ready</div>
           <canvas id="wave" aria-hidden="true"></canvas>
           <form class="cin" id="cform" autocomplete="off">
@@ -371,11 +373,11 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 
     <!-- column 3 -->
     <div class="col c3">
-      <section class="panel p-next" aria-labelledby="h-next">
+      <section class="panel p-next" style="--pc:var(--sky)" aria-labelledby="h-next">
         <div class="ph"><h2 id="h-next">Next step per class</h2><span class="meta" id="next-meta"></span></div>
         <ul class="tasks" id="tasks"></ul>
       </section>
-      <section class="panel p-due" id="p-due" aria-labelledby="h-due">
+      <section class="panel p-due" style="--pc:var(--violet)" id="p-due" aria-labelledby="h-due">
         <div class="ph"><h2 id="h-due">Exams &amp; due dates</h2><span class="meta" id="due-meta"></span></div>
         <div id="need"></div>
         <ul class="dues" id="dues"></ul>
@@ -385,11 +387,11 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 
     <!-- column 4 -->
     <div class="col c4">
-      <section class="panel p-qa" aria-labelledby="h-qa">
+      <section class="panel p-qa" style="--pc:var(--pink)" aria-labelledby="h-qa">
         <div class="ph"><h2 id="h-qa">Quick actions</h2></div>
         <ul class="qa" id="qa"></ul>
       </section>
-      <section class="panel p-proto" id="p-proto" aria-labelledby="h-proto">
+      <section class="panel p-proto" style="--pc:var(--teal)" id="p-proto" aria-labelledby="h-proto">
         <div class="ph"><h2 id="h-proto">Protocol · how to win</h2></div>
         <ol class="proto">
           <li style="--c:#FF4FB0"><b>Learn it</b><span>Short chunks in plain English.</span></li>
@@ -407,7 +409,7 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 </main>
 
 <footer class="bottom">
-  <div class="sb"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 L20 16 L12 21 L4 16 Z"/></svg><span><small>Jewlz OS</small><b>v2.0</b></span></div>
+  <div class="sb"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 L20 16 L12 21 L4 16 Z"/></svg><span><small>Jewlz World</small><b>v2.1</b></span></div>
   <div class="sb hide-sm hide-md"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><small>Term</small><b id="term">Fall 2026</b></span></div>
   <div class="sb hide-sm hide-md"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><span><small>Progress</small><b>Saved on this device</b></span></div>
   <button class="talk" type="button" id="talk"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h6"/></svg>Command</button>
@@ -416,7 +418,7 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 </footer>
 
 <div class="modal" id="modal-proto" hidden role="dialog" aria-modal="true" aria-labelledby="mp-h">
-  <div class="panel">
+  <div class="panel" style="--pc:var(--teal)">
     <h2 id="mp-h">Protocol</h2>
     <p>Run these four steps in every class. Every class feeds the FDE Lab.</p>
     <ol class="proto">
@@ -639,7 +641,7 @@ function drawWave(t) {
     const x = (i + .5) * W / n, u = i / n, env = Math.sin(u * Math.PI);
     const v = (Math.sin(u * 22 + t * .004) * .5 + Math.sin(u * 51 - t * .007) * .3 + Math.sin(u * 9 + t * .002) * .2) * env * amp;
     const h = Math.max(2, Math.abs(v) * H * .9);
-    const g = wctx.createLinearGradient(0, H / 2 - h / 2, 0, H / 2 + h / 2); g.addColorStop(0, '#8be9ff'); g.addColorStop(.5, '#3fd2ff'); g.addColorStop(1, '#1f7bff');
+    const g = wctx.createLinearGradient(0, H / 2 - h / 2, 0, H / 2 + h / 2); g.addColorStop(0, '#FFD25A'); g.addColorStop(.5, '#FF4FB0'); g.addColorStop(1, '#B48CFF');
     wctx.fillStyle = g; wctx.fillRect(x - 1.2, H / 2 - h / 2, 2.4, h);
   }
   typing *= .97;
@@ -690,7 +692,7 @@ try {
 stage.appendChild(renderer.domElement);
 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 760 ? 1.5 : 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
-renderer.setClearColor(0x020a1e, 1);
+renderer.setClearColor(0x0d0a26, 1);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(36, 1, .1, 200);
@@ -706,17 +708,17 @@ const root = new THREE.Group(); root.position.y = .5; scene.add(root);
 // inner glow sphere (fresnel)
 const glowMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: add, uniforms: { uT: { value: 0 } },
   vertexShader: 'varying vec3 vN; varying vec3 vV; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vN = normalize(mat3(modelMatrix)*normal); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix*viewMatrix*w; }',
-  fragmentShader: 'varying vec3 vN; varying vec3 vV; uniform float uT; void main(){ float d = clamp(dot(vN,vV),0.0,1.0); float f = pow(max(1.0-d,0.0),2.2); float p = 0.9+0.1*sin(uT*2.0); vec3 c = vec3(0.12,0.55,1.0)*(0.06+f*1.9) + vec3(0.75,0.95,1.0)*pow(d,5.0)*0.75*p; gl_FragColor = vec4(c,1.0); }' });
+  fragmentShader: 'varying vec3 vN; varying vec3 vV; uniform float uT; void main(){ float d = clamp(dot(vN,vV),0.0,1.0); float f = pow(max(1.0-d,0.0),2.2); float p = 0.9+0.1*sin(uT*2.0); vec3 c = vec3(1.0,0.45,0.12)*(0.05+f*1.7) + vec3(1.0,0.88,0.55)*pow(d,5.0)*0.8*p + vec3(1.0,0.25,0.6)*f*0.5; gl_FragColor = vec4(c,1.0); }' });
 root.add(new THREE.Mesh(new THREE.SphereGeometry(1.55, 64, 48), glowMat));
 // globe grid
-const wire = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2.05, 3)), new THREE.LineBasicMaterial({ color: C('#3fd2ff').multiplyScalar(1.3), transparent: true, opacity: .34, blending: add, depthWrite: false }));
+const wire = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2.05, 3)), new THREE.LineBasicMaterial({ color: C('#FF4FB0').multiplyScalar(1.3), transparent: true, opacity: .4, blending: add, depthWrite: false }));
 root.add(wire);
 const lat = new THREE.Group(); root.add(lat);
-for (let i = -3; i <= 3; i++) { const y = i * .55, r = Math.sqrt(Math.max(0, 2.3 * 2.3 - y * y)); const l = new THREE.Mesh(new THREE.TorusGeometry(r, .008, 4, 96), new THREE.MeshBasicMaterial({ color: C('#8be9ff').multiplyScalar(1.4), transparent: true, opacity: .5, blending: add, depthWrite: false })); l.rotation.x = Math.PI / 2; l.position.y = y; lat.add(l); }
-for (let i = 0; i < 6; i++) { const l = new THREE.Mesh(new THREE.TorusGeometry(2.3, .008, 4, 96), new THREE.MeshBasicMaterial({ color: C('#8be9ff').multiplyScalar(1.4), transparent: true, opacity: .4, blending: add, depthWrite: false })); l.rotation.y = i * Math.PI / 6; lat.add(l); }
+for (let i = -3; i <= 3; i++) { const y = i * .55, r = Math.sqrt(Math.max(0, 2.3 * 2.3 - y * y)); const l = new THREE.Mesh(new THREE.TorusGeometry(r, .008, 4, 96), new THREE.MeshBasicMaterial({ color: C('#FFD25A').multiplyScalar(1.4), transparent: true, opacity: .5, blending: add, depthWrite: false })); l.rotation.x = Math.PI / 2; l.position.y = y; lat.add(l); }
+for (let i = 0; i < 6; i++) { const l = new THREE.Mesh(new THREE.TorusGeometry(2.3, .008, 4, 96), new THREE.MeshBasicMaterial({ color: C('#FFD25A').multiplyScalar(1.4), transparent: true, opacity: .4, blending: add, depthWrite: false })); l.rotation.y = i * Math.PI / 6; lat.add(l); }
 // orbits (gold + cyan) with comets
 const orbits = [];
-[[3.6, 2.2, '#FFB648', .45, .35], [3.9, 1.6, '#3fd2ff', -.5, -.25], [3.3, 2.6, '#8be9ff', .2, .9]].forEach(([a, b, col, tilt, spin], k) => {
+[[3.6, 2.2, '#FFD25A', .45, .35], [3.9, 1.6, '#2FE6C8', -.5, -.25], [3.3, 2.6, '#FF4FB0', .2, .9]].forEach(([a, b, col, tilt, spin], k) => {
   const g = new THREE.Group(); g.rotation.set(Math.PI / 2 + tilt, spin, 0); root.add(g);
   const pts = []; for (let i = 0; i <= 200; i++) { const t = i / 200 * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(t) * a, Math.sin(t) * b, 0)); }
   const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: C(col).multiplyScalar(2.2), transparent: true, opacity: k === 2 ? .35 : .9, blending: add, depthWrite: false }));
@@ -732,26 +734,26 @@ function ringTex(col, ticks) {
   x.lineWidth = 2; x.globalAlpha = .6; for (let i = 0; i < ticks; i++) { const a = i / ticks * Math.PI * 2, l = i % 6 ? 8 : 18; x.beginPath(); x.moveTo(Math.cos(a) * 210, Math.sin(a) * 210); x.lineTo(Math.cos(a) * (210 - l), Math.sin(a) * (210 - l)); x.stroke(); }
   const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
-const hud = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 6.4), new THREE.MeshBasicMaterial({ map: ringTex('#3fd2ff', 120), transparent: true, blending: add, depthWrite: false, color: C('#fff').multiplyScalar(1.3), side: THREE.DoubleSide }));
+const hud = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 6.4), new THREE.MeshBasicMaterial({ map: ringTex('#2FE6C8', 120), transparent: true, blending: add, depthWrite: false, color: C('#fff').multiplyScalar(1.3), side: THREE.DoubleSide }));
 root.add(hud);
 // platform below
 const plat = new THREE.Group(); plat.position.y = -2.75; scene.add(plat);
-[[1.4, '#8be9ff', 2.4], [2.2, '#3fd2ff', 1.8], [3.0, '#1f7bff', 1.4], [3.9, '#3fd2ff', .9], [4.8, '#1f7bff', .6]].forEach(([r, col, k]) => {
+[[1.4, '#FFD25A', 2.4], [2.2, '#FF4FB0', 1.8], [3.0, '#B48CFF', 1.4], [3.9, '#2FE6C8', .9], [4.8, '#6FC3FF', .6]].forEach(([r, col, k]) => {
   const m = new THREE.Mesh(new THREE.TorusGeometry(r, .025, 6, 160), new THREE.MeshBasicMaterial({ color: C(col).multiplyScalar(k), transparent: true, blending: add, depthWrite: false })); m.rotation.x = Math.PI / 2; plat.add(m);
 });
 const disc = new THREE.Mesh(new THREE.CircleGeometry(5.2, 96), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: add, uniforms: { uT: { value: 0 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ vec2 q = vUv-0.5; float r = length(q)*2.0; float g = (1.0-smoothstep(0.0,1.0,r))*0.12; float sweep = smoothstep(0.97,1.0,cos(atan(q.y,q.x+1e-4)-uT*0.8))*(1.0-r)*0.6; float rings = (1.0-smoothstep(0.0,0.06,abs(fract(r*6.0-uT*0.15)-0.5)-0.44))*0.12*(1.0-r); gl_FragColor = vec4(vec3(0.15,0.6,1.0)*(g+sweep+rings),1.0); }' }));
+  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ vec2 q = vUv-0.5; float r = length(q)*2.0; float g = (1.0-smoothstep(0.0,1.0,r))*0.12; float sweep = smoothstep(0.97,1.0,cos(atan(q.y,q.x+1e-4)-uT*0.8))*(1.0-r)*0.6; float rings = (1.0-smoothstep(0.0,0.06,abs(fract(r*6.0-uT*0.15)-0.5)-0.44))*0.12*(1.0-r); gl_FragColor = vec4(vec3(0.75,0.3,1.0)*(g+rings) + vec3(1.0,0.3,0.7)*sweep,1.0); }' }));
 disc.rotation.x = -Math.PI / 2; plat.add(disc);
 const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 2.6, 2.6, 48, 1, true), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: add, side: THREE.DoubleSide, uniforms: { uT: { value: 0 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ float v = pow(clamp(1.0-vUv.y,0.0,1.0),1.6)*0.22; float s = 0.6+0.4*sin(vUv.y*30.0-uT*3.0); gl_FragColor = vec4(vec3(0.2,0.65,1.0)*v*s,1.0); }' }));
+  fragmentShader: 'varying vec2 vUv; uniform float uT; void main(){ float v = pow(clamp(1.0-vUv.y,0.0,1.0),1.6)*0.22; float s = 0.6+0.4*sin(vUv.y*30.0-uT*3.0); gl_FragColor = vec4(vec3(1.0,0.62,0.25)*v*s,1.0); }' }));
 beam.position.y = -1.45; scene.add(beam);
 // sparks
 const N = 420, sp = new Float32Array(N * 3), sv = [];
 for (let i = 0; i < N; i++) { const r = 2.6 + Math.random() * 2.4, a = Math.random() * Math.PI * 2, y = (Math.random() - .5) * 4; sp.set([Math.cos(a) * r, y, Math.sin(a) * r], i * 3); sv.push({ r, a, y, s: (.08 + Math.random() * .25) * (Math.random() < .5 ? 1 : -1) }); }
 const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-const sparks = new THREE.Points(sg, new THREE.PointsMaterial({ color: C('#8be9ff').multiplyScalar(2), size: .045, transparent: true, opacity: .85, blending: add, depthWrite: false })); root.add(sparks);
+const sparks = new THREE.Points(sg, new THREE.PointsMaterial({ color: C('#FFD25A').multiplyScalar(2), size: .045, transparent: true, opacity: .85, blending: add, depthWrite: false })); root.add(sparks);
 
 function size() {
   const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
