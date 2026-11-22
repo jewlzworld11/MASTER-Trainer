@@ -698,6 +698,9 @@ code { color: var(--text); background: color-mix(in srgb, var(--neon) 13%, trans
 .set-lab b { color: var(--neon); }
 </style>
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Exo+2:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="cc-skin.css">
+<script>document.documentElement.classList.add('cc')</script>
 <div class="wrap">
   <header class="top">
     <div class="top-row">
@@ -2793,4 +2796,6 @@ if (REF && (location.hash === '#dictionary' || store.get('pot.view', null) === '
 </script>
 
 <script src="nav.js"></script>
+<script src="mt-progress.js" data-id="python"></script>
+<script src="cc-skin.js" data-id="python" data-title="Python Output Trainer" data-short="PYTHON" data-hero="header.top" data-tabs='[{"t":"Levels","sel":"#levels","do":"scroll"},{"t":"Daily review","sel":"#levels .chip.review:not(.pj-chip)","do":"click"},{"t":"Project Lab","sel":"#levels .pj-chip","do":"click"}]'></script>
 </body></html>

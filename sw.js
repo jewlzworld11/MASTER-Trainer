@@ -3,9 +3,9 @@
    - Pages are served from the saved copy right away and refreshed in the background,
      so a new version shows up the next time you open the app.
    - Bump VERSION whenever the files change. */
-const VERSION = 'mt-2026-11-22a';
+const VERSION = 'mt-2026-11-22b';
 const LOCAL = [
-  './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest',
+  './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js',
   'fde-lab.html', 'python-output.html', 'math-placement.html', 'ai-business.html', 'ethics-octagon.html', 'english-writing.html',
   'miami-backdrop.svg', 'bg-home.jpg', 'bg-fde.jpg', 'bg-python.jpg', 'bg-math.jpg', 'bg-business.jpg', 'bg-ethics.jpg',
   'card-fde.jpg', 'card-python.jpg', 'card-math.jpg', 'card-business.jpg', 'card-ethics.jpg',
