@@ -4,7 +4,7 @@ Jewlz OS · Applied AI · Miami
 
 Every class trainer in one place, built around one end goal: **Forward Deployed Engineer**.
 
-**Open it:** https://jewlzworld11.github.io/master-trainer/
+**Open it:** https://jewlzworld11.github.io/MASTER-Trainer/
 
 ## Install it as an app
 
