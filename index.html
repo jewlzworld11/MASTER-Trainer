@@ -239,7 +239,20 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
 /* ---------- modal ---------- */
 .modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: rgba(5, 3, 20, .72); }
 .modal[hidden] { display: none; }
-.modal .panel { width: min(480px, 100%); padding: 20px; }
+.modal .panel { width: min(480px, 100%); padding: 20px; max-height: calc(100dvh - 32px); overflow: auto; }
+.modal .panel.wide { width: min(820px, 100%); }
+.cgrid { list-style: none; margin: 0 0 4px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ccard { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; align-items: center; padding: 12px; border-radius: 10px; text-decoration: none; color: inherit;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: rgba(11, 8, 34, .6); box-shadow: inset 3px 0 0 var(--c); }
+.ccard:hover, .ccard:focus-visible { background: color-mix(in srgb, var(--c) 12%, rgba(11, 8, 34, .7)); box-shadow: inset 3px 0 0 var(--c), 0 0 16px color-mix(in srgb, var(--c) 35%, transparent); }
+.ccard .ic { grid-row: span 3; width: 40px; height: 40px; border-radius: 9px; display: grid; place-items: center; color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); }
+.ccard b { font: 700 15px/1.2 var(--body); color: #fff; }
+.ccard b small { display: block; font: 600 11px/1.3 var(--body); color: var(--c); margin-top: 2px; }
+.ccard .nx { font: 500 12px/1.35 var(--body); color: var(--mut); }
+.ccard .row2 { display: flex; align-items: center; gap: 8px; }
+.ccard .row2 .bar { flex: 1; }
+.ccard .row2 span { font: 600 11.5px/1 var(--mono); color: var(--c); min-width: 34px; text-align: right; }
+@media (max-width: 640px) { .cgrid { grid-template-columns: 1fr; } }
 .modal h2 { margin: 0 0 4px; font: 800 20px/1.1 var(--head); letter-spacing: .08em; text-transform: uppercase; }
 .modal p { margin: 0 0 14px; color: var(--mut); }
 
@@ -301,10 +314,10 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
   </a>
   <div class="clock"><small id="date"></small><b id="time">--:--</b></div>
   <nav class="tabs" aria-label="Sections">
-    <button class="tab" type="button" aria-current="page" data-jump="top">Command Center</button>
-    <button class="tab" type="button" data-jump="p-mod">Classes</button>
+    <button class="tab" type="button" aria-current="page" data-tab="home">Command Center</button>
+    <button class="tab" type="button" data-open="classes" data-tab="classes">Classes</button>
     <a class="tab" href="fde-lab.html">FDE Lab</a>
-    <button class="tab" type="button" data-open="proto">Protocol</button>
+    <button class="tab" type="button" data-open="proto" data-tab="proto">Protocol</button>
   </nav>
   <div class="status"><i><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg></i><span><small>System status</small><b id="sys">All modules online</b></span></div>
   <div class="who">
@@ -418,6 +431,13 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
   <div class="sb hide-sm"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1"/></svg><span><small>Network</small><b id="net">Online</b></span></div>
   <div class="sb hide-sm"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg><span><small>End goal</small><b>FDE</b></span></div>
 </footer>
+
+<div class="modal" id="modal-classes" hidden role="dialog" aria-modal="true" aria-labelledby="mc-h">
+  <div class="panel wide" style="--pc:var(--orange)">
+    <div class="ph"><h2 id="mc-h">Classes · pick one to open</h2><button class="meta link" type="button" data-close>Close ✕</button></div>
+    <ul class="cgrid" id="cgrid"></ul>
+  </div>
+</div>
 
 <div class="modal" id="modal-proto" hidden role="dialog" aria-modal="true" aria-labelledby="mp-h">
   <div class="panel" style="--pc:var(--teal)">
@@ -594,13 +614,26 @@ const tDay = Math.max(1, Math.round((day0() - parse(TERM_START)) / 864e5) + 1), 
 $('term').textContent = 'Fall 2026 · day ' + Math.min(tDay, tLen) + ' of ' + tLen;
 function net() { $('net').textContent = navigator.onLine ? 'Online' : 'Offline · saved copy'; }
 net(); addEventListener('online', net); addEventListener('offline', net);
-document.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', () => {
-  const t = b.dataset.jump === 'top' ? document.body : $(b.dataset.jump); t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}));
-const proto = $('modal-proto');
-document.querySelectorAll('[data-open="proto"]').forEach(b => b.addEventListener('click', () => { proto.hidden = false; proto.querySelector('[data-close]').focus(); }));
-proto.addEventListener('click', e => { if (e.target === proto || e.target.closest('[data-close]')) proto.hidden = true; });
-addEventListener('keydown', e => { if (e.key === 'Escape') proto.hidden = true; });
+/* ---------- top tabs: Command Center = this dashboard, Classes = class launcher, Protocol = how to win ---------- */
+function setTab(name) { document.querySelectorAll('.tab[data-tab]').forEach(t => t.toggleAttribute('aria-current', t.dataset.tab === name)); document.querySelectorAll('.tab[data-tab][aria-current]').forEach(t => t.setAttribute('aria-current', 'page')); }
+const proto = $('modal-proto'), classes = $('modal-classes');
+function openModal(m, tab) { [proto, classes].forEach(x => { x.hidden = x !== m; }); setTab(tab); (m.querySelector('[data-close]') || m).focus(); }
+function closeModals() { proto.hidden = true; classes.hidden = true; setTab('home'); }
+function fillClasses() {
+  const P = prog();
+  $('cgrid').innerHTML = ALL.map(c => {
+    const r = P[c.id], pc = pctOf(r);
+    const nx = r ? (r.next ? 'Next: ' + r.next.t : 'All caught up') : 'Open it once so it can report your progress';
+    return '<li><a class="ccard" href="' + c.file + '" style="--c:' + c.color + '"><span class="ic">' + iconFor(c, 20) + '</span>' +
+      '<b>' + esc(c.title) + '<small>' + esc(c.code) + '</small></b><span class="nx">' + esc(nx) + '</span>' +
+      '<span class="row2"><span class="bar"><i style="width:' + (r ? Math.max(2, pc) : 0) + '%"></i></span><span>' + (r ? pc + '%' : '—') + '</span></span></a></li>';
+  }).join('');
+}
+document.querySelector('.tab[data-tab="home"]').addEventListener('click', () => { closeModals(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+document.querySelectorAll('[data-open="proto"]').forEach(b => b.addEventListener('click', () => openModal(proto, 'proto')));
+document.querySelectorAll('[data-open="classes"]').forEach(b => b.addEventListener('click', () => { fillClasses(); openModal(classes, 'classes'); }));
+[proto, classes].forEach(m => m.addEventListener('click', e => { if (e.target === m || e.target.closest('[data-close]')) closeModals(); }));
+addEventListener('keydown', e => { if (e.key === 'Escape' && (!proto.hidden || !classes.hidden)) closeModals(); });
 
 /* ---------- typed commands ---------- */
 const WORDS = {
@@ -614,7 +647,8 @@ function run(raw) {
   const q = raw.toLowerCase().trim(); if (!q) return;
   setState('match');
   if (/\b(due|deadline|deadlines|exam dates|calendar)\b/.test(q) && !/\bexam mode\b/.test(q)) { reply.innerHTML = 'Here are your <b>exams and due dates</b>.'; $('p-due').scrollIntoView({ behavior: 'smooth' }); setTimeout(() => setState('ready'), 900); return; }
-  if (/\b(protocol|how to win|win)\b/.test(q)) { proto.hidden = false; setState('ready'); return; }
+  if (/\b(protocol|how to win|win)\b/.test(q)) { openModal(proto, 'proto'); setState('ready'); return; }
+  if (/^(classes|class list|all classes)$/.test(q)) { fillClasses(); openModal(classes, 'classes'); setState('ready'); return; }
   const cid = findClass(q);
   let target = null, label = '';
   const qa = QA.filter(a => (!cid || a.c === cid) && a.k.some(k => new RegExp('\\b' + k + '\\b').test(q)));
