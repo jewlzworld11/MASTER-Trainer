@@ -1,0 +1,23 @@
+{
+  "name": "Master Trainer",
+  "short_name": "Trainer",
+  "description": "Jewlz OS · every class trainer in one place, built around the FDE end goal.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05030f",
+  "theme_color": "#0B0822",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "FDE Lab", "url": "./fde-lab.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Python Output Trainer", "url": "./python-output.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Math Placement Trainer", "url": "./math-placement.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Writing Room", "url": "./english-writing.html", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}

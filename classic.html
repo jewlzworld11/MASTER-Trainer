@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0822">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="favicon-48.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Master Trainer · 2D view</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;0,800;0,900;1,900&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Miami sunset theme. A bay skyline at dusk up top, a class-select grid in the middle,
+   a neon Art Deco street at the bottom. Deep indigo with hot pink, sunset orange and turquoise. Dark only. */
+:root {
+  color-scheme: dark;
+  --bg: #0B0822; --panel: #151033; --panel-2: #1D1644; --text: #F8F4FF; --muted: #C4BDE6; --line: #3A2F6B;
+  --pink: #FF4FB0; --orange: #FF9E45; --teal: #2FE6C8; --sky: #6FC3FF; --violet: #B48CFF; --gold: #FFD25A;
+  --head: 'Archivo', 'Arial Black', 'Helvetica Neue', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; min-height: 100vh; color: var(--text); font: 400 16px/1.55 var(--body); background: transparent; }
+/* the Brickell photo fills the whole page, pinned in place, tinted to the theme */
+body::before { content: ""; position: fixed; inset: 0; z-index: -2; background: url("bg-home.jpg") center 55% / cover no-repeat; }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(11,8,34,.62) 0%, rgba(11,8,34,.42) 40%, rgba(11,8,34,.58) 100%), linear-gradient(140deg, rgba(255,79,176,.30) 0%, rgba(122,59,209,.26) 50%, rgba(27,17,96,.34) 100%); }
+.scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; display: flex; align-items: flex-start; }
+.hero-in { position: relative; z-index: 2; width: 100%; max-width: 1120px; margin: 0 auto; padding: clamp(26px, 5vw, 56px) clamp(16px, 4vw, 32px) 150px; }
+.kicker { font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 10px; text-shadow: 0 1px 8px rgba(11,8,34,.8); }
+.kicker::before { content: ""; width: 26px; height: 2px; background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+h1 { font: italic 900 clamp(44px, 9vw, 104px)/.88 var(--head); letter-spacing: -.015em; text-transform: uppercase; margin: 14px 0 12px; color: #fff; text-shadow: 0 4px 0 rgba(11,8,34,.55), 0 0 34px rgba(255,79,176,.45); }
+h1 span { display: inline-block; padding-right: .08em; background: linear-gradient(180deg, #FFE08A 0%, #FF9E45 38%, #FF4FB0 78%, #B48CFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 4px 0 rgba(11,8,34,.55)) drop-shadow(0 0 22px rgba(255,79,176,.5)); }
+.lede { max-width: 560px; color: #F3ECFF; font-size: 17px; margin: 0; text-shadow: 0 1px 10px rgba(11,8,34,.9); }
+.lede b { color: var(--gold); }
+.hud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.hud span { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px; border-radius: 6px; background: rgba(11,8,34,.62); border: 1px solid rgba(255,255,255,.22); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hud span b { color: var(--teal); }
+.hud a.go3d { font: 800 12px/1 var(--head); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px; border-radius: 6px; color: var(--bg); background: var(--gold); text-decoration: none; box-shadow: 0 0 14px rgba(255,210,90,.55); }
+.hud a.go3d:hover, .hud a.go3d:focus-visible { background: #fff; }
+
+/* ---------- class select ---------- */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); position: relative; z-index: 3; }
+.goal { --c: var(--gold); position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 28px; align-items: center; margin-top: -84px; padding: 24px 26px; overflow: hidden;
+  border: 2px solid var(--gold); border-radius: 18px; color: inherit; text-decoration: none;
+  background: linear-gradient(120deg, rgba(52,30,84,.96), rgba(21,16,51,.96) 62%);
+  box-shadow: 0 12px 34px rgba(5,3,20,.6), 0 0 30px rgba(255,210,90,.3); transition: transform .18s ease, box-shadow .18s ease; }
+.goal::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: linear-gradient(90deg, #FFD25A, #FF9E45 45%, #FF4FB0 80%, transparent); }
+.goal::after { content: ""; position: absolute; right: -90px; top: -110px; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, rgba(255,210,90,.26), transparent 68%); pointer-events: none; }
+.goal:hover, .goal:focus-visible { transform: translateY(-3px); outline: none; box-shadow: 0 16px 38px rgba(5,3,20,.65), 0 0 44px rgba(255,210,90,.5); }
+.goal > * { position: relative; z-index: 1; }
+.goal .tag { display: inline-flex; align-items: center; gap: 7px; font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 7px 10px; border-radius: 6px; box-shadow: 0 0 16px rgba(255,210,90,.55); }
+.goal h2 { font: italic 900 clamp(34px, 5.4vw, 56px)/.95 var(--head); text-transform: uppercase; margin: 12px 0 4px; color: #fff; text-shadow: 0 0 26px rgba(255,210,90,.4); }
+.goal h2 span { color: var(--gold); }
+.goal .role { font: 600 13px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin: 0 0 8px; }
+.goal p.what { margin: 0; color: #E4DCFA; max-width: 620px; }
+.lanes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.lanes span { font: 600 12px/1 var(--mono); letter-spacing: .06em; padding: 7px 10px; border-radius: 999px; border: 1.5px solid rgba(255,210,90,.55); color: #FFE7A6; background: rgba(11,8,34,.45); }
+.goal .enter { display: inline-flex; align-items: center; gap: 10px; font: 900 15px/1 var(--head); letter-spacing: .08em; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 22px rgba(255,210,90,.5); white-space: nowrap; }
+.goal .enter svg { transition: transform .18s ease; }
+.goal:hover .enter svg { transform: translateX(5px); }
+.feedline { display: flex; align-items: center; gap: 12px; margin: 22px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.feedline::before, .feedline::after { content: ""; flex: 1; border-top: 1.5px dashed rgba(255,210,90,.45); }
+.select-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 18px; margin-top: 22px; }
+.feeds { display: flex; align-items: flex-start; gap: 7px; font: 600 12px/1.35 var(--mono); color: #FFE7A6; padding: 8px 10px; border-radius: 8px; background: rgba(255,210,90,.08); border: 1px dashed rgba(255,210,90,.4); }
+.feeds svg { flex: none; color: var(--gold); margin-top: 1px; }
+.feeds b { color: var(--gold); letter-spacing: .08em; text-transform: uppercase; }
+.select-head h2 { font: italic 900 clamp(22px, 3.4vw, 32px)/1 var(--head); text-transform: uppercase; margin: 0; letter-spacing: .01em; text-shadow: 0 2px 12px rgba(11,8,34,.9); }
+.select-head h2 em { font-style: inherit; color: var(--pink); text-shadow: 0 0 16px rgba(255,79,176,.6); }
+.select-head p { margin: 0; font: 600 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; margin-top: 18px; }
+.card {
+  --c: var(--pink);
+  position: relative; display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 20px; overflow: hidden;
+  background: linear-gradient(160deg, rgba(29,22,68,.94), rgba(21,16,51,.94)); border: 1.5px solid var(--c); border-radius: 16px; color: inherit; text-decoration: none;
+  box-shadow: 0 10px 30px rgba(5,3,20,.55), 0 0 20px color-mix(in srgb, var(--c) 26%, transparent);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(90deg, var(--c), transparent 85%); }
+.card::after { content: ""; position: absolute; right: -60px; top: -60px; width: 190px; height: 190px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--c) 30%, transparent), transparent 68%); pointer-events: none; }
+.card:hover, .card:focus-visible { transform: translateY(-4px); outline: none; box-shadow: 0 14px 34px rgba(5,3,20,.6), 0 0 34px color-mix(in srgb, var(--c) 52%, transparent); }
+.card .top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.card.has-shot { padding-top: 0; }
+.card.has-shot::after { display: none; }
+.shot { position: relative; margin: 0 -22px 4px; padding: 16px 18px; height: 128px; background-size: cover; background-position: center; display: flex; flex-direction: column; }
+.shot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,8,34,.15) 0%, rgba(11,8,34,0) 40%, rgba(24,18,58,.95) 100%), linear-gradient(120deg, color-mix(in srgb, var(--c) 30%, transparent), transparent 60%); }
+.shot .ic { background: rgba(11,8,34,.72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.goal .photo { position: absolute; z-index: 0; inset: 0 0 0 42%; background-size: cover; background-position: center 40%; opacity: .92;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 42%); mask-image: linear-gradient(90deg, transparent 0%, #000 42%); }
+.goal .enter { position: relative; }
+.lvl { font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--bg); background: var(--c); padding: 7px 10px; border-radius: 6px; box-shadow: 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); }
+.ic { color: var(--c); width: 44px; height: 44px; border: 1.5px solid color-mix(in srgb, var(--c) 60%, transparent); border-radius: 12px; display: grid; place-items: center; background: rgba(11,8,34,.5); }
+.code { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--c); margin-top: 6px; }
+.card h3 { font: italic 900 25px/1.05 var(--head); margin: 0; text-transform: uppercase; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; flex: 1; }
+.go { display: inline-flex; align-items: center; gap: 8px; font: 800 13px/1 var(--head); letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-top: 6px; }
+.go svg { transition: transform .18s ease; }
+.card:hover .go svg { transform: translateX(5px); }
+.slot { border: 1.5px dashed #5A4C94; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; justify-content: center; gap: 8px; color: var(--muted); min-height: 200px; background: rgba(21,16,51,.5); }
+.slot .lock { width: 40px; height: 40px; border-radius: 10px; border: 1.5px dashed #8A80B4; display: grid; place-items: center; color: #B9B2DC; }
+.slot strong { font: italic 900 20px/1.1 var(--head); text-transform: uppercase; color: var(--text); }
+
+.win { display: grid; grid-template-columns: minmax(240px, 340px) minmax(0, 1fr); gap: 0; margin-top: 40px; border: 1.5px solid var(--pink); border-radius: 18px; overflow: hidden;
+  background: linear-gradient(140deg, rgba(29,22,68,.94), rgba(21,16,51,.94)); box-shadow: 0 10px 30px rgba(5,3,20,.55), 0 0 24px rgba(255,79,176,.25); }
+.win-photo { position: relative; min-height: 340px; overflow: hidden; }
+.win-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(21,16,51,0) 55%, rgba(24,18,58,.96) 100%), linear-gradient(180deg, rgba(11,8,34,.25) 0%, rgba(11,8,34,0) 30%, rgba(11,8,34,.55) 100%); }
+.win-photo span { position: absolute; z-index: 1; left: 16px; bottom: 14px; font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #fff; background: rgba(11,8,34,.66); border: 1px solid rgba(255,255,255,.25); padding: 7px 10px; border-radius: 6px; }
+.win-body { padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; }
+.win-body h2 { font: italic 900 clamp(22px, 3.4vw, 32px)/1 var(--head); text-transform: uppercase; margin: 0 0 4px; }
+.win-body h2 em { font-style: inherit; color: var(--pink); text-shadow: 0 0 16px rgba(255,79,176,.6); }
+.win-body > p { margin: 0 0 14px; color: var(--muted); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.steps li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 14px; align-items: center; padding: 11px 14px; border: 1.5px dashed var(--line); border-radius: 12px; background: rgba(11,8,34,.4); }
+.steps b.n { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 900 15px/1 var(--head); color: var(--bg); background: var(--c); box-shadow: 0 0 14px var(--c); }
+.steps strong { font: 800 16px/1.2 var(--head); text-transform: uppercase; letter-spacing: .03em; color: var(--c); }
+.steps span { color: var(--muted); font-size: 14px; line-height: 1.35; }
+@media (max-width: 720px) { .win { grid-template-columns: minmax(0, 1fr); } .win-photo { min-height: 260px; }
+  .win-photo::after { background: linear-gradient(180deg, rgba(11,8,34,.2) 0%, rgba(11,8,34,0) 40%, rgba(24,18,58,.96) 100%); } .win-body { padding: 20px; } }
+
+/* ---------- street banner ---------- */
+.street { position: relative; height: clamp(200px, 26vw, 330px); margin-top: 46px; overflow: hidden; }
+.street::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 90px; z-index: 1; background: linear-gradient(180deg, #170E3E, rgba(23,14,62,0)); }
+.street .cap { position: absolute; z-index: 2; left: 0; right: 0; bottom: 14px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; padding: 0 16px; font-size: 14px; color: #F3ECFF; text-shadow: 0 1px 8px rgba(11,8,34,.95); }
+.street .cap b { color: var(--gold); }
+.street::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 80px; z-index: 1; background: linear-gradient(180deg, rgba(11,8,34,0), rgba(11,8,34,.85)); }
+@media (max-width: 640px) {
+  .hero-in { padding-bottom: 130px; }
+  .goal { grid-template-columns: minmax(0, 1fr); padding: 22px 20px; }
+  .goal .enter { justify-self: start; }
+  .goal .photo { inset: 0; opacity: .38; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 60%); mask-image: linear-gradient(180deg, transparent 0%, #000 60%); }
+  .street .cap { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .card, .go svg { transition: none; } .card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <div class="kicker">Jewlz World · Applied AI · Miami</div>
+    <h1>Master <span>Trainer</span></h1>
+    <p class="lede">Every class trains you for one job: <b>Forward Deployed Engineer</b>. Level up in a class, then prove it in the FDE Lab.</p>
+    <div class="hud"><span>End goal: <b>FDE</b></span><span><b id="hud-n">4</b> classes loaded</span><span>Fall 2026</span><span>Miami, FL</span><a class="go3d" href="index.html">Enter 3D world →</a></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="goal"></div>
+  <div class="feedline">Every class below trains you for this</div>
+  <div class="select-head"><h2>Select your <em>class</em></h2><p>Progress saves as you play</p></div>
+  <section class="grid" id="classes" aria-label="Classes"></section>
+  <section class="win" aria-label="How to win">
+    <div class="win-photo"><div class="scene" aria-hidden="true" style="background: url('bg-home.jpg') center 60% / cover no-repeat"></div><span>Miami, FL</span></div>
+    <div class="win-body">
+      <h2>How to <em>win</em></h2>
+      <p>Run these four steps in every class.</p>
+      <ol class="steps">
+        <li style="--c:var(--pink)"><b class="n">1</b><strong>Learn it</strong><span>Short chunks in plain English.</span></li>
+        <li style="--c:var(--orange)"><b class="n">2</b><strong>Drill it</strong><span>Flashcards and practice until it sticks.</span></li>
+        <li style="--c:var(--teal)"><b class="n">3</b><strong>Test it</strong><span>Quizzes and mock exams.</span></li>
+        <li style="--c:var(--sky)"><b class="n">4</b><strong>Teach it back</strong><span>Explain it in your own words.</span></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="street">
+  <div class="scene" aria-hidden="true" style="background: url('miami-backdrop.svg') center bottom / cover no-repeat"></div>
+  <div class="cap"><span><b>Progress</b> saves in your browser as you go.</span><span><b>New classes</b> get added here each semester.</span></div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+(function () {
+  var M = window.MASTER;
+  if (!M) return;
+  var grid = document.getElementById('classes');
+  var arrow = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+  var lock = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  grid.innerHTML = M.CLASSES.map(function (c, i) {
+    var top = '<div class="top"><span class="lvl">Class ' + String(i + 1).padStart(2, '0') + '</span><span class="ic">' + M.icon(c.icon, 24) + '</span></div>';
+    return '<a class="card' + (c.photo ? ' has-shot' : '') + '" href="' + c.file + '" style="--c:' + c.color + '">' +
+      (c.photo ? '<div class="shot" style="background-image:url(' + c.photo + ')">' + top + '</div>' : top) +
+      '<div class="code">' + M.esc(c.code) + '</div>' +
+      '<h3>' + M.esc(c.title) + '</h3>' +
+      '<p>' + M.esc(c.blurb) + '</p>' +
+      (c.feeds ? '<div class="feeds">' + M.icon('target', 15) + '<span><b>Feeds FDE</b> · ' + M.esc(c.feeds) + '</span></div>' : '') +
+      '<span class="go">Start ' + arrow + '</span></a>';
+  }).join('') +
+  '<div class="slot"><span class="lock">' + lock + '</span><strong>Unlocks next semester</strong><span>Spring 2027 classes drop in here.</span></div>';
+  document.getElementById('hud-n').textContent = M.CLASSES.length;
+  var G = M.GOAL;
+  document.getElementById('goal').innerHTML = '<a class="goal" href="' + G.file + '">' +
+    (G.photo ? '<span class="photo" style="background-image:url(' + G.photo + ')"></span>' : '') +
+    '<div><span class="tag">' + M.icon('target', 15) + 'End goal</span>' +
+    '<h2>FDE <span>Lab</span></h2><p class="role">' + M.esc(G.code) + '</p>' +
+    '<p class="what">' + M.esc(G.blurb) + '</p>' +
+    '<div class="lanes">' + G.lanes.map(function (l) { return '<span>' + M.esc(l) + '</span>'; }).join('') + '</div></div>' +
+    '<span class="enter">Enter the lab ' + arrow + '</span></a>';
+})();
+</script>
+<script>
+/* App mode: save everything for offline use, and offer an Install button when Chrome allows it. */
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').then(function () { return navigator.serviceWorker.ready; }).then(function (reg) {
+      var list = performance.getEntriesByType('resource').map(function (e) { return e.name; });
+      if (reg.active) reg.active.postMessage({ save: list });
+    }).catch(function () {});
+  });
+  var later = null, btn = document.getElementById('btn-install');
+  addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); later = e; if (btn) btn.hidden = false; });
+  if (btn) btn.addEventListener('click', function () {
+    if (!later) return;
+    later.prompt();
+    later.userChoice.then(function () { later = null; btn.hidden = true; }, function () { later = null; });
+  });
+  addEventListener('appinstalled', function () { if (btn) btn.hidden = true; });
+})();
+</script>
+</body>
+</html>

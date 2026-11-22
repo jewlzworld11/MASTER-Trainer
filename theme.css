@@ -1,0 +1,15 @@
+/* Master Trainer theme: Miami sunset.
+   Loaded by every class page. Deep indigo night, hot pink / sunset orange / turquoise neon,
+   and an original skyline-and-palms scene pinned behind the page. */
+html { background: #0B0822 !important; }
+html::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(rgba(11, 8, 34, .34), rgba(11, 8, 34, .34)),
+    url("miami-backdrop.svg") center bottom / max(100%, 1200px) auto no-repeat,
+    radial-gradient(130% 55% at 50% 112%, rgba(255, 126, 78, .34), rgba(255, 79, 176, .20) 36%, rgba(111, 42, 147, .14) 58%, transparent 76%),
+    linear-gradient(180deg, #0B0822 0%, #120C36 46%, #24124F 78%, #3A1560 100%);
+}
+html body { background: transparent !important; }
+::selection { background: #FF4FB0; color: #0B0822; }
+@media print { html::before { display: none; } }

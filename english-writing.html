@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,700;0,800;0,900;1,900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Writing Room: ENC 1101 trainer inside the Master Trainer.
+   Neon boxes on deep indigo, same tokens as the other class pages. Dark only. */
+:root {
+  color-scheme: dark;
+  --bg: #0B0822; --panel: #151033; --panel-2: #1D1644; --sunk: #0A0720;
+  --text: #F8F4FF; --muted: #C4BDE6; --dim: #8A80B4; --line: #3A2F6B;
+  --pink: #FF4FB0; --orange: #FF9E45; --teal: #2FE6C8; --sky: #6FC3FF; --violet: #B48CFF; --gold: #FFD25A; --red: #FF5C5C;
+  --on-neon: #0B0822;
+  --head: 'Archivo', 'Arial Black', 'Helvetica Neue', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --c: var(--violet);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; color: var(--text); font: 400 17px/1.6 var(--body); background: var(--bg); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px 80px; }
+@media (min-width: 700px) { .wrap { padding: 0 28px 90px; } }
+
+/* hero */
+.hero { padding: 34px 0 10px; }
+.kicker { font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--violet); display: flex; align-items: center; gap: 10px; }
+.kicker::before { content: ""; width: 26px; height: 2px; background: var(--violet); box-shadow: 0 0 8px var(--violet); }
+h1 { font: italic 900 clamp(40px, 8vw, 84px)/.9 var(--head); text-transform: uppercase; margin: 14px 0 12px; letter-spacing: -.01em; text-shadow: 0 0 30px rgba(180,140,255,.45); }
+h1 span { color: var(--violet); }
+.lede { max-width: 640px; margin: 0; color: #EDE6FF; }
+.lede b { color: var(--gold); }
+.why { margin-top: 20px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.why div { border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; background: rgba(21,16,51,.85); }
+.why b { display: block; font: 800 15px/1.2 var(--head); text-transform: uppercase; letter-spacing: .03em; color: var(--gold); margin-bottom: 4px; }
+.why span { color: var(--muted); font-size: 15px; }
+
+/* level picker */
+.sec-h { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; margin: 34px 0 14px; }
+.sec-h h2 { font: italic 900 clamp(22px, 3.4vw, 32px)/1 var(--head); text-transform: uppercase; margin: 0; }
+.sec-h h2 em { font-style: inherit; color: var(--pink); text-shadow: 0 0 16px rgba(255,79,176,.6); }
+.sec-h p { margin: 0; font: 600 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.levels { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.lv { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 14px; border: 1.5px solid var(--c); background: linear-gradient(160deg, rgba(29,22,68,.95), rgba(21,16,51,.95)); box-shadow: 0 0 16px color-mix(in srgb, var(--c) 20%, transparent); transition: transform .15s, box-shadow .15s; }
+.lv:hover, .lv:focus-visible { transform: translateY(-3px); box-shadow: 0 0 26px color-mix(in srgb, var(--c) 45%, transparent); }
+.lv.on { background: color-mix(in srgb, var(--c) 16%, #151033); box-shadow: 0 0 30px color-mix(in srgb, var(--c) 55%, transparent); }
+.lv .row { display: flex; align-items: center; gap: 10px; }
+.lv .n { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 900 15px/1 var(--head); color: var(--on-neon); background: var(--c); box-shadow: 0 0 12px var(--c); flex: none; }
+.lv strong { font: 800 16px/1.15 var(--head); text-transform: uppercase; letter-spacing: .02em; }
+.lv small { color: var(--muted); font-size: 14px; line-height: 1.35; }
+.bar { height: 6px; border-radius: 99px; background: var(--sunk); border: 1px solid var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.lv .tag { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--c); }
+
+/* level body */
+.panel { margin-top: 26px; border: 2px solid var(--c); border-radius: 18px; background: rgba(21,16,51,.94); box-shadow: 0 0 26px color-mix(in srgb, var(--c) 30%, transparent); overflow: hidden; }
+.panel-head { padding: 20px 22px 16px; border-bottom: 1.5px solid color-mix(in srgb, var(--c) 45%, transparent); background: linear-gradient(120deg, color-mix(in srgb, var(--c) 18%, transparent), transparent 70%); }
+.panel-head .tag { font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+.panel-head h2 { font: italic 900 clamp(26px, 4.4vw, 40px)/1 var(--head); text-transform: uppercase; margin: 8px 0 6px; }
+.panel-head p { margin: 0; color: #EDE6FF; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 22px 0; }
+.tab { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line); color: var(--muted); font: 800 13px/1 var(--head); letter-spacing: .06em; text-transform: uppercase; }
+.tab b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--line); color: var(--text); }
+.tab.on { color: var(--c); border-color: var(--c); box-shadow: 0 0 12px color-mix(in srgb, var(--c) 35%, transparent); }
+.tab.on b { background: var(--c); color: var(--on-neon); }
+.tab:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.pane { padding: 18px 22px 24px; }
+@media (max-width: 560px) { .pane, .panel-head { padding-left: 16px; padding-right: 16px; } .tabs { padding-left: 16px; padding-right: 16px; } }
+
+/* learn blocks */
+.chunk { border: 1.5px dashed var(--line); border-radius: 14px; padding: 14px 16px; margin: 0 0 12px; background: rgba(11,8,34,.45); }
+.chunk h3 { font: 800 17px/1.2 var(--head); text-transform: uppercase; letter-spacing: .03em; color: var(--c); margin: 0 0 6px; }
+.chunk p { margin: 0 0 8px; }
+.chunk p:last-child, .chunk ul:last-child { margin-bottom: 0; }
+.chunk ul { margin: 0 0 8px; padding-left: 20px; }
+.chunk li { margin: 3px 0; }
+.chunk b { color: #fff; }
+.chunk .ex { display: block; margin: 6px 0; padding: 8px 12px; border-left: 3px solid var(--c); background: rgba(255,255,255,.04); border-radius: 0 8px 8px 0; font-size: 16px; }
+.chunk .ex.bad { border-left-color: var(--red); }
+.chunk .ex.good { border-left-color: var(--teal); }
+.chunk .lbl { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 6px; }
+.lbl.bad { color: var(--red); } .lbl.good { color: var(--teal); }
+.callout { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 12px; align-items: start; border: 1.5px solid var(--gold); border-radius: 14px; padding: 14px 16px; margin: 0 0 12px; background: rgba(255,210,90,.06); }
+.callout.fde { border-color: var(--gold); }
+.callout.ana { border-color: var(--orange); background: rgba(255,158,69,.06); }
+.callout.hook { border-color: var(--pink); background: rgba(255,79,176,.06); }
+.callout .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; border: 1.5px solid currentColor; }
+.callout.fde .ic { color: var(--gold); } .callout.ana .ic { color: var(--orange); } .callout.hook .ic { color: var(--pink); }
+.callout h4 { margin: 0 0 4px; font: 800 14px/1.2 var(--head); text-transform: uppercase; letter-spacing: .06em; }
+.callout.fde h4 { color: var(--gold); } .callout.ana h4 { color: var(--orange); } .callout.hook h4 { color: var(--pink); }
+.callout p { margin: 0; }
+.terms { width: 100%; border-collapse: collapse; margin: 4px 0 12px; font-size: 15px; }
+.terms th, .terms td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.terms th { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--c); }
+.terms td:first-child { font-weight: 700; color: #fff; white-space: nowrap; }
+.terms td:last-child { color: var(--muted); }
+.tablewrap { overflow-x: auto; }
+@media (max-width: 560px) { .terms td:first-child { white-space: normal; } }
+
+/* quiz */
+.qhead { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.qhead .meta { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.qhead .meta b { color: var(--c); }
+.qcard { border: 1.5px solid var(--c); border-radius: 14px; padding: 16px; background: rgba(11,8,34,.55); }
+.qcard .kind { font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+.qcard .q { font-size: 18px; margin: 8px 0 12px; }
+.qcard .q .quote { display: block; margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.05); border: 1px solid var(--line); font-size: 16px; }
+.opts { display: grid; gap: 8px; }
+.opt { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 10px; align-items: start; padding: 11px 13px; border-radius: 11px; border: 1.5px solid var(--line); background: rgba(29,22,68,.7); color: var(--text); font-size: 16px; line-height: 1.45; }
+.opt:hover:not([disabled]), .opt:focus-visible { border-color: var(--c); }
+.opt .k { width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; font: 700 12px/1 var(--mono); background: var(--line); }
+.opt.right { border-color: var(--teal); background: rgba(47,230,200,.10); }
+.opt.right .k { background: var(--teal); color: var(--on-neon); }
+.opt.wrong { border-color: var(--red); background: rgba(255,92,92,.10); }
+.opt.wrong .k { background: var(--red); color: var(--on-neon); }
+.opt[disabled] { cursor: default; }
+.fb { margin-top: 12px; padding: 12px 14px; border-radius: 11px; border: 1.5px solid; }
+.fb.ok { border-color: var(--teal); background: rgba(47,230,200,.07); }
+.fb.no { border-color: var(--red); background: rgba(255,92,92,.07); }
+.fb strong { display: block; font: 800 14px/1.2 var(--head); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+.fb.ok strong { color: var(--teal); } .fb.no strong { color: var(--red); }
+.fb p { margin: 0; }
+.btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border-radius: 11px; background: var(--c); color: var(--on-neon); font: 900 14px/1 var(--head); letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 0 14px color-mix(in srgb, var(--c) 45%, transparent); }
+.btn.ghost { background: transparent; color: var(--c); border: 1.5px solid var(--c); box-shadow: none; }
+.btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.done { text-align: center; padding: 18px 10px; }
+.done .big { font: italic 900 56px/1 var(--head); color: var(--c); text-shadow: 0 0 20px color-mix(in srgb, var(--c) 50%, transparent); }
+.done p { color: var(--muted); margin: 6px 0 0; }
+.missed { text-align: left; margin-top: 14px; }
+.missed li { margin: 4px 0; color: var(--muted); }
+
+/* teach back */
+.tb label { display: block; font-weight: 700; margin: 0 0 6px; }
+.tb textarea { width: 100%; min-height: 150px; resize: vertical; padding: 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--sunk); color: var(--text); font: 16px/1.5 var(--body); }
+.tb textarea:focus { outline: none; border-color: var(--c); box-shadow: 0 0 12px color-mix(in srgb, var(--c) 35%, transparent); }
+.checks { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; cursor: pointer; }
+.checks input { accent-color: var(--c); width: 18px; height: 18px; margin-top: 3px; flex: none; }
+.saved { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-top: 8px; }
+
+/* weak spots */
+.weak { margin-top: 26px; border: 1.5px solid var(--pink); border-radius: 16px; padding: 16px 18px; background: rgba(21,16,51,.9); }
+.weak h3 { margin: 0 0 6px; font: 800 16px/1.2 var(--head); text-transform: uppercase; color: var(--pink); letter-spacing: .04em; }
+.weak p { margin: 0; color: var(--muted); }
+.weak ul { margin: 6px 0 0; padding-left: 20px; }
+@media (prefers-reduced-motion: reduce) { .lv { transition: none; } .lv:hover { transform: none; } }
+
+/* new questions (11/22) */
+.fresh-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 14px; padding: 10px 12px; border: 1.5px dashed var(--line); border-radius: 12px; }
+.fresh-bar .btn { padding: 8px 14px; }
+.fresh-note { font-size: 14px; color: var(--muted); flex: 1 1 260px; }
+.fresh-bar.busy .fresh-note { color: var(--teal); }
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">ENC 1101 · English Composition 1</div>
+    <h1>Writing <span>Room</span></h1>
+    <p class="lede">An FDE wins clients with <b>clear writing</b>: emails, scoping docs, recommendations, and explaining AI to people who don't code. This room turns your English class into those skills, and it gets you ready for the <b>annotated bibliography (Sat 12/5)</b> and the <b>final essay (Mon 12/7)</b>.</p>
+    <div class="why">
+      <div><b>For class</b><span>Thesis, sources, MLA, and grammar are what Prof. Coro grades.</span></div>
+      <div><b>For the FDE job</b><span>Liaison lane: write so a client trusts you and acts on it.</span></div>
+      <div><b>How to play</b><span>Pick a level. Learn it, drill it, then teach it back in your own words.</span></div>
+    </div>
+  </header>
+
+  <div class="sec-h"><h2>Pick your <em>level</em></h2><p>Best scores save in this browser</p></div>
+  <section class="levels" id="levels" aria-label="Levels"></section>
+
+  <section class="panel" id="panel" aria-live="polite"></section>
+
+  <section class="weak" id="weak" aria-label="Weak spots"></section>
+</div>
+
+<script>
+/* ---------- New questions engine (11/22/2026) ----------
+   Claude writes brand-new practice questions from THIS page's own lesson material, then a second,
+   separate call answers them cold. Only questions where both agree are shown, so a bad answer key
+   gets thrown out instead of taught. Needs the page to declare the `sample` capability.
+   One copy of this block is dropped into every trainer. */
+var FRESH = (function () {
+  'use strict';
+  var sampleP = null, blocked = '';
+  function getSample() {
+    if (!sampleP) {
+      sampleP = (window.claude && typeof window.claude.use === 'function')
+        ? Promise.resolve(window.claude.use('sample')).catch(function () { return null; })
+        : Promise.resolve(null);
+    }
+    return sampleP;
+  }
+  function clean(s, max) {
+    var t = String(s == null ? '' : s)
+      .replace(/<br\s*\/?>/gi, ' ').replace(/<\/(p|li|div|h\d|tr)>/gi, '. ').replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"').replace(/&#39;|&rsquo;|&lsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"').replace(/&#36;/g, '$')
+      .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1').replace(/\s+/g, ' ').replace(/(\.\s*){2,}/g, '. ').trim();
+    return max && t.length > max ? t.slice(0, max) + '…' : t;
+  }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function str(x, max) { return typeof x === 'string' && x.trim() && x.length <= (max || 600) ? x.trim() : null; }
+  function uid(p) { return p + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7); }
+  var VOICE = 'The student is an adult back in school after years away. He learns best from plain words and short sentences. ' +
+    'If a technical word is needed, the question explains it. When a real-world example helps, use trading, cooking, or music production. Never use football or other sports.';
+
+  function message(e) {
+    var c = e && e.code;
+    if (c === 'unavailable' || c === 'sampling_disabled' || c === 'capability_disabled' || c === 'capability_removed' || c === 'not_declared')
+      return 'New questions only work when this page is open in the Claude app or on claude.ai.';
+    if (c === 'not_granted') return 'New questions need your OK to use Claude. Reload the page and choose Allow when it asks.';
+    if (c === 'rate_limited') return 'Claude is busy or you hit a usage limit. Try again in a few minutes.';
+    if (c === 'session_expired') return 'Your Claude sign-in expired. Sign in again, then try.';
+    if (c === 'cancelled') return 'Stopped.';
+    if (c === 'too_few') return 'Claude wrote questions, but the double-check threw most of them out. Tap the button again for a new batch.';
+    return 'That batch didn\'t come through cleanly. Tap the button again to get a new one.';
+  }
+  function isPermanent(e) { var c = e && e.code; return c === 'unavailable' || c === 'not_granted' || c === 'sampling_disabled' || c === 'capability_disabled' || c === 'capability_removed' || c === 'not_declared'; }
+
+  async function call(prompt, opts) {
+    if (blocked) throw { code: blocked };
+    var s = await getSample();
+    if (!s) { blocked = 'unavailable'; throw { code: 'unavailable' }; }
+    try { return await s.json(prompt, opts); }
+    catch (e) { if (isPermanent(e)) blocked = e.code; throw e; }
+  }
+
+  /* Multiple choice. o = { subject, material, n, avoid: [stems], tags: [{id, name}] (optional), extra, onStage }
+     Resolves [{ q, correct, wrong: [3], why, tag?, code? }]. */
+  async function mcq(o) {
+    var n = Math.max(2, Math.min(o.n || 5, 10));
+    var tagRule = o.tags && o.tags.length > 1
+      ? '- Each question is about ONE of these, named by its id in "tag": ' + o.tags.map(function (t) { return t.id + ' = ' + t.name; }).join('; ') + '. Spread the questions across them.\n'
+      : '';
+    var codeRule = o.code ? '- If a question needs a short code snippet (8 lines max, plain Python), put it in "code" and keep it out of "q".\n' : '';
+    var quoteRule = o.quote ? '- If a question asks him to judge a sentence, thesis, paragraph or source, put that text in "quote" (keep it under 60 words) and keep it out of "q".\n' : '';
+    var prompt =
+      'You write practice questions for a student\'s study app.\n\nSTUDENT: ' + VOICE + '\n\nSUBJECT: ' + o.subject + '\n\n' +
+      'MATERIAL. Use ONLY these facts. If something is not in the material, do not ask about it:\n"""\n' + clean(o.material, 14000) + '\n"""\n\n' +
+      (o.avoid && o.avoid.length ? 'QUESTIONS HE ALREADY HAS. Do not repeat these. Test the same ideas from a new angle, with new situations:\n' + o.avoid.slice(0, 60).map(function (s) { return '- ' + clean(s, 160); }).join('\n') + '\n\n' : '') +
+      'Write ' + n + ' NEW multiple-choice questions.\nRules:\n' +
+      '- About half are "apply it" questions: a short, concrete situation, and he picks what the idea says to do or what it explains. The rest check understanding in plain words. No trick questions, no "all of the above", no "none of the above".\n' +
+      '- Exactly one correct answer. Three wrong answers that sound right to someone who only half-learned it (real mix-ups), about the same length as the right one.\n' +
+      '- "why": one or two short sentences on why the right answer is right, naming the trap if there is one.\n' +
+      '- Each question under 50 words, each answer choice under 22 words. Plain text only, no markdown.\n' +
+      tagRule + codeRule + quoteRule + (o.extra ? o.extra + '\n' : '') +
+      '\nReply with only a JSON array, no other text, like:\n[{"q": "...", "correct": "...", "wrong": ["...", "...", "..."], "why": "..."' + (tagRule ? ', "tag": "' + o.tags[0].id + '"' : '') + (codeRule ? ', "code": ""' : '') + (quoteRule ? ', "quote": ""' : '') + '}]';
+    if (o.onStage) o.onStage('write');
+    var raw = await call(prompt, { cache: false });
+    var tagIds = (o.tags || []).map(function (t) { return t.id; });
+    var list = (Array.isArray(raw) ? raw : []).map(function (x) {
+      if (!x || typeof x !== 'object') return null;
+      var q = str(x.q, 700), c = str(x.correct, 300), w = Array.isArray(x.wrong) ? x.wrong.map(function (y) { return str(y, 300); }).filter(Boolean) : [];
+      var why = str(x.why, 700);
+      if (!q || !c || w.length < 3 || !why) return null;
+      w = w.slice(0, 3);
+      var all = [c].concat(w).map(function (s) { return s.toLowerCase(); });
+      if (all.some(function (s, i) { return all.indexOf(s) !== i; })) return null;
+      var out = { q: q, correct: c, wrong: w, why: why };
+      if (tagIds.length) out.tag = tagIds.indexOf(x.tag) >= 0 ? x.tag : tagIds[0];
+      if (o.code && str(x.code, 1200)) out.code = x.code.replace(/\s+$/, '');
+      if (o.quote && str(x.quote, 900)) out.quote = x.quote.trim();
+      return out;
+    }).filter(Boolean);
+    if (!list.length) throw { code: 'invalid_json' };
+    return verify(list, o);
+  }
+
+  /* A second, separate call answers each question without the key. Keep only the ones it gets right. */
+  async function verify(list, o) {
+    if (o.onStage) o.onStage('check');
+    var shown = list.map(function (x) {
+      var opts = shuffle([x.correct].concat(x.wrong));
+      return { x: x, opts: opts, key: 'ABCD'.charAt(opts.indexOf(x.correct)) };
+    });
+    var prompt = 'Answer these practice questions. Use the material below as the source of truth. For each one, pick the single best answer.\n\n' +
+      'MATERIAL:\n"""\n' + clean(o.material, 14000) + '\n"""\n\n' +
+      shown.map(function (s, i) {
+        return (i + 1) + '. ' + s.x.q + (s.x.quote ? '\nText: "' + s.x.quote + '"' : '') + (s.x.code ? '\nCode:\n' + s.x.code : '') + '\n' + s.opts.map(function (t, k) { return '   ' + 'ABCD'.charAt(k) + ') ' + t; }).join('\n');
+      }).join('\n\n') +
+      '\n\nReply with only a JSON array of ' + shown.length + ' capital letters in question order, like ["B", "D"].';
+    var ans;
+    try { ans = await call(prompt, { cache: false }); } catch (e) { if (isPermanent(e)) throw e; ans = null; }
+    if (!Array.isArray(ans) || ans.length !== shown.length) return list;  // the check didn't come back: keep the batch, it was validated for shape
+    var kept = shown.filter(function (s, i) { return String(ans[i]).trim().toUpperCase().charAt(0) === s.key; }).map(function (s) { return s.x; });
+    if (!kept.length) throw { code: 'too_few' };
+    return kept;
+  }
+
+  /* FDE: "what does it print?" Python. The page runs each snippet itself to get the real output. */
+  async function reads(o) {
+    var n = Math.max(1, Math.min(o.n || 2, 4));
+    var prompt = 'You write "read the code" drills for a beginner\'s Python study app.\n\nSTUDENT: ' + VOICE + '\n\nLESSON: ' + o.subject + '\n\n' +
+      'LESSON MATERIAL:\n"""\n' + clean(o.material, 10000) + '\n"""\n\n' +
+      'Write ' + n + ' short Python programs (4 to 12 lines each) that practice this lesson\'s idea. The student reads each one and writes down exactly what it prints.\n' +
+      'Rules: plain Python 3 only. No imports, no input(), no files, no randomness, no network. Must print 1 to 8 lines. Use data from trading, cooking, or music. ' +
+      'Different from these existing drills:\n' + (o.avoid || []).slice(0, 12).map(function (s) { return '---\n' + String(s).slice(0, 400); }).join('\n') + '\n\n' +
+      '"why": 1-2 sentences explaining the key step a beginner gets wrong. Do NOT say what it prints.\n' +
+      'Reply with only a JSON array, like: [{"code": "...", "why": "..."}]';
+    if (o.onStage) o.onStage('write');
+    var raw = await call(prompt, { cache: false });
+    return (Array.isArray(raw) ? raw : []).map(function (x) {
+      var code = x && str(x.code, 1500), why = x && str(x.why, 600);
+      if (!code || /\bimport\b|input\s*\(|open\s*\(/.test(code)) return null;
+      return { code: code.replace(/\s+$/, ''), why: why || '' };
+    }).filter(Boolean);
+  }
+
+  /* FDE: write-it tasks. The page runs the solution to get the expected output, and checks the starter does NOT pass. */
+  async function writes(o) {
+    var n = Math.max(1, Math.min(o.n || 2, 3));
+    var prompt = 'You write "write the code" tasks for a beginner\'s Python study app.\n\nSTUDENT: ' + VOICE + '\n\nLESSON: ' + o.subject + '\n\n' +
+      'LESSON MATERIAL:\n"""\n' + clean(o.material, 10000) + '\n"""\n\n' +
+      'Write ' + n + ' small tasks that practice this lesson\'s idea (5 to 15 lines of solution code each).\n' +
+      'Rules: plain Python 3 only. No imports, no files, no randomness, no network. If the task uses input(), give 2 test cases with the typed values; otherwise give one test with no inputs. ' +
+      'The starter is a skeleton with ___ blanks or # step comments, never the full answer. Use data from trading, cooking, or music.\n' +
+      'Different from these existing tasks:\n' + (o.avoid || []).slice(0, 12).map(function (s) { return '- ' + clean(s, 200); }).join('\n') + '\n\n' +
+      'Reply with only a JSON array, like: [{"title": "short name", "task": "what to build, 1-3 sentences", "starter": "...", "solution": "...", "tests": [[]], "hints": ["...", "..."]}]\n' +
+      '("tests" is a list of test cases; each test case is the list of strings the user types, in order. [[]] means one run with no typing.)';
+    if (o.onStage) o.onStage('write');
+    var raw = await call(prompt, { cache: false });
+    return (Array.isArray(raw) ? raw : []).map(function (x) {
+      if (!x) return null;
+      var t = str(x.title, 120), task = str(x.task, 900), st = str(x.starter, 2000), sol = str(x.solution, 2500);
+      if (!t || !task || !st || !sol || /\bimport\b|open\s*\(/.test(sol)) return null;
+      var tests = Array.isArray(x.tests) && x.tests.length ? x.tests.slice(0, 3).map(function (a) { return Array.isArray(a) ? a.map(String) : []; }) : [[]];
+      var hints = Array.isArray(x.hints) ? x.hints.map(function (h) { return str(h, 300); }).filter(Boolean).slice(0, 3) : [];
+      return { title: t, task: task, starter: st, solution: sol, tests: tests, hints: hints };
+    }).filter(Boolean);
+  }
+
+  function load(key, dflt) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : dflt; } catch (e) { return dflt; } }
+  function save(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) { /* storage full or blocked: the set still works this visit */ } }
+  var STAGE = { write: 'Claude is writing new questions from this lesson…', check: 'Double-checking every answer with a second, separate pass…' };
+  return { mcq: mcq, reads: reads, writes: writes, message: message, clean: clean, shuffle: shuffle, uid: uid, load: load, save: save, STAGE: STAGE,
+    ready: function () { return getSample().then(function (s) { return !!s && !blocked; }); } };
+})();
+
+(function () {
+  'use strict';
+
+  /* ---------- storage (never required: the page works without it) ---------- */
+  var KEY = 'writing-room-v1';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+  var S = load(); S.best = S.best || {}; S.notes = S.notes || {}; S.checks = S.checks || {}; S.miss = S.miss || {};
+
+  var ICON = {
+    fde: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>',
+    ana: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>',
+    hook: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1.3 1.7 1.4 2.5h5.2c.1-.8.6-1.7 1.4-2.5A6 6 0 0 0 12 3Z"/></svg>'
+  };
+
+  /* ---------- content ---------- */
+  var L = [
+  {
+    id: 'thesis', color: '#B48CFF', title: 'Claim, Evidence, So What', short: 'Build an argument people believe', tag: 'Final essay',
+    intro: 'Every strong essay and every strong client memo runs on the same engine: make a clear claim, prove it, and explain why the proof matters.',
+    learn: [
+      { h: 'What a thesis is', html: '<p>A <b>thesis</b> is one sentence that states your main point. It is a <b>claim</b>: something a reasonable person could disagree with, and that you prove with evidence.</p><p>It usually sits at the <b>end of your introduction</b>, so the reader knows exactly what the rest of the paper will prove.</p>' },
+      { h: 'Topic vs. question vs. thesis', html: '<span class="ex bad"><span class="lbl bad">Topic</span>Shop class.</span><span class="ex bad"><span class="lbl bad">Question</span>Why are schools cutting shop class?</span><span class="ex good"><span class="lbl good">Thesis</span>Every high school student should have to take an industrial arts or home economics class to graduate, because these classes teach hands-on problem solving that relying on AI can\'t replace.</span><p>Prof. Coro\'s rule: your proposal can ask a question, but the <b>final paper must state a thesis</b>. A question makes the reader do your job.</p>' },
+      { h: 'The 4-point thesis check', html: '<ul><li><b>Arguable:</b> someone could push back. "Shop class uses tools" is a fact, not a claim.</li><li><b>Specific:</b> names who, what, and where. "Education has problems" is too broad.</li><li><b>Provable:</b> you can back it up with sources, not just feelings.</li><li><b>One sentence:</b> if it takes a paragraph, you haven\'t decided what you think yet.</li></ul>' },
+      { h: 'Body paragraphs: C-E-S', html: '<ul><li><b>Claim</b> (also called the <b>topic sentence</b>): the one point this paragraph proves.</li><li><b>Evidence:</b> a stat, a quote from an expert, or an example, with a citation.</li><li><b>So what</b> (also called <b>analysis</b>): 1–2 sentences explaining how that evidence proves your claim and connects back to the thesis.</li></ul><p>Most weak paragraphs skip the <b>So what</b>. They drop a quote and move on, and the reader has to guess why it matters.</p>' },
+      { h: 'Evidence ranked', html: '<ul><li><b>Strongest:</b> data from a study or government source, or a quote from someone with real credentials.</li><li><b>Good:</b> a specific real example (like Klarna replacing 700 support agents with AI, then hiring humans again).</li><li><b>Support only:</b> your personal experience. It makes you credible, but it can\'t carry the argument alone.</li><li><b>Not evidence:</b> "everybody knows," "studies show" with no study named, or a random post.</li></ul>' },
+      { h: 'Counterargument', html: '<p>A <b>counterargument</b> is the best point the other side would make. Name it, then answer it (that answer is the <b>rebuttal</b>).</p><span class="ex good">Some people say AI makes hands-on skills useless. But AI can\'t patch a hole in the wall or rewire an outlet, and someone still has to check the AI\'s work.</span><p>Doing this makes you look fair and confident, not weaker.</p>' }
+    ],
+    terms: [
+      ['Thesis', 'Your main claim in one sentence', '"Every student should take shop or home ec to graduate."'],
+      ['Claim', 'A point someone could disagree with', '"Hands-on classes build problem solving."'],
+      ['Evidence', 'The proof: data, quotes, examples', 'A PBS NewsHour report on Gen Z choosing trades'],
+      ['Analysis / "So what"', 'Explaining how the proof supports the claim', '"This shows students want job-ready skills, not just degrees."'],
+      ['Topic sentence', 'First sentence of a paragraph: its one point', '"Schools cut shop classes to save money."'],
+      ['Counterargument', 'The other side\'s best point', '"AI makes these skills useless."'],
+      ['BLUF', 'Bottom Line Up Front: answer first, details after', '"Recommendation: pilot the chatbot in one store first."']
+    ],
+    analogy: '<b>Trading:</b> your thesis is your <b>bias</b> for the day. Evidence is the <b>confirmation</b> on the chart. The "so what" is your <b>risk-to-reward</b>, the reason the trade is worth taking. A bias with no confirmation is a gamble, and a claim with no evidence is just an opinion.',
+    fde: 'Clients don\'t read essays. They read <b>recommendations</b>. Same engine, different shape: <b>Recommendation</b> (claim) → <b>What we found</b> (evidence) → <b>Impact</b> (so what: money, time, or risk). Put the bottom line first. That habit is called <b>BLUF</b>.',
+    hook: '<b>"Make a call. Prove it. Say why it matters."</b> Claim, Evidence, So What = <b>C-E-S</b>.',
+    quiz: [
+      { q: 'Which one is a thesis?', o: ['Home economics.', 'Should schools bring back home economics?', 'Home economics used to teach cooking and sewing.', 'Florida high schools should require one home economics or shop class, because these classes teach life skills students can\'t get from a screen.'], a: 3, why: 'Only the last one makes an arguable, specific claim with a reason. The first is a topic, the second is a question, and the third is a fact nobody would argue with.' },
+      { q: 'Prof. Coro said your final paper can\'t be built around this. What is it?', quote: '"Why are schools cutting shop class?"', o: ['A fact', 'A question instead of a thesis', 'A counterargument', 'A citation'], a: 1, why: 'It\'s a question. A proposal can start from a working question, but the final essay has to answer it with a stated claim.' },
+      { q: 'What\'s wrong with this thesis?', quote: '"Education in America has a lot of problems."', o: ['It\'s too broad', 'It\'s too specific', 'It\'s a question', 'Nothing, it\'s strong'], a: 0, why: 'It doesn\'t say which problem, for whom, or what to do. A strong thesis narrows it down: which students, which class, which fix.' },
+      { q: 'This paragraph is missing one part. Which one?', quote: 'Schools are cutting hands-on classes. A 2025 PBS NewsHour report showed more Gen Z students choosing training in skilled trades. Next, let\'s talk about AI.', o: ['Claim', 'Evidence', 'So what (analysis)', 'Nothing'], a: 2, why: 'It has a claim and evidence, then jumps away. It never explains why the report matters, for example that students want hands-on skills that schools stopped teaching.' },
+      { q: 'Which is the strongest evidence that hands-on classes matter?', o: ['"Everybody knows kids can\'t fix anything anymore."', 'A national data report on career and technical education, with the source cited', 'A funny TikTok about a guy who can\'t use a drill', '"Studies show it helps."'], a: 1, why: 'Data from a named, credible source beats feelings, jokes, and "studies show" with no study named. The TikTok could be a hook, but not your proof.' },
+      { q: 'Why add a counterargument to your essay?', o: ['To fill up word count', 'To show you understand the other side, then beat it', 'Because it weakens your argument on purpose', 'Only professors care about it'], a: 1, why: 'Naming the other side\'s best point and answering it makes you look fair and confident. Readers trust a writer who isn\'t hiding from objections.' },
+      { q: 'Where does the thesis usually go?', o: ['The first word of the essay', 'The end of the introduction', 'Halfway through the essay', 'Only in the conclusion'], a: 1, why: 'At the end of the intro, after you hook the reader and give context. Then every body paragraph proves a piece of it.' },
+      { q: 'FDE mode: which email opener to a client is best?', o: ['"Hope you\'re well! So we\'ve been looking at a bunch of stuff this week and there were some interesting things..."', '"Recommendation: launch the support chatbot in one store for 30 days before rolling it out. Details below."', '"Per my last email, please see attached."', '"There are many factors to consider in today\'s fast-paced world."'], a: 1, why: 'Bottom Line Up Front. The client knows the decision in one line, then reads details if they want. That\'s C-E-S for business.' },
+      { q: 'Your personal story (training as an electrician) in the final essay is...', o: ['Not allowed in a research paper', 'Good support that makes you credible, but it needs sources next to it', 'Enough evidence by itself', 'Only allowed in the conclusion'], a: 1, why: 'Experience gives you credibility, but research papers need outside evidence to prove the claim. Use both together.' }
+    ],
+    teach: { prompt: 'Write your working thesis for the final essay in one sentence. Then write one C-E-S body paragraph plan: your claim, which source would prove it, and your "so what."', checks: ['My thesis is one sentence and makes a claim (not a question)', 'Someone could disagree with it', 'It names who and what (specific)', 'My paragraph plan has a claim, evidence with a source, and a "so what"'] }
+  },
+  {
+    id: 'sources', color: '#2FE6C8', title: 'Source Detective', short: 'Real or fake? Primary or secondary?', tag: 'Annotated bib',
+    intro: 'Prof. Coro makes you do an annotated bibliography because AI invents fake citations. An FDE has the same job every day: check the AI\'s output before a client sees it.',
+    learn: [
+      { h: 'Primary vs. secondary (Prof. Coro\'s rules)', html: '<ul><li><b>Primary</b> = the original or firsthand info: government data, a news article that reports what happened (not opinion), scholarly research, experiment results, an interview, an original creative work.</li><li><b>Secondary</b> = something that analyzes or comments on the original: documentaries, editorials and opinion pieces, reviews, commentary videos.</li><li><b>Trick case:</b> a documentary is secondary, but a stat or chart shown inside it (like a College Board tuition chart) is primary and gets its own citation.</li></ul><p>Your final essay needs <b>at least 1 primary source</b>.</p>' },
+      { h: 'The 4-question check', html: '<ul><li><b>When?</b> Published or updated recently? Pair any old source with one from the last ~5 years.</li><li><b>Relevant?</b> Does it actually answer your question?</li><li><b>Who?</b> Who wrote it, and what are their credentials?</li><li><b>Why?</b> Its purpose: to <b>inform, teach, sell, entertain, or persuade</b>. Watch for sponsored content (paid for by a company).</li></ul>' },
+      { h: 'Mis-, dis-, malinformation', html: '<ul><li><b>Misinformation:</b> false, but the person sharing it believes it\'s true.</li><li><b>Disinformation:</b> false, and spread <b>on purpose</b> to fool people.</li><li><b>Malinformation:</b> <b>true</b>, but shared to cause harm (like leaking someone\'s private info).</li></ul>' },
+      { h: 'Spotting a fake (AI-made) citation', html: '<ul><li>You can\'t find the article in the library databases or Google Scholar.</li><li>The <b>DOI</b> (a permanent ID link for an article) goes nowhere or to a different article.</li><li>The journal exists, but that volume or page range doesn\'t.</li><li>The quote doesn\'t appear anywhere in the real article.</li></ul><p><b>The rule:</b> never cite anything you haven\'t opened and read yourself.</p>' },
+      { h: 'Where to search (11/16 class)', html: '<ul><li>Log in to the library first, then Databases → Subjects → <b>Education</b>.</li><li>Filters: full text, peer reviewed, last 5 years, English. Add <b>AND "United States"</b>.</li><li>Use <b>quotes</b> for phrases: "industrial arts". Try more than one database (JSTOR worked better in class).</li><li>Read the <b>abstract</b> (a short summary at the top of an article) before reading the whole thing.</li></ul>' }
+    ],
+    terms: [
+      ['Primary source', 'Original or firsthand info', 'Government data, an interview you did, a study\'s results'],
+      ['Secondary source', 'Comments on or analyzes the original', 'A documentary, an editorial, a review'],
+      ['Peer reviewed', 'Checked by experts in the field before publishing', 'A journal article in a library database'],
+      ['Abstract', 'A short summary at the top of an article', 'Read it first to decide if the article fits'],
+      ['DOI', 'A permanent ID link for an article', 'doi.org/10.1080/...'],
+      ['Hallucination', 'When AI makes up facts or sources', 'A citation for an article that doesn\'t exist'],
+      ['Sponsored content', 'Content paid for by a company', 'An "article" a streaming service paid a magazine to run']
+    ],
+    analogy: '<b>Trading:</b> a stock tip on social media is a secondary source with a hidden purpose. The actual earnings report is the primary source. You don\'t size a position off a tip without checking the report, and you don\'t build a paragraph off a source you haven\'t verified.',
+    fde: 'Prof. Coro\'s water-treatment stories are the FDE nightmare: someone trusted AI output, the math and citations were fake, and nobody checked. Your value as an FDE is being the person who <b>verifies before it ships</b>. That\'s called keeping a <b>human in the loop</b>.',
+    hook: '<b>"When, Relevant, Who, Why"</b> and <b>"If I didn\'t open it, I don\'t cite it."</b>',
+    quiz: [
+      { kind: 'Primary or secondary?', q: 'A government data table on high school enrollment in career and technical education classes.', o: ['Primary', 'Secondary'], a: 0, why: 'Government data is original, firsthand information. That\'s primary.' },
+      { kind: 'Primary or secondary?', q: 'A PBS documentary about for-profit colleges.', o: ['Primary', 'Secondary'], a: 1, why: 'A documentary packages and comments on information, so Prof. Coro counts it as secondary.' },
+      { kind: 'Primary or secondary?', q: 'A tuition chart from the College Board that appears inside that documentary.', o: ['Primary', 'Secondary'], a: 0, why: 'Her trick case: the documentary is secondary, but the original data shown in it is primary and gets its own citation.' },
+      { kind: 'Primary or secondary?', q: 'A newspaper editorial arguing that schools should bring back shop class.', o: ['Primary', 'Secondary'], a: 1, why: 'Editorials are opinion pieces. Opinion and commentary are secondary.' },
+      { kind: 'Primary or secondary?', q: 'An interview you do with an electrician who has worked in the trade for 20 years.', o: ['Primary', 'Secondary'], a: 0, why: 'Interviews are firsthand. State the person\'s credentials when you use it.' },
+      { q: 'A for-profit college\'s TV ad. What\'s its main purpose?', o: ['To inform', 'To teach', 'To sell', 'To entertain'], a: 2, why: 'It\'s trying to get you to enroll and pay. Purpose matters: a source that\'s selling something is going to show only the good side.' },
+      { q: 'Your uncle shares a fake stat about schools on Facebook, and he truly believes it. That\'s...', o: ['Misinformation', 'Disinformation', 'Malinformation'], a: 0, why: 'False but shared in good faith = misinformation.' },
+      { q: 'A company spreads a made-up study on purpose to sell its product. That\'s...', o: ['Misinformation', 'Disinformation', 'Malinformation'], a: 1, why: 'False and spread on purpose to fool people = disinformation.' },
+      { q: 'Someone posts a classmate\'s real grades online to embarrass them. That\'s...', o: ['Misinformation', 'Disinformation', 'Malinformation'], a: 2, why: 'The info is true, but it\'s shared to cause harm = malinformation.' },
+      { q: 'An AI tool gives you a perfect citation, but you can\'t find the article in any database and the DOI goes nowhere. What do you do?', o: ['Use it, the AI is probably right', 'Change the page numbers so it looks better', 'Drop it and find a real source you can open and read', 'Cite it but don\'t quote it'], a: 2, why: 'It\'s almost certainly a hallucination. Using it is exactly what the annotated bibliography is designed to catch.' },
+      { q: 'Why did Prof. Coro filter to "last 5 years" in the database?', o: ['Older sources aren\'t allowed', 'To get current information, then pair any older foundation source with a recent one', 'Because databases only have 5 years', 'To get fewer results for no reason'], a: 1, why: 'Older sources are OK as a foundation, but she wants something recent alongside them so your facts are current.' },
+      { q: 'What should you read first to decide if a journal article fits your topic?', o: ['The Works Cited', 'The abstract', 'The last page', 'The author\'s bio only'], a: 1, why: 'The abstract is a short summary of the whole article. It saves you from reading 20 pages that don\'t fit.' }
+    ],
+    teach: { prompt: 'Pick one source you plan to use. Write: is it primary or secondary, and why? Then answer When, Relevant, Who, and Why (purpose) for it in one line each.', checks: ['I opened and read this source myself', 'I said primary or secondary and explained why', 'I checked the date, the author, and the purpose', 'I know where I found it (database name or website)'] }
+  },
+  {
+    id: 'summary', color: '#6FC3FF', title: 'Summary Sprint', short: 'Shrink it without losing the point', tag: 'Annotated bib',
+    intro: 'Every annotation starts with a 2–3 sentence summary. Every client meeting ends with a recap. Same skill: keep the main point, cut the rest.',
+    learn: [
+      { h: 'Quote vs. paraphrase vs. summary', html: '<ul><li><b>Quote:</b> the author\'s exact words, in quotation marks, with a citation. Use it when the wording itself is powerful.</li><li><b>Paraphrase:</b> one passage in <b>your own words and your own sentence structure</b>, about the same length. Still cite it.</li><li><b>Summary:</b> the <b>main idea only</b>, in your own words, much shorter. Still cite it.</li></ul><p>All three need a citation. Your own words don\'t make it your own idea.</p>' },
+      { h: 'Patchwriting: the trap', html: '<p><b>Patchwriting</b> means swapping a few words for synonyms but keeping the author\'s sentence shape. It reads like plagiarism, and Turnitin catches it.</p><span class="ex bad"><span class="lbl bad">Original</span>The company admitted that focusing too much on cost had led to lower quality.</span><span class="ex bad"><span class="lbl bad">Patchwritten</span>The business confessed that concentrating too heavily on price had caused worse quality.</span><span class="ex good"><span class="lbl good">Real paraphrase</span>Klarna\'s leaders said their push to save money hurt their customer service, so they started hiring people again.</span>' },
+      { h: 'How to summarize (4 steps)', html: '<ul><li><b>1. Read it</b> all the way through.</li><li><b>2. Close it.</b> Don\'t look at the source.</li><li><b>3. Write from memory:</b> who, what they found or argue, and why it matters.</li><li><b>4. Check it</b> against the source for accuracy, and make sure you didn\'t copy phrases.</li></ul>' },
+      { h: 'What to cut', html: '<p>Cut examples, side stories, and numbers that aren\'t the main point. Keep the <b>main claim</b> and the <b>one fact</b> that proves it. If a sentence could be removed and the reader still gets the point, remove it.</p>' }
+    ],
+    terms: [
+      ['Quote', 'Exact words in quotation marks', '"in a swiftly moving stream of particles" (Carr)'],
+      ['Paraphrase', 'Same passage, your words and structure', 'Carr says his mind now expects quick, chopped-up info'],
+      ['Summary', 'Main idea only, much shorter', 'Carr argues the internet is weakening our deep focus'],
+      ['Patchwriting', 'Swapping synonyms, keeping their sentence shape', 'Counts as plagiarism'],
+      ['Exec summary', 'A short summary at the top of a business doc', '3 lines a CEO reads before deciding']
+    ],
+    analogy: '<b>Cooking:</b> a summary is a <b>sauce reduction</b>. You boil it down until it\'s less volume but all the flavor. A quote is serving the chef\'s dish exactly as made, with their name on it. A paraphrase is cooking the same dish from your own recipe, and you still credit where you learned it.',
+    fde: 'After every client call, an FDE sends a recap: <b>decisions made, action items, who owns each one, and deadlines</b>. If the client reads only the first 3 lines, they should know everything important. That\'s an <b>exec summary</b>.',
+    hook: '<b>"Read it. Close it. Say it. Check it."</b>',
+    quiz: [
+      { q: 'Which of these needs a citation?', o: ['Only quotes', 'Quotes and paraphrases, but not summaries', 'Quotes, paraphrases, and summaries', 'None, if it\'s in your own words'], a: 2, why: 'All three use someone else\'s ideas. Changing the words doesn\'t change whose idea it is.' },
+      { q: 'Pick the best one-sentence summary.', quote: 'In 2024, Klarna said its AI chatbot was doing the work of 700 customer service agents. By 2025, its CEO said that focusing too much on cost had led to lower quality, and the company started hiring humans again.', o: ['Klarna is a company that had a chatbot in 2024 and a CEO in 2025.', 'Klarna replaced hundreds of support workers with AI to save money, saw quality drop, and started rehiring people.', 'AI is bad and should never be used for customer service.', 'In 2024, Klarna said its AI chatbot was doing the work of 700 customer service agents.'], a: 1, why: 'It keeps the main idea (cut workers, quality dropped, rehired) in your own words. The first misses the point, the third adds an opinion the source didn\'t say, and the fourth just copies one sentence.' },
+      { q: 'Is this a real paraphrase or patchwriting?', quote: 'Original: "the internet has changed the way our brains work." Yours: "the web has altered the manner our minds function."', o: ['Real paraphrase', 'Patchwriting'], a: 1, why: 'Same sentence shape, just synonyms swapped in. A real paraphrase rebuilds the sentence: "Carr believes going online has rewired how we think."' },
+      { q: 'Step 2 of summarizing is "close it." Why?', o: ['To save time', 'So you write it in your own words instead of copying the author\'s phrasing', 'Professors require it', 'So you forget the details'], a: 1, why: 'If the source is open, your brain copies its wording. Writing from memory forces your own words.' },
+      { q: 'You\'re summarizing a 20-page study for your annotated bib. What do you keep?', o: ['Every statistic', 'The main finding and the one fact that best proves it', 'The author\'s bio and the history of the journal', 'Only the title'], a: 1, why: 'A 2–3 sentence summary keeps the main claim and its strongest proof. Details go in your essay if you need them.' },
+      { q: 'FDE mode: which client recap is strongest?', o: ['"Great call today! Lots of good ideas, let\'s keep the momentum going!"', '"Decisions: pilot the chatbot in Store 1. Action items: Juelz sends the data checklist by Fri; Maria grants system access by Wed. Next call: Mon 10 AM."', '"Attached are my notes, 6 pages."', '"We talked about many things in today\'s fast-paced world."'], a: 1, why: 'Decisions, owners, and deadlines in a few lines. The client can act on it without reading anything else.' },
+      { q: 'When should you use a direct quote instead of a paraphrase?', o: ['Always, it\'s safer', 'When the exact wording is powerful or important', 'Never in research papers', 'To reach the word count'], a: 1, why: 'Quote when the words themselves matter (a sharp line or a key definition). Otherwise paraphrase or summarize, so the essay sounds like you.' }
+    ],
+    teach: { prompt: 'Pick one source you\'ve read. Close it. Write a 2–3 sentence summary from memory: who made it, what it argues or found, and why it matters. Then open it and check yourself.', checks: ['I wrote it without looking at the source', 'It has the main idea, not side details', 'I didn\'t copy any phrases (or I put them in quotes)', 'I checked it against the source for accuracy'] }
+  },
+  {
+    id: 'surgery', color: '#FF4FB0', title: 'Sentence Surgery', short: 'Fix run-ons, splices, fragments', tag: 'Your #1 fix',
+    intro: 'Your ideas are strong. Voice-to-text turns them into one long breath. This level is about cutting them into clean sentences so the reader can follow.',
+    learn: [
+      { h: 'What a sentence needs', html: '<p>A complete sentence (an <b>independent clause</b>) needs three things: a <b>subject</b> (who or what), a <b>verb</b> (the action), and a <b>complete thought</b>.</p><span class="ex good">Schools cut shop class.</span>' },
+      { h: 'The 3 big errors', html: '<ul><li><b>Run-on (fused sentence):</b> two complete sentences smashed together with nothing between them.<span class="ex bad">AI is everywhere people stopped fixing things themselves.</span></li><li><b>Comma splice:</b> two complete sentences joined with only a comma.<span class="ex bad">AI is everywhere, people stopped fixing things themselves.</span></li><li><b>Fragment:</b> a piece of a sentence pretending to be a whole one.<span class="ex bad">Because AI is everywhere.</span></li></ul>' },
+      { h: '4 ways to fix a run-on or comma splice', html: '<ul><li><b>Period:</b> AI is everywhere. People stopped fixing things themselves.</li><li><b>Semicolon:</b> AI is everywhere; people stopped fixing things themselves.</li><li><b>Comma + FANBOYS</b> (for, and, nor, but, or, yet, so): AI is everywhere, so people stopped fixing things themselves.</li><li><b>Make one part depend on the other</b> (because, although, when, since): Because AI is everywhere, people stopped fixing things themselves.</li></ul>' },
+      { h: 'Voice-to-text traps', html: '<ul><li><b>"And" chains:</b> "...and I think... and then... and so..." Split at every "and so" or "and then."</li><li><b>Filler:</b> "like," "kind of," "you know." Cut them in writing.</li><li><b>Sound-alikes:</b> their / there / they\'re, its / it\'s, your / you\'re, then / than, affect / effect.</li><li><b>Idioms:</b> only use a saying if you know exactly what it means. "Keeping up with the Joneses" means competing with your neighbors\' stuff, not keeping up with the times.</li></ul><p><b>Test:</b> read it out loud. Wherever you naturally stop to breathe, you probably need a period.</p>' },
+      { h: 'Agreement and formal tone', html: '<ul><li><b>Subject-verb agreement:</b> match the verb to the real subject. "The list of skills <b>is</b> long" (the subject is "list," not "skills").</li><li><b>Formal writing:</b> your tutor said to write "they are" and "is not" instead of "they\'re" and "isn\'t" in academic essays.</li></ul>' }
+    ],
+    terms: [
+      ['Independent clause', 'Subject + verb + complete thought', 'Schools cut shop class.'],
+      ['Run-on', 'Two sentences with nothing between them', 'AI is everywhere people stopped fixing things.'],
+      ['Comma splice', 'Two sentences joined by only a comma', 'AI is everywhere, people stopped...'],
+      ['Fragment', 'An incomplete sentence', 'Because AI is everywhere.'],
+      ['FANBOYS', 'Words that join two sentences after a comma', 'for, and, nor, but, or, yet, so'],
+      ['Subject-verb agreement', 'Verb matches its real subject', 'The list of skills is long.']
+    ],
+    analogy: '<b>Music:</b> a run-on is a track with no rests. The listener can\'t breathe, and the hook gets lost. Punctuation is your <b>rests and bar lines</b> in Logic Pro. A period is a full rest, a comma is a quick breath, and a semicolon is a pause before the next phrase that answers the first.',
+    fde: 'A client judges your work by your Slack messages and emails before they ever see your code. Clean sentences read as <b>careful work</b>. A run-on in a client email reads like you rushed, and they start wondering what else you rushed.',
+    hook: '<b>"Two thoughts need a wall: a period, a semicolon, or comma + FANBOYS."</b>',
+    quiz: [
+      { kind: 'Name the error', q: 'I went to school to become an electrician the wiring has changed a lot since then.', o: ['Run-on', 'Comma splice', 'Fragment', 'Correct'], a: 0, why: 'Two complete sentences with nothing between them. Fix: "...an electrician. The wiring has changed a lot since then."' },
+      { kind: 'Name the error', q: 'I\'m not against AI, I study it every day.', o: ['Run-on', 'Comma splice', 'Fragment', 'Correct'], a: 1, why: 'Two complete sentences joined by only a comma. Fix: "I\'m not against AI. I study it every day." or "I\'m not against AI; I study it every day."' },
+      { kind: 'Name the error', q: 'Because people rely on AI for everything.', o: ['Run-on', 'Comma splice', 'Fragment', 'Correct'], a: 2, why: '"Because" makes it depend on another thought that never comes. Fix: "Because people rely on AI for everything, they stop solving problems themselves."' },
+      { kind: 'Name the error', q: 'Because people rely on AI for everything, they stop solving problems themselves.', o: ['Run-on', 'Comma splice', 'Fragment', 'Correct'], a: 3, why: 'Correct: a dependent part ("Because...") joined to a complete sentence with a comma.' },
+      { kind: 'Pick the fix', q: 'Fix this comma splice: "Schools cut shop class, students lost hands-on skills."', o: ['Schools cut shop class, and students lost hands-on skills.', 'Schools cut shop class students lost hands-on skills.', 'Schools cut shop class, students, lost hands-on skills.', 'Schools cut, shop class students lost hands-on skills.'], a: 0, why: 'Comma + a FANBOYS word ("and") correctly joins two complete sentences. The second option just removes the comma, which turns it into a run-on.' },
+      { kind: 'Pick the fix', q: 'Voice-to-text gave you: "and I feel like we\'re losing that and so I want my kids to learn it and it\'s important"', o: ['Leave it, it sounds natural', 'I feel like we\'re losing that. I want my kids to learn these skills because they matter.', 'And I feel, like, we\'re losing that, and so I want my kids to learn it, and it\'s important.', 'I feel like we\'re losing that and so I want my kids to learn it.'], a: 1, why: 'Split at "and so," cut the extra "and" chain, and make the reason clear. Adding commas to an "and" chain doesn\'t fix it.' },
+      { kind: 'Pick the right word', q: '"Schools say ___ budget is too tight for shop class."', o: ['there', 'their', 'they\'re'], a: 1, why: '"Their" shows ownership (the schools\' budget). "There" is a place, and "they\'re" means "they are."' },
+      { kind: 'Pick the right word', q: '"AI is a great tool, but ___ not a replacement for thinking."', o: ['its', 'it\'s'], a: 1, why: '"It\'s" = "it is." Test it: "it is not a replacement" works, so you need the apostrophe. "Its" shows ownership: "AI and its output."' },
+      { kind: 'Pick the right word', q: '"Hands-on classes are more useful ___ people think."', o: ['then', 'than'], a: 1, why: '"Than" compares. "Then" is about time: "first this, then that."' },
+      { kind: 'Agreement', q: 'Which is correct?', o: ['The list of life skills are getting shorter.', 'The list of life skills is getting shorter.'], a: 1, why: 'The subject is "list" (one list), not "skills." Cover up the "of..." phrase to find the real subject.' },
+      { kind: 'Idioms', q: 'You want to say classes should keep changing as the world changes. Which works?', o: ['"Schools need to keep up with the Joneses."', '"Schools need to keep up with the times."'], a: 1, why: '"Keeping up with the Joneses" means competing with neighbors over money and stuff. "Keep up with the times" means staying current.' },
+      { kind: 'Formal tone', q: 'For a formal academic essay, which fits Prof. Coro\'s class and your tutor\'s advice?', o: ['They\'re not ready for college and it isn\'t their fault.', 'They are not ready for college, and it is not their fault.'], a: 1, why: 'Your tutor asked for full forms ("they are," "is not") in academic writing. Contractions are fine in emails and casual writing.' }
+    ],
+    teach: { prompt: 'Paste 3–4 sentences from one of your own voice-to-text drafts. Fix every run-on, comma splice, and fragment. Then write which fix you used for each one (period, semicolon, comma + FANBOYS, or because/although).', checks: ['I read it out loud to find the breath breaks', 'Every sentence has a subject, a verb, and a complete thought', 'No two complete sentences are joined by only a comma', 'I checked their/there/they\'re and its/it\'s'] }
+  },
+  {
+    id: 'audience', color: '#FF9E45', title: 'Audience Switch', short: 'Same idea, right voice', tag: 'FDE liaison',
+    intro: 'The same idea has to sound different for a professor, a client, and a 12-year-old. Knowing your audience is half of being an FDE.',
+    learn: [
+      { h: 'Audience, purpose, tone', html: '<ul><li><b>Audience:</b> who\'s reading, and what do they already know?</li><li><b>Purpose:</b> what do you want them to do or understand after reading?</li><li><b>Tone</b> (also called <b>register</b>): how formal or casual you sound. Academic = formal. Slack with your team = casual. Client = professional but plain.</li></ul>' },
+      { h: 'One idea, three audiences', html: '<span class="ex"><span class="lbl good">Professor</span>Schools that remove industrial arts courses take away one of the few places students practice hands-on problem solving.</span><span class="ex"><span class="lbl good">Client</span>Your new hires can use AI tools, but many can\'t troubleshoot without them. A short hands-on training would close that gap.</span><span class="ex"><span class="lbl good">12-year-old</span>If a robot does all your fixing for you, you never learn how to fix stuff yourself.</span>' },
+      { h: 'Plain English rules', html: '<ul><li>Short sentences. One idea each.</li><li><b>Active voice</b> (the subject does the action): "The school cut the program." Not <b>passive</b>: "The program was cut by the school."</li><li><b>Jargon</b> (insider words): define it right after you use it, or drop it.</li><li>Concrete examples beat big words.</li></ul>' },
+      { h: 'AI tells to avoid', html: '<p>Your tutor said Essay #1 "sounded like AI." These are the giveaways:</p><ul><li>"Delve," "tapestry," "landscape," "realm"</li><li>"It\'s important to note that..." and "In today\'s fast-paced world..."</li><li>"Moreover" and "Furthermore" stacked back to back</li><li>Dashes everywhere, and everything grouped in threes</li><li>A conclusion that just repeats the intro word for word</li></ul><p>Sound like <b>you</b>: plain words, your examples, your opinions.</p>' }
+    ],
+    terms: [
+      ['Audience', 'Who is reading', 'Prof. Coro, a client CEO, your son'],
+      ['Purpose', 'What you want the reader to do or know', 'Approve a pilot, understand a risk'],
+      ['Tone / register', 'How formal or casual you sound', 'Essay = formal, Slack = casual'],
+      ['Active voice', 'The subject does the action', 'The school cut the program.'],
+      ['Passive voice', 'The action happens to the subject', 'The program was cut.'],
+      ['Jargon', 'Insider words outsiders don\'t know', '"RAG," "latency," "fine-tuning"']
+    ],
+    analogy: '<b>Music:</b> same song, different mix. The <b>radio edit</b> is short and clean for everyone. The <b>extended club mix</b> is for people who already love the track. You don\'t play the 9-minute version on the radio, and you don\'t send a client the 9-minute technical version either.',
+    fde: 'The <b>Liaison lane</b> of the FDE job is translation: tech → business. A CFO doesn\'t care how a model works. They care about <b>cost, time saved, and risk</b>. Say it in their language, and define any tech word you can\'t avoid.',
+    hook: '<b>"Who\'s reading? What should they do? How should it sound?"</b>',
+    quiz: [
+      { q: 'Which version fits a client CEO?', o: ['"We implemented a retrieval-augmented generation pipeline with vector embeddings."', '"The new assistant answers staff questions from your own manuals, which should cut training time."', '"It\'s important to note that in today\'s fast-paced landscape, AI is a tapestry of opportunity."', '"lol it works now"'], a: 1, why: 'Plain words, the business benefit (less training time), no jargon. The first is too technical, the third is full of AI tells, and the fourth is too casual.' },
+      { q: 'Which sentence is in active voice?', o: ['The program was cut by the district.', 'Mistakes were made.', 'The district cut the program.', 'The budget was reduced.'], a: 2, why: 'In active voice the subject (the district) does the action (cut). Active is clearer and shows who\'s responsible.' },
+      { q: 'Spot the AI tell.', o: ['"Shop class taught me to fix things."', '"Moreover, it is important to note that this multifaceted landscape..."', '"I trained as an electrician."', '"Schools should require one hands-on class."'], a: 1, why: '"Moreover," "it is important to note," "multifaceted," and "landscape" stacked together sound like AI wrote it.' },
+      { q: 'You have to use the word "latency" in a client email. Best move?', o: ['Use it and move on', 'Define it right after: "latency (how long the system takes to respond)"', 'Put it in bold so it looks important', 'Use three more technical words to look smart'], a: 1, why: 'Define jargon right after you use it. The client should never have to Google your email.' },
+      { q: 'Which is best for explaining your essay topic to a 12-year-old?', o: ['"Industrial arts curricula have declined due to budgetary constraints."', '"Schools stopped teaching kids how to build and fix stuff, and that\'s a problem."', '"The pedagogy of hands-on learning is multifaceted."'], a: 1, why: 'Short, concrete, everyday words. The goal is that they get it on the first read.' },
+      { q: 'Your conclusion repeats your intro almost word for word. What\'s the problem?', o: ['Nothing, that\'s what conclusions do', 'It reads like filler and like an AI pattern. A conclusion should show why it matters or what to do next', 'It\'s too short', 'It needs more quotes'], a: 1, why: 'A strong conclusion goes one step further: the bigger meaning, a call to action, or a look ahead. Repeating the intro feels robotic.' },
+      { q: 'Same news, different audience: "The project is 2 weeks late." What\'s best for the client?', o: ['"Unforeseen circumstances arose."', '"We\'re 2 weeks behind because the data arrived late. New date: Dec 15. Here\'s what we\'re doing to protect it."', '"Mistakes were made."', 'Say nothing and hope they don\'t notice.'], a: 1, why: 'Direct, active, honest, with a new date and a plan. Clients trust bad news delivered clearly far more than vague excuses.' }
+    ],
+    teach: { prompt: 'Take one idea from your final essay. Write it 3 ways, one sentence each: for Prof. Coro (formal), for a business client (plain and focused on results), and for your son (simple and concrete).', checks: ['Each version fits its reader', 'No jargon without a definition', 'Active voice: who does what is clear', 'No AI tells (delve, landscape, "it\'s important to note")'] }
+  },
+  {
+    id: 'mla', color: '#FFD25A', title: 'MLA + Annotated Bib', short: 'Format it right for 12/5 and 12/7', tag: 'Due soon',
+    intro: 'Class-specific, short-term, and worth easy points. MLA 9 is the format Prof. Coro grades on, and the annotated bibliography is due Sat 12/5, before the paper.',
+    learn: [
+      { h: 'Page setup', html: '<ul><li>Times New Roman, 12 pt, <b>double-spaced</b> everywhere, 1-inch margins.</li><li>Top right of every page: last name + page number (<b>Perez 1</b>).</li><li>Heading, top left, 4 lines: <b>Juliano Perez / Professor Coro / ENC 1101 / 5 December 2026</b> (day month year).</li><li>Title centered, not bold, not underlined. Indent each paragraph half an inch.</li></ul>' },
+      { h: 'In-text citations', html: '<ul><li>Author\'s last name + page number, no comma, no "p.": <b>(Carr 57)</b>.</li><li>No page numbers (like a website): just the name: <b>(Ivanova)</b>.</li><li>No author: a short version of the title in quotation marks: <b>("Why Many in Gen Z")</b>.</li><li>Video: the title plus a timestamp in digital format: <b>(01:31)</b> or a range <b>(01:31–02:00)</b>. Don\'t spell it out.</li><li>Quoting someone inside a documentary? Introduce them with their <b>most recent title</b> first: "former Secretary of Education John King Jr."</li></ul>' },
+      { h: 'Works Cited', html: '<ul><li>New page, title <b>Works Cited</b> centered.</li><li>Alphabetical by the first word of each entry (usually the author\'s last name).</li><li><b>Hanging indent:</b> first line at the margin, every line after indented half an inch.</li><li>MLA 9 order: <b>Author. Title. Container, Other contributors, Version, Number, Publisher, Date, Location.</b> Skip any piece that doesn\'t exist.</li><li><b>BibMe</b> (free, MLA 9) builds these for you. Always double-check its output.</li></ul>' },
+      { h: 'Annotated bibliography (due Sat 12/5)', html: '<ul><li>For each source: <b>citation → summary (2–3 sentences) → evaluation</b> (why you chose it and how it helps your argument).</li><li><b>First person is OK</b>: "I chose this because..."</li><li>Optional reflection: did it change how you see your topic?</li><li><b>5–10 sources</b> (11 is OK; 12+ she\'ll ask you to justify). At least 1 primary.</li><li>Non-academic sources (news, PBS, even a TikTok) are OK if you explain why they\'re relevant.</li></ul>' },
+      { h: 'Hard deadlines', html: '<ul><li><b>Peer editing #2:</b> Fri 12/4</li><li><b>Annotated bibliography:</b> Sat 12/5</li><li><b>Final essay:</b> Mon 12/7. No late work without paperwork proving an emergency. Early is always OK.</li><li><b>Research week</b> 11/30–12/4: meet Prof. Coro or a tutor for points. She prefers a printed draft.</li></ul>' }
+    ],
+    terms: [
+      ['MLA 9', 'The citation format for English classes', 'Modern Language Association, 9th edition'],
+      ['In-text citation', 'The short credit inside your sentence', '(Carr 57)'],
+      ['Works Cited', 'The full list of sources at the end', 'Alphabetical, hanging indent'],
+      ['Hanging indent', 'First line out, the rest indented', 'Makes each entry easy to scan'],
+      ['Annotated bibliography', 'Citation + summary + evaluation for each source', 'Due Sat 12/5'],
+      ['Container', 'The bigger thing a source sits inside', 'The Atlantic (for Carr\'s article), YouTube (for a video)']
+    ],
+    analogy: '<b>Trading:</b> MLA is like a standard <b>order ticket</b>. Symbol, side, size, price, always in the same order, so anyone can read it instantly. Citations work the same way: author, title, container, date, in a fixed order, so any reader can find your source.',
+    fde: 'In client docs it\'s called <b>"show your receipts."</b> Every number in a recommendation should link to where it came from. Clients and legal teams will ask, and the FDE who can show the source in 10 seconds is the one they trust.',
+    hook: '<b>"Name, page, no comma."</b> And for the annotated bib: <b>"Cite it, sum it, sell it."</b>',
+    quiz: [
+      { q: 'Which in-text citation is correct MLA 9?', o: ['(Carr, p. 57)', '(Carr 57)', '(Nicholas Carr, 2008, page 57)', '[Carr: 57]'], a: 1, why: 'Last name + page number, no comma, no "p." Simple on purpose.' },
+      { q: 'What date goes in your annotated bibliography heading, even if you turn it in early?', o: ['The day you submit it', '5 December 2026', 'December 5th, 2026', '12/5/26'], a: 1, why: 'Prof. Coro said to use the due date, written day month year: 5 December 2026.' },
+      { q: 'Put the MLA 9 core elements in order. Which one is right?', o: ['Title. Author. Date. Container.', 'Author. Title. Container, Other contributors, Version, Number, Publisher, Date, Location.', 'Publisher. Author. Title. Date.', 'Date. Author. Title. Location.'], a: 1, why: 'Author first, then title, then the container and its details, ending with the location (pages, DOI, or URL).' },
+      { q: 'What does a hanging indent look like?', o: ['Every line indented', 'First line at the margin, the following lines indented half an inch', 'First line indented, the rest at the margin', 'No indents at all'], a: 1, why: 'It\'s the reverse of a normal paragraph. It makes the first word of each entry (the author) easy to spot.' },
+      { q: 'You quote a speaker at 1 minute 31 seconds in a video with no author. How do you cite it in your sentence?', o: ['(1 minute 31 seconds)', '("Video Title" 01:31)', '(YouTube 91)', '(Anonymous, 1:31 pm)'], a: 1, why: 'No author, so start with a short version of the title, then the timestamp in digital format.' },
+      { q: 'The three must-have parts of each annotation, in order:', o: ['Title, author, date', 'Citation, summary, evaluation', 'Quote, page number, opinion', 'Intro, body, conclusion'], a: 1, why: 'Citation first, then a short summary, then why you chose it and how it helps. That\'s "cite it, sum it, sell it."' },
+      { q: 'Can you write "I" in an annotated bibliography for Prof. Coro?', o: ['No, never in academic writing', 'Yes, she said first person is OK in annotations', 'Only in the citation'], a: 1, why: 'She said first person is fine: "I\'m a visual learner, and this documentary helped me because..."' },
+      { q: 'How many sources does she want in the annotated bibliography?', o: ['2–3', '5–10 (11 OK, 12+ justify it)', 'At least 20', 'Exactly 7'], a: 1, why: '5–10, with at least 1 primary source.' },
+      { q: 'What happens if the final essay is late on 12/7 without documentation?', o: ['10% off per day', 'She doesn\'t accept it', 'Automatic extension to 12/11', 'Half credit'], a: 1, why: 'She was clear: no exceptions without paperwork proving an emergency. Her own grades are due 12/11.' }
+    ],
+    teach: { prompt: 'Write one full annotation for a real source you plan to use: the MLA 9 citation, a 2–3 sentence summary, and 2–3 sentences on why you chose it and how it helps your argument.', checks: ['The citation follows Author. Title. Container... order (or came from BibMe and I checked it)', 'The summary is in my own words', 'The evaluation says why I chose it and how it helps', 'I opened and read this source myself'] }
+  }
+  ];
+
+  var MIXED = { id: 'mixed', color: '#FFFFFF', title: 'Mixed Test', short: '15 random questions from every level', tag: 'Test it' };
+
+  /* ---------- helpers ---------- */
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function byId(id) { if (id === 'mixed') return MIXED; for (var i = 0; i < L.length; i++) if (L[i].id === id) return L[i]; return L[0]; }
+
+  var levelsEl = document.getElementById('levels');
+  var panel = document.getElementById('panel');
+  var weakEl = document.getElementById('weak');
+  var current = S.last && (S.last === 'mixed' || L.some(function (l) { return l.id === S.last; })) ? S.last : 'thesis';
+  var currentTab = 'learn';
+
+  function renderLevels() {
+    var all = L.concat([MIXED]);
+    levelsEl.innerHTML = all.map(function (l, i) {
+      var best = S.best[l.id];
+      var pct = typeof best === 'number' ? best : 0;
+      return '<button type="button" class="lv' + (l.id === current ? ' on' : '') + '" data-id="' + l.id + '" style="--c:' + l.color + '"' + (l.id === current ? ' aria-current="true"' : '') + '>' +
+        '<span class="row"><span class="n">' + (l.id === 'mixed' ? '★' : i + 1) + '</span><strong>' + esc(l.title) + '</strong></span>' +
+        '<small>' + esc(l.short) + '</small>' +
+        '<span class="tag">' + esc(l.tag) + (typeof best === 'number' ? ' · best ' + best + '%' : '') + '</span>' +
+        '<span class="bar"><i style="width:' + pct + '%"></i></span></button>';
+    }).join('');
+  }
+  levelsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.lv'); if (!b) return;
+    current = b.getAttribute('data-id'); currentTab = current === 'mixed' ? 'drill' : 'learn';
+    S.last = current; save(S); renderLevels(); renderPanel();
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  function renderPanel() {
+    var l = byId(current);
+    panel.style.setProperty('--c', l.color);
+    if (l.id === 'mixed') {
+      panel.innerHTML = '<div class="panel-head"><span class="tag">Test it</span><h2>Mixed Test</h2><p>15 random questions from all six levels. Missed ones come back at the end of the round, asked again.</p></div><div class="pane" id="pane"></div>';
+      startQuiz(mixedPool(), 'mixed');
+      return;
+    }
+    var tabs = [['learn', 'Learn it'], ['drill', 'Drill it'], ['teach', 'Teach it back']];
+    panel.innerHTML = '<div class="panel-head"><span class="tag">Level ' + (L.indexOf(l) + 1) + ' · ' + esc(l.tag) + '</span><h2>' + esc(l.title) + '</h2><p>' + esc(l.intro) + '</p></div>' +
+      '<div class="tabs" role="tablist">' + tabs.map(function (t, i) {
+        return '<button type="button" role="tab" class="tab' + (t[0] === currentTab ? ' on' : '') + '" data-tab="' + t[0] + '" aria-selected="' + (t[0] === currentTab) + '"><b>' + (i + 1) + '</b>' + t[1] + '</button>';
+      }).join('') + '</div><div class="pane" id="pane"></div>';
+    panel.querySelector('.tabs').addEventListener('click', function (e) {
+      var b = e.target.closest('.tab'); if (!b) return;
+      currentTab = b.getAttribute('data-tab'); renderPanel();
+    });
+    if (currentTab === 'drill') panel.insertBefore(freshBar(l), document.getElementById('pane'));
+    if (currentTab === 'learn') renderLearn(l);
+    else if (currentTab === 'drill') startQuiz(l.quiz.map(function (q) { return Object.assign({ lv: l.id }, q); }), l.id);
+    else renderTeach(l);
+  }
+
+  function callout(cls, title, html) {
+    return '<div class="callout ' + cls + '"><span class="ic">' + ICON[cls] + '</span><div><h4>' + title + '</h4><p>' + html + '</p></div></div>';
+  }
+  function renderLearn(l) {
+    var pane = document.getElementById('pane');
+    pane.innerHTML = l.learn.map(function (c) { return '<div class="chunk"><h3>' + esc(c.h) + '</h3>' + c.html + '</div>'; }).join('') +
+      '<div class="chunk"><h3>Key terms</h3><div class="tablewrap"><table class="terms"><thead><tr><th>Term</th><th>Plain English</th><th>Example</th></tr></thead><tbody>' +
+      l.terms.map(function (t) { return '<tr><td>' + esc(t[0]) + '</td><td>' + esc(t[1]) + '</td><td>' + esc(t[2]) + '</td></tr>'; }).join('') + '</tbody></table></div></div>' +
+      callout('ana', 'Analogy', l.analogy) + callout('fde', 'FDE version', l.fde) + callout('hook', 'Memory hook', l.hook) +
+      '<div class="actions"><button type="button" class="btn" id="toDrill">Drill it →</button></div>';
+    document.getElementById('toDrill').addEventListener('click', function () { currentTab = 'drill'; renderPanel(); });
+  }
+
+  function mixedPool() {
+    var pool = [];
+    L.forEach(function (l) { l.quiz.forEach(function (q) { pool.push(Object.assign({ lv: l.id }, q)); }); });
+    // weight toward missed questions: put previously missed ones in first
+    var missed = pool.filter(function (q) { return S.miss[q.lv + '|' + q.q]; });
+    var rest = shuffle(pool.filter(function (q) { return !S.miss[q.lv + '|' + q.q]; }));
+    return shuffle(missed.slice(0, 7)).concat(rest).slice(0, 15);
+  }
+
+  /* ---------- new questions (11/22): Claude writes them from the level ---------- */
+  function levelMaterial(l) {
+    var T = ['LEVEL: ' + l.title + '. ' + l.intro];
+    (l.learn || []).forEach(function (c) { T.push('\n' + c.h + ': ' + FRESH.clean(c.html)); });
+    (l.terms || []).forEach(function (t) { T.push('Term: ' + t[0] + ' = ' + t[1] + (t[2] ? ' (e.g. ' + FRESH.clean(t[2]) + ')' : '')); });
+    if (l.analogy) T.push('Analogy: ' + FRESH.clean(l.analogy));
+    return T.join('\n');
+  }
+  function freshBar(l) {
+    var el = document.createElement('div');
+    el.className = 'fresh-bar';
+    el.innerHTML = '<button type="button" class="btn ghost">New questions &#8635;</button><span class="fresh-note">Solved this drill already? Claude writes 5 brand-new questions from this level, then double-checks every answer.</span>';
+    var b = el.querySelector('button'), note = el.querySelector('.fresh-note');
+    b.addEventListener('click', async function () {
+      b.disabled = true; el.classList.add('busy');
+      try {
+        var avoid = l.quiz.map(function (q) { return q.q + (q.quote ? ' ' + q.quote : ''); });
+        var got = await FRESH.mcq({ subject: 'ENC 1101 English Composition (college writing), level: ' + l.title, material: levelMaterial(l), n: 5,
+          avoid: avoid, quote: true, onStage: function (st) { note.textContent = FRESH.STAGE[st]; } });
+        var qs = got.map(function (x) {
+          var o = FRESH.shuffle([x.correct].concat(x.wrong));
+          var q = { lv: l.id, kind: 'New question', q: x.q, o: o, a: o.indexOf(x.correct), why: x.why };
+          if (x.quote) q.quote = x.quote;
+          return q;
+        });
+        note.textContent = 'New set: ' + qs.length + ' questions. Tap again anytime for another batch.';
+        startQuiz(qs, l.id + '-new');
+      } catch (e) { note.textContent = FRESH.message(e); }
+      finally { b.disabled = false; el.classList.remove('busy'); }
+    });
+    return el;
+  }
+
+  /* ---------- quiz engine: one at a time, misses come back at the end ---------- */
+  function startQuiz(questions, scoreKey) {
+    var pane = document.getElementById('pane');
+    var queue = shuffle(questions).map(function (q) { return { q: q, retry: false }; });
+    var total = queue.length, firstTryRight = 0, done = 0, missedList = [];
+
+    function show() {
+      if (!queue.length) return finish();
+      var item = queue[0], q = item.q;
+      var order = shuffle(q.o.map(function (t, i) { return i; }));
+      var lv = byId(q.lv || scoreKey);
+      pane.innerHTML = '<div class="qhead"><span class="meta">Question <b>' + Math.min(done + 1, total) + '</b> of ' + total + (item.retry ? ' · <b>second try</b>' : '') + '</span><span class="meta">First-try score <b>' + firstTryRight + '</b></span></div>' +
+        '<div class="qcard"' + (scoreKey === 'mixed' ? ' style="--c:' + lv.color + '"' : '') + '>' +
+        '<span class="kind">' + esc(q.kind || (scoreKey === 'mixed' ? lv.title : 'Pick one')) + '</span>' +
+        '<div class="q">' + esc(q.q) + (q.quote ? '<span class="quote">' + esc(q.quote) + '</span>' : '') + '</div>' +
+        '<div class="opts">' + order.map(function (oi, k) {
+          return '<button type="button" class="opt" data-i="' + oi + '"><span class="k">' + 'ABCDEF'.charAt(k) + '</span><span>' + esc(q.o[oi]) + '</span></button>';
+        }).join('') + '</div><div id="fb"></div></div>';
+      var opts = pane.querySelectorAll('.opt');
+      opts.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var pick = +b.getAttribute('data-i'), right = pick === q.a;
+          opts.forEach(function (x) {
+            x.disabled = true;
+            var xi = +x.getAttribute('data-i');
+            if (xi === q.a) x.classList.add('right');
+            else if (xi === pick) x.classList.add('wrong');
+          });
+          var key = (q.lv || scoreKey) + '|' + q.q;
+          if (right) {
+            if (!item.retry) firstTryRight++;
+            if (item.retry || S.miss[key]) { delete S.miss[key]; }
+          } else {
+            S.miss[key] = 1;
+            if (!item.retry) missedList.push(q.q);
+          }
+          save(S);
+          var fb = document.getElementById('fb');
+          fb.innerHTML = '<div class="fb ' + (right ? 'ok' : 'no') + '"><strong>' + (right ? 'Right.' : 'Not quite.') + '</strong><p>' + esc(q.why) + '</p></div>' +
+            (!right && !item.retry ? '<p class="saved">This one comes back at the end of the round.</p>' : '') +
+            '<div class="actions"><button type="button" class="btn" id="next">' + (queue.length > 1 || (!right && !item.retry) ? 'Next →' : 'See score →') + '</button></div>';
+          queue.shift();
+          if (!item.retry) done++;
+          if (!right && !item.retry) queue.push({ q: q, retry: true });
+          var nx = document.getElementById('next'); nx.focus();
+          nx.addEventListener('click', show);
+        });
+      });
+    }
+
+    function finish() {
+      var pct = Math.round(firstTryRight / total * 100);
+      var prev = S.best[scoreKey];
+      if (typeof prev !== 'number' || pct > prev) S.best[scoreKey] = pct;
+      save(S); renderLevels(); renderWeak();
+      var msg = pct >= 90 ? 'Locked in. You could teach this.' : pct >= 70 ? 'Solid. Run it again to clean up the misses.' : 'Go back to Learn it, then run the drill again.';
+      pane.innerHTML = '<div class="done"><div class="big">' + pct + '%</div><p>' + firstTryRight + ' of ' + total + ' right on the first try. ' + msg + '</p>' +
+        (missedList.length ? '<div class="missed"><strong>Missed on the first try:</strong><ul>' + missedList.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul></div>' : '') +
+        '<div class="actions" style="justify-content:center"><button type="button" class="btn" id="again">Run it again</button>' +
+        (scoreKey !== 'mixed' ? '<button type="button" class="btn ghost" id="toTeach">Teach it back →</button>' : '') + '</div></div>';
+      document.getElementById('again').addEventListener('click', function () { renderPanel(); });
+      var tt = document.getElementById('toTeach');
+      if (tt) tt.addEventListener('click', function () { currentTab = 'teach'; renderPanel(); });
+    }
+    show();
+  }
+
+  function renderTeach(l) {
+    var pane = document.getElementById('pane');
+    var note = S.notes[l.id] || '';
+    var ck = S.checks[l.id] || [];
+    pane.innerHTML = '<div class="tb"><div class="chunk"><h3>Your turn</h3><p>' + esc(l.teach.prompt) + '</p><p style="color:var(--muted);font-size:15px">Voice-to-text is fine. Then fix it using what you learned. If you can explain it in your own words, you own it.</p></div>' +
+      '<label for="tb-' + l.id + '">Write it here</label><textarea id="tb-' + l.id + '" placeholder="Start typing or talking...">' + esc(note) + '</textarea>' +
+      '<p class="saved" id="tb-saved">' + (note ? 'Saved in this browser' : 'Saves as you type') + '</p>' +
+      '<ul class="checks">' + l.teach.checks.map(function (c, i) {
+        return '<li><label><input type="checkbox" data-i="' + i + '"' + (ck[i] ? ' checked' : '') + '><span>' + esc(c) + '</span></label></li>';
+      }).join('') + '</ul></div>';
+    var ta = pane.querySelector('textarea'), sv = document.getElementById('tb-saved'), t;
+    ta.addEventListener('input', function () {
+      clearTimeout(t);
+      t = setTimeout(function () { S.notes[l.id] = ta.value; save(S); sv.textContent = 'Saved in this browser'; }, 400);
+    });
+    pane.querySelectorAll('.checks input').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        var arr = S.checks[l.id] || []; arr[+cb.getAttribute('data-i')] = cb.checked; S.checks[l.id] = arr; save(S);
+      });
+    });
+  }
+
+  function renderWeak() {
+    var scored = L.filter(function (l) { return typeof S.best[l.id] === 'number'; });
+    if (!scored.length) {
+      weakEl.innerHTML = '<h3>Your weak spots</h3><p>Run a drill and your two weakest levels show up here, so you know where to spend your next 20 minutes. Start with <b>Level 4: Sentence Surgery</b>; it\'s the fastest win for your writing.</p>';
+      return;
+    }
+    var sorted = scored.slice().sort(function (a, b) { return S.best[a.id] - S.best[b.id]; }).slice(0, 2);
+    var untried = L.filter(function (l) { return typeof S.best[l.id] !== 'number'; });
+    weakEl.innerHTML = '<h3>Your weak spots</h3><ul>' + sorted.map(function (l) { return '<li><b style="color:' + l.color + '">' + esc(l.title) + '</b>: best ' + S.best[l.id] + '%</li>'; }).join('') + '</ul>' +
+      (untried.length ? '<p style="margin-top:8px">Not tried yet: ' + untried.map(function (l) { return esc(l.title); }).join(', ') + '.</p>' : '');
+  }
+
+  renderLevels(); renderPanel(); renderWeak();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
