@@ -396,7 +396,7 @@ main { padding: 14px max(14px, env(safe-area-inset-right)) 14px max(14px, env(sa
         <div class="ph"><h2 id="h-due">Exams &amp; due dates</h2><span class="meta" id="due-meta"></span></div>
         <div id="need"></div>
         <ul class="dues" id="dues"></ul>
-        <p class="foot">From your class notes and recordings. Tick one off when it's turned in. Ask Claude to add or change dates.</p>
+        <p class="foot">From your Canvas calendar (Nov 22) and class recordings. Tick one off when it's turned in. Send Claude a new Canvas screenshot to update.</p>
       </section>
     </div>
 
@@ -482,16 +482,23 @@ const ALL = [M.GOAL].concat(M.CLASSES);
 const BY = {}; ALL.forEach(c => { BY[c.id] = c; });
 const SHORT = { fde: 'FDE Lab', python: 'Python', math: 'Math', business: 'AI Business', ethics: 'AI Ethics', english: 'Writing' };
 
-/* ---------- real dates from class notes (edit here) ---------- */
+/* ---------- real dates from the Canvas calendar (11/22 photo) + class recordings (edit here) ---------- */
 const DEADLINES = [
-  { id: 'eth-m6a', d: '2026-11-24', c: 'ethics', t: 'Module 6 presentation day 1', n: 'Ortega + Foucault · moved up for Thanksgiving' },
-  { id: 'enc-rw', d: '2026-11-30', end: '2026-12-04', c: 'english', t: 'Research week: see Prof. Coro or a tutor', n: 'First come, first served · counts for points' },
-  { id: 'eth-m6b', d: '2026-12-01', c: 'ethics', t: 'Module 6 presentation day 2', n: 'Tuesday after Thanksgiving' },
-  { id: 'py-grade', d: '2026-12-02', c: 'python', t: 'Gradebook group project due', n: 'Numeric Gradebook + Performance Analytics' },
-  { id: 'enc-bib', d: '2026-12-05', c: 'english', t: 'Annotated bibliography due', n: 'MLA · 5–10 sources · heading date 5 December 2026' },
-  { id: 'enc-final', d: '2026-12-07', c: 'english', t: 'Final essay due', n: 'No late work without paperwork' },
+  { id: 'geb-ch7w', d: '2026-11-22', c: 'business', t: 'Chapter 7 Writing Assignment', n: 'Canvas · due tonight 11:59 PM · Ch 7 quiz already done' },
+  { id: 'py-rev9', d: '2026-11-23', c: 'python', t: 'Revel 9: Dictionaries and Sets', n: 'Canvas · due 2:59 AM Mon, so finish it Sunday night' },
+  { id: 'eth-cc6', d: '2026-11-29', c: 'ethics', t: 'Critical Collaboration 6', n: 'Canvas · Module 6 · Ortega + Foucault' },
+  { id: 'eth-p6', d: '2026-11-30', c: 'ethics', t: 'Presentation 6', n: 'Canvas · due 5 PM' },
+  { id: 'enc-rw', d: '2026-11-30', end: '2026-12-04', c: 'english', t: 'Research week: see Prof. Coro or a tutor', n: 'From class · first come, first served · counts for points' },
+  { id: 'geb-mkt', d: '2026-12-01', c: 'business', t: 'Marketing AI Assignment', n: 'Canvas · the Generative AI Marketing Consultant' },
+  { id: 'py-p2', d: '2026-12-02', c: 'python', t: 'Project 2: Gradebook', n: 'Canvas · Numeric Gradebook + Performance Analytics' },
+  { id: 'enc-peer2', d: '2026-12-04', c: 'english', t: 'Peer-editing #2', n: 'Canvas' },
+  { id: 'enc-bib', d: '2026-12-05', c: 'english', t: 'Annotated Bibliography / research', n: 'Canvas · MLA · 5–10 sources · heading date 5 December 2026' },
+  { id: 'xc-1205', d: '2026-12-05', c: '', t: 'Extra Credit Assignment', n: 'Canvas · class not clear from the photo, check which one' },
+  { id: 'enc-final', d: '2026-12-07', c: 'english', t: 'Final Essay', n: 'Canvas · no late work without paperwork' },
   { id: 'geb-ex3', d: '2026-12-11', c: 'business', t: 'Exam III', n: 'Date not announced yet · term ends Fri 12/11', tba: true }
 ];
+const cOf = id => BY[id] || { color: '#C4BDE6', title: 'Canvas' };
+const sOf = id => SHORT[id] || 'Canvas';
 const TERM_START = '2026-09-21', TERM_END = '2026-12-11';
 
 /* ---------- quick actions (deep links into each trainer) ---------- */
@@ -578,12 +585,12 @@ function render() {
   const list = DEADLINES.filter(x => daysTo(x.end || x.d) >= -1);
   $('due-meta').textContent = open.length + ' open';
   const urgent = open.find(x => !x.tba && daysTo(x.d) <= 3);
-  $('need').innerHTML = urgent ? '<div class="need"><i>' + ICON.alert + '</i><small>Needs you · ' + (daysTo(urgent.d) <= 0 ? 'today' : 'in ' + daysTo(urgent.d) + ' day' + (daysTo(urgent.d) === 1 ? '' : 's')) + '</small><b>' + esc(urgent.t) + ' · ' + esc(SHORT[urgent.c]) + '</b></div>' : '';
+  $('need').innerHTML = urgent ? '<div class="need"><i>' + ICON.alert + '</i><small>Needs you · ' + (daysTo(urgent.d) <= 0 ? 'today' : 'in ' + daysTo(urgent.d) + ' day' + (daysTo(urgent.d) === 1 ? '' : 's')) + '</small><b>' + esc(urgent.t) + ' · ' + esc(sOf(urgent.c)) + '</b></div>' : '';
   $('dues').innerHTML = list.map(x => {
-    const c = BY[x.c], n = daysTo(x.d), done = !!doneSet[x.id];
+    const c = cOf(x.c), n = daysTo(x.d), done = !!doneSet[x.id];
     const tag = x.tba ? '<span class="left tba">TBA</span>' : '<span class="left' + (n <= 3 ? ' soon' : '') + '">' + (n < 0 ? 'Now' : n === 0 ? 'Today' : n + 'd') + '</span>';
     return '<li class="due' + (done ? ' done' : '') + '" style="--c:' + c.color + '"><span class="dt"><small>' + (x.tba ? 'By' : fmtDay(x.d)) + '</small><b>' + parse(x.d).getDate() + '</b></span>' +
-      '<span class="dx" title="' + esc(x.t + ' · ' + x.n) + '"><b>' + esc(x.t) + '</b><small><em>' + esc(SHORT[x.c]) + '</em> · ' + (x.end ? fmtShort(x.d) + '–' + fmtShort(x.end) : fmtShort(x.d)) + ' · ' + esc(x.n) + '</small></span>' +
+      '<span class="dx" title="' + esc(x.t + ' · ' + x.n) + '"><b>' + esc(x.t) + '</b><small><em>' + esc(sOf(x.c)) + '</em> · ' + (x.end ? fmtShort(x.d) + '–' + fmtShort(x.end) : fmtShort(x.d)) + ' · ' + esc(x.n) + '</small></span>' +
       '<span class="dl">' + tag + '<button class="chk" type="button" data-id="' + x.id + '" aria-pressed="' + done + '" aria-label="Mark ' + esc(x.t) + ' as done">' + ICON.check + '</button></span></li>';
   }).join('');
 
