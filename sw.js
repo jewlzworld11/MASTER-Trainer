@@ -1,11 +1,11 @@
 /* Master Trainer offline worker.
    - On install it saves every page, image and the 3D + Python engines, so the app opens with no internet.
-   - Pages are served from the saved copy right away and refreshed in the background,
-     so a new version shows up the next time you open the app.
+   - Online: this app's own pages and scripts always come fresh from the server (network first),
+     so updates show up the first time you open the app. Offline: the saved copy is used.
    - Bump VERSION whenever the files change. */
-const VERSION = 'mt-2026-11-23a';
+const VERSION = 'mt-2026-11-23b';
 const LOCAL = [
-  './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js',
+  './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js', 'mt-voice.js',
   'fde-lab.html', 'python-output.html', 'math-placement.html', 'ai-business.html', 'ethics-octagon.html', 'english-writing.html',
   'miami-backdrop.svg', 'bg-home.jpg', 'bg-fde.jpg', 'bg-python.jpg', 'bg-math.jpg', 'bg-business.jpg', 'bg-ethics.jpg',
   'card-fde.jpg', 'card-python.jpg', 'card-math.jpg', 'card-business.jpg', 'card-ethics.jpg',
@@ -26,7 +26,7 @@ const SAVE_FROM = ['cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.co
 self.addEventListener('install', e => {
   e.waitUntil((async () => {
     const c = await caches.open(VERSION);
-    await c.addAll(LOCAL);
+    await c.addAll(LOCAL.map(u => new Request(u, { cache: 'reload' })));  // skip the browser's HTTP cache
     // outside files: save each one on its own so one hiccup doesn't block the install
     await Promise.all(REMOTE.map(u => fetch(u, { mode: 'cors' }).then(r => r.ok && c.put(u, r)).catch(() => {})));
     self.skipWaiting();
@@ -59,8 +59,14 @@ self.addEventListener('fetch', e => {
     const c = await caches.open(VERSION);
     const key = local ? url.pathname.endsWith('/') ? url.pathname + 'index.html' : req.url.split('#')[0].split('?')[0] : req.url;
     const hit = await c.match(key) || await c.match(req, { ignoreSearch: local });
-    const fresh = fetch(req).then(r => { if (r && (r.ok || r.type === 'opaque')) c.put(key, r.clone()); return r; }).catch(() => null);
-    if (hit) { e.waitUntil(fresh); return hit; }
+    const fresh = fetch(local ? new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' }) : req)
+      .then(r => { if (r && (r.ok || r.type === 'opaque')) c.put(key, r.clone()); return r; }).catch(() => null);
+    if (hit && !local) { e.waitUntil(fresh); return hit; }            // fonts and engines: saved copy first
+    if (hit) {                                                        // app files: fresh copy first, saved copy if slow or offline
+      const r = await Promise.race([fresh, new Promise(ok => setTimeout(() => ok(null), 4000))]);
+      if (r && r.ok) return r;
+      e.waitUntil(fresh); return hit;
+    }
     const r = await fresh;
     if (r) return r;
     if (req.mode === 'navigate') return (await c.match(new URL('index.html', self.registration.scope).href)) || Response.error();

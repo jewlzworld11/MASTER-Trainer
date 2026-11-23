@@ -101,3 +101,10 @@
   setInterval(tick, 15000); setInterval(paint, 5000);
   addEventListener('online', paint); addEventListener('offline', paint);
 })();
+
+/* Read-aloud add-on (11/23/2026): speaker button on every section, tap-to-hear on selected text,
+   speed + voice controls, pronunciation fixes. All of it lives in mt-voice.js. */
+(function () {
+  if (document.querySelector('script[src$="mt-voice.js"]')) return;
+  var s = document.createElement('script'); s.src = 'mt-voice.js'; document.body.appendChild(s);
+})();

@@ -827,6 +827,9 @@ if (!RM) (function loop() { requestAnimationFrame(loop); if (document.hidden) re
 <script>
 /* App mode: save everything for offline use. */
 if ('serviceWorker' in navigator) addEventListener('load', function () {
+  // when a new version of the app takes over, reload once so you see it right away
+  var hadSW = !!navigator.serviceWorker.controller, reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadSW && !reloaded) { reloaded = true; location.reload(); } });
   navigator.serviceWorker.register('sw.js').then(function () { return navigator.serviceWorker.ready; }).then(function (reg) {
     var list = performance.getEntriesByType('resource').map(function (e) { return e.name; });
     if (reg.active) reg.active.postMessage({ save: list });
