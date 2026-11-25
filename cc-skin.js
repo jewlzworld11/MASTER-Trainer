@@ -108,3 +108,10 @@
   if (document.querySelector('script[src$="mt-voice.js"]')) return;
   var s = document.createElement('script'); s.src = 'mt-voice.js'; document.body.appendChild(s);
 })();
+
+/* Motion board add-on (11/25/2026): numbered section board, heading badges, scroll beam, particles, tilt.
+   All of it lives in mt-board.js. */
+(function () {
+  if (document.querySelector('script[src$="mt-board.js"]')) return;
+  var s = document.createElement('script'); s.src = 'mt-board.js'; document.body.appendChild(s);
+})();

@@ -409,7 +409,7 @@ details.tips ul { margin-top: 10px; padding-left: 1.2em; display: grid; gap: 6px
 
   <main id="view"></main>
 
-  <p class="foot">Built from your class transcripts, the prof's video lectures and your own CCs. Lines credited to the prof are paraphrased from auto-transcripts. Ortega and Foucault (Module 6) are built from the study videos you sent (Foucault now includes part 3, "Power"); Ortega has the prof's framing from the 11/17 class. The podcast card is your own Module 5 case (recent events, fact-checked 11/2). Nietzsche is a bonus card from your own reading, not on the syllabus. Progress is saved in this browser only.</p>
+  <p class="foot">Built from your class transcripts, the prof's video lectures and your own CCs. Lines credited to the prof are paraphrased from auto-transcripts. Ortega and Foucault (Module 6) are built from the study videos you sent (Foucault now includes part 3, "Power"); both have the prof's framing from the live classes (Ortega 11/17, Foucault 11/24). The podcast card is your own Module 5 case (recent events, fact-checked 11/2). Nietzsche is a bonus card from your own reading, not on the syllabus. Progress is saved in this browser only.</p>
 </div>
 
 <script>
@@ -3869,6 +3869,37 @@ enrich("foucault", {
     { id: "w85", line: "\"Where there is power, there is resistance.\"", who: "foucault", near: ["gramsci", "han"] },
     { id: "w86", line: "Power is everywhere, \"not because it embraces everything, but because it comes from everywhere.\"", who: "foucault", near: ["latour", "gramsci"] },
     { id: "w87", line: "The scientist replaced the priest: we now confess our private lives to experts who decide what's normal.", who: "foucault", near: ["nietzsche", "han"] },
+  ],
+});
+
+// 11/24/2026: live class, Foucault day ("power owns us").
+enrich("foucault", {
+  deep: [
+    { title: "Live class 11/24: power owns us", kind: "steps", items: [
+      "**Gramsci vs. Foucault:** Gramsci: some people **have** power (money, violence, culture) and turn their view into common sense. Foucault: **nobody** has it. \"There are no puppet masters here.\" \"Power owns us.\"",
+      "**You're it.** Like the Florida man shooting at a hurricane, you can't fight power from outside. It works in and through you. \"We don't create society; society creates us.\"",
+      "**The prison schedule:** out of bed at 7, mess hall at 7:05, dishes at 7:25, until the routine becomes you. Society is \"that prison writ large.\" Han comes **after** this.",
+      "**The power passage** (*History of Sexuality*, Vol. 1): power is everywhere \"not because it embraces everything, but because it comes from everywhere.\" It comes from below. **\"Where there is power, there is resistance.\"** We're nodes the forces flow through.",
+      "**Resisting feeds it:** the hippies' \"free love,\" or skipping breakfast, just makes more talk, more categories, more identities. Even \"look at me, stop watching me.\"",
+      "**Language shows it:** \"consumers,\" \"viral,\" \"1v1\" vs. \"1 on 1,\" how we settled on \"9/11.\" Nobody decided, yet everyone talks the same way. Like a flock, a wave, an ant colony or traffic.",
+      "**Two takeaways:** (1) what feels natural is **contingent**: it has a genealogy and won't last. (2) **Simple explanations** (the scapegoat, \"blame that guy\") are political moves that shape the future (9/11 leading to the Patriot Act).",
+      "**AI (your question):** a model trained on today's text might lock in today's episteme. The prof: AI \"adds an entire new channel,\" but \"yes and not at all\": pinning it down changes how we act, which changes it again. AI hiring, credit and health scores = **biopower** sorting us into categories.",
+    ] },
+    { title: "11/24 head-to-heads", kind: "table", head: ["", "Foucault says", "vs."], rows: [
+      ["Gramsci", "No ruling class holds power; it runs through everyone", "Elites hold power and manage common sense"],
+      ["Ortega", "Society isn't falling apart, it's reorganizing; we never held it up", "Society's achievements may crumble because of the mass man"],
+      ["Latour", "Power and resistance, always", "Same network, but tell a truer story and it can run on negotiation"],
+      ["Kant", "Even \"reason\" changes with the episteme", "Reason finds what's universal in all of us"],
+      ["Deleuze", "Society as capillaries", "Society as a rhizome: grass, not a tree"],
+    ] },
+  ],
+  quiz: [
+    { id: "fou-24", q: "In the 11/24 class, how did the prof split Gramsci and Foucault on power?", choices: ["Gramsci: some people have power. Foucault: nobody has it; it runs through everyone", "Gramsci: nobody has power. Foucault: the king has it", "Both say only governments have power", "Both say power is just money"], why: "\"There are no puppet masters here.\" \"Power owns us.\"" },
+    { id: "fou-25", q: "Why did the prof bring up the Florida man shooting at a hurricane?", choices: ["You can't resist power from outside; it works in and through you", "To show guns are useless", "To explain climate change", "To praise resistance"], why: "Ask \"who can I resist?\" and the answer is: you're it." },
+    { id: "fou-26", q: "Jason says he skips breakfast to resist the \"breakfast scam.\" What would Foucault say?", choices: ["Resisting creates more breakfast talk and identities, so it's part of the same system", "He has escaped the system", "He should eat cereal", "Breakfast has nothing to do with power"], why: "Power and resistance are two sides of one coin." },
+    { id: "fou-27", q: "What were the prof's two Foucault takeaways?", choices: ["The natural is contingent, and simple explanations are political moves that shape the future", "Power is evil, and science is fake", "Kings rule, and resistance wins", "History repeats, and nothing changes"], why: "Example: 9/11 fear became the Patriot Act and normalized surveillance." },
+    { id: "fou-28", q: "Which image did the prof use for society at the end of class?", choices: ["A rhizome (grass) or traffic: no trunk, no driver, yet it all flows", "A tree with one trunk", "A pyramid with a king on top", "A machine with one operator"], why: "From Deleuze: roots tangled just under the surface." },
+    { id: "fou-29", q: "You asked if AI trained on today's text locks in today's episteme. The prof said:", choices: ["Yes and not at all: AI adds a new channel, but pinning an episteme down changes how we act", "No, AI has no effect on thinking", "Yes, forever", "Only if the government allows it"], why: "Every attempt to pin down an episteme changes behavior, which changes the episteme." },
   ],
 });
 
