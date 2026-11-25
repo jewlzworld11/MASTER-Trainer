@@ -135,3 +135,123 @@ html.cc .cc-hero h1 { font-size: clamp(26px, 3.4vw, 40px); }
   .cc-home { padding: 10px 16px; font-size: 10.5px; }
 }
 @media (prefers-reduced-motion: reduce) { .cc-orb .r, .cc-orb .r3, .cc-orb .r4 { animation: none; } }
+
+/* ======================================================================
+   v3 restyle (11/25/2026): every trainer matches the hub ("6 trainers running in parallel").
+   Dark glass panels with an outer neon glow, Orbitron headings, mono tags with cut corners,
+   the hub's glow + circuit-grid backdrop over each trainer's own photo, glowing bars and code wells.
+   Colours, fonts and boxes only: no trainer content or logic changes.
+   ====================================================================== */
+html.cc {
+  --v3-k: var(--cc-main);
+  --v3-glass: rgba(13, 9, 40, .86); --v3-glass2: rgba(19, 13, 54, .9); --v3-well: #070520; --v3-line: #2E2566;
+  /* every trainer's own tokens, repointed to the hub palette */
+  --panel: rgba(16, 11, 46, .9); --panel-2: rgba(24, 16, 62, .92); --card: var(--panel); --surface: var(--panel);
+  --sunk: #070520; --code-bg: #070520; --out-bg: #05031A;
+  --line: #2E2566; --rule: #2E2566; --grid: transparent;
+  --muted: #C4BDE6; --ink-2: #C4BDE6; --ink-3: #8A80B4; --dim: #8A80B4;
+  --font-head: 'Orbitron', 'Archivo', system-ui, sans-serif; --font-display: 'Orbitron', 'Archivo', system-ui, sans-serif; --head: 'Orbitron', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Exo 2', 'Atkinson Hyperlegible', system-ui, sans-serif; --body: 'Exo 2', 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+/* AI Business still had the old lime / yellow palette: move it onto the hub neons */
+html.cc:has(script[src$="cc-skin.js"][data-id="business"]) {
+  --bg: #0B0822; --text: #F8F4FF; --ledger: #0E0A2C; --paper: #0B0822; --next: #8A80B4; --hl-ink: #0B0822;
+  --lime: #2FE6C8; --yellow: #FFD25A; --mint: #9AF2C8; --peri: #6FC3FF; --violet: #B48CFF; --pink: #FF4FB0; --orange: #FF9E45;
+}
+html.cc body { font-family: var(--cc-ui); }
+
+/* backdrop: the hub's glow + circuit grid over the trainer's own photo */
+html.cc::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60% 38% at 50% 0%, rgba(180, 140, 255, .20), transparent 70%),
+    radial-gradient(45% 40% at 100% 72%, color-mix(in srgb, var(--cc-main) 16%, transparent), transparent 70%),
+    radial-gradient(40% 35% at 0% 58%, rgba(47, 230, 200, .10), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(111, 195, 255, .05) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, rgba(111, 195, 255, .05) 0 1px, transparent 1px 40px),
+    linear-gradient(180deg, rgba(5, 3, 26, .35), rgba(5, 3, 26, .62) 55%, rgba(5, 3, 26, .8));
+}
+
+/* ---------- headings ---------- */
+html.cc :is(h1, h2, h3):not(.cc-top *, .cc-bottom *, .mb-board *, .mtv-ui *) {
+  font-family: var(--cc-head); font-weight: 800; letter-spacing: .02em; line-height: 1.15;
+  text-shadow: 0 0 14px color-mix(in srgb, currentColor 45%, transparent);
+}
+html.cc :is(h1, h2, h3):not(.cc-top *, .cc-bottom *, .mb-board *, .mtv-ui *) { overflow-wrap: break-word; hyphens: manual; }
+html.cc :is(.eyebrow, .kicker, .part-label, .ex-label, .cv-label, .world-label, .now-label, .tc-lab, .lab, .step-tag, .card-num):not(.cc-top *, .cc-bottom *, .mb-board *) {
+  font-family: var(--cc-head); font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+}
+
+/* ---------- panels: dark glass + outer neon glow ---------- */
+html.cc :is(.block, .card, .panel, .qcard, .card-sec, .case, .nbox, .concept, .chunk, .callout, .box, .tile, .fighter-tile, .era, .step, .world, .remember, .notice, .info, .compare, .matrix, .opt, .choice, .rung, .term, .stat, .flag, .facts, .wex, .results, .mockintro, .tst, .test, .entry, .jrow, .upnext, .phase, .lsum, .goal, .target, .nextbar, .road-step, .road-steps > *, .pj-box, .review, .practice, .write, .side, .row, .level-head, .levels > *, .roster > *):not(.cc-top *, .cc-bottom *, .cc-hero, .mb-board *, .mtv-ui *, .mt-strip *, button.btn) {
+  --v3-k: var(--neon, var(--c, var(--accent, var(--cc-main))));
+  background-color: transparent;
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--v3-k) 8%, var(--v3-glass)), var(--v3-glass) 70%);
+  border-radius: 16px;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--v3-k) 22%, transparent), inset 0 0 24px color-mix(in srgb, var(--v3-k) 7%, transparent);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+/* small items inside a panel stay lighter so the page doesn't drown in glow */
+html.cc :is(.block, .card, .panel, .qcard, .chunk, .card-sec, .concept) :is(.opt, .choice, .term, .tile, .stat, .step, .rung, .flag, .row, .entry, .jrow, .box) {
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--v3-k) 6%, transparent); backdrop-filter: none; -webkit-backdrop-filter: none;
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--v3-k) 6%, rgba(9, 6, 30, .55)), rgba(9, 6, 30, .55));
+}
+html.cc :is(.opt, .choice, .tile, .fighter-tile, .rung, .term):is(:hover, :focus-visible):not(.cc-top *, .mb-board *) {
+  box-shadow: 0 0 22px color-mix(in srgb, var(--v3-k) 45%, transparent), inset 0 0 18px color-mix(in srgb, var(--v3-k) 12%, transparent);
+}
+
+/* ---------- buttons: hub style ---------- */
+html.cc :is(.btn, .gd-btn, .brkbtn, .flagbtn, .xbtn, .dbt, .seg-btn, .startbtn, .startbtns > button, .actions > button):not(.cc-top *, .cc-bottom *, .mb-board *, .mtv-ui *) {
+  font-family: var(--cc-head); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: max(11px, .78em);
+  border-radius: 10px;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--neon, var(--c, var(--accent, var(--cc-main)))) 40%, transparent);
+  transition: box-shadow .2s, transform .15s;
+}
+html.cc :is(.btn, .gd-btn, .seg-btn):is(:hover, :focus-visible):not(.cc-top *, .mb-board *) { box-shadow: 0 0 22px color-mix(in srgb, var(--neon, var(--c, var(--accent, var(--cc-main)))) 70%, transparent); }
+html.cc :is(.btn, .gd-btn, .seg-btn):active:not(.cc-top *, .mb-board *) { transform: translateY(1px); }
+
+/* ---------- tags + pills: mono, cut corners, like the hub's branch tags ---------- */
+html.cc :is(.tag, .pill, .badge, .kind, .tid, .bigid, .era-n, .ex-tag, .step-name + .tag, .tnum, .card-when, .ft-meta .tag):not(.cc-top *, .cc-bottom *, .mb-board *, .mtv-ui *) {
+  font-family: var(--cc-mono); letter-spacing: .02em; border-radius: 6px;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+html.cc :is(.chip):not(.cc-top *, .cc-bottom *, .mb-board *) { font-family: var(--cc-mono); letter-spacing: .01em; }
+
+/* ---------- tabs inside trainers ---------- */
+html.cc :is(.tab, .utab, .nav .tab, .tabs > button, .nav-row > button):not(.cc-top *, .cc-bottom *, .mb-board *, .mt-strip *) {
+  font-family: var(--cc-head); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: max(11px, .76em);
+}
+html.cc :is(.tab, .utab, .tabs > button, .nav-row > button):is([aria-selected="true"], [aria-current], [aria-pressed="true"], .on, .active):not(.cc-top *, .cc-bottom *, .mb-board *, .mt-strip *) {
+  box-shadow: 0 0 16px color-mix(in srgb, var(--neon, var(--c, var(--accent, var(--cc-main)))) 55%, transparent);
+}
+
+/* ---------- code, consoles, inputs ---------- */
+html.cc :is(pre, .code, .src, .editor, .console, .dx-code, .dx-out, .code-in, .cdisp, .cscreen):not(td, th, tr, code, .cc-top *, .mb-board *, .mtv-ui *, pre *) {
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--v3-line), inset 0 0 22px rgba(111, 195, 255, .06), 0 0 14px rgba(5, 3, 26, .6);
+}
+html.cc :is(pre, code, kbd, .code, .src, .editor, .console, .mono) { font-family: var(--cc-mono); }
+html.cc :is(input[type="text"], input[type="number"], input[type="search"], input:not([type]), textarea, select):not(.cc-top *, .mb-board *, .mtv-ui *) {
+  background-color: #0A0724; color: var(--cc-text); border: 1px solid #3A2F6B; border-radius: 10px;
+}
+html.cc :is(input[type="text"], input[type="number"], input[type="search"], input:not([type]), textarea, select):focus-visible:not(.cc-top *, .mb-board *) {
+  outline: none; border-color: var(--cc-main); box-shadow: 0 0 0 1px var(--cc-main), 0 0 16px color-mix(in srgb, var(--cc-main) 45%, transparent);
+}
+
+/* ---------- progress + meters: glowing fills ---------- */
+html.cc :is(.meter-fill, .mbar > *, .sc-bar > *, .dx-bar > *, .done-bar > *, .fresh-bar > *, .loopbar > *, .bar > i, .bar > span, .bar > div) {
+  box-shadow: 0 0 10px currentColor, 0 0 12px color-mix(in srgb, var(--neon, var(--c, var(--accent, var(--cc-main)))) 60%, transparent);
+}
+html.cc :is(.mbar, .sc-bar, .dx-bar, .done-bar, .fresh-bar, .loopbar, .bar):not(.cc-top *, .mb-board *) { border-radius: 6px; }
+
+/* ---------- tables ---------- */
+html.cc table:not(.cc-top *, .mb-board *) { border-collapse: separate; border-spacing: 0; }
+html.cc :is(th):not(.cc-top *, .mb-board *) { font-family: var(--cc-head); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: max(10.5px, .78em); }
+
+/* ---------- right / wrong stay readable and glow ---------- */
+html.cc :is(.right, .good, .pass, .yes):not(.cc-top *, .mb-board *, .mtv-ui *, body, html) { text-shadow: 0 0 10px rgba(47, 230, 200, .35); }
+html.cc :is(.wrong, .bad, .err, .miss):not(.cc-top *, .mb-board *, .mtv-ui *, body, html) { text-shadow: 0 0 10px rgba(255, 92, 92, .3); }
+
+@media (prefers-reduced-transparency: reduce) {
+  html.cc :is(.block, .card, .panel, .qcard, .chunk) { backdrop-filter: none; -webkit-backdrop-filter: none; background-image: none; background-color: #120D38; }
+}
