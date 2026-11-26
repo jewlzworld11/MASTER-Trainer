@@ -226,7 +226,7 @@ html.cc :is(.tab, .utab, .tabs > button, .nav-row > button):is([aria-selected="t
 }
 
 /* ---------- code, consoles, inputs ---------- */
-html.cc :is(pre, .code, .src, .editor, .console, .dx-code, .dx-out, .code-in, .cdisp, .cscreen):not(td, th, tr, code, .cc-top *, .mb-board *, .mtv-ui *, pre *) {
+html.cc :is(pre, .code, .src, .editor, .console, .dx-code, .dx-out, .code-in, .cdisp, .cscreen):not(td, th, tr, code, .cc-top *, .mb-board *, .mtv-ui *, pre *, .code *, .editor *, .console *, .ln *) {
   border-radius: 12px;
   box-shadow: inset 0 0 0 1px var(--v3-line), inset 0 0 22px rgba(111, 195, 255, .06), 0 0 14px rgba(5, 3, 26, .6);
 }
@@ -255,3 +255,12 @@ html.cc :is(.wrong, .bad, .err, .miss):not(.cc-top *, .mb-board *, .mtv-ui *, bo
 @media (prefers-reduced-transparency: reduce) {
   html.cc :is(.block, .card, .panel, .qcard, .chunk) { backdrop-filter: none; -webkit-backdrop-filter: none; background-image: none; background-color: #120D38; }
 }
+
+/* ---------- layout guards (11/26/2026) ----------
+   Long code lines must scroll inside their own box, never push a column wider than its slot
+   (the Gradebook build's "Learn it" column was sliding under "Your turn"). */
+html.cc :is(.gb-learn, .gb-build, .gb-step, .gb-asm, .two > *, .pj-two > *, .boxes > *) { min-width: 0; }
+html.cc :is(.gb-learn, .gb-build, .gb-step, .gb-asm) { grid-template-columns: minmax(0, 1fr); }
+html.cc :is(.gb-ex, .gb-learn, .gb-build) :is(.code, pre) { max-width: 100%; overflow-x: auto; }
+html.cc .gb-build .editor { max-width: 100%; }
+html.cc :is(.gb-build) :is(.actions, .btns, .row, .gb-btns) { flex-wrap: wrap; }

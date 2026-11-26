@@ -698,6 +698,33 @@ code { color: var(--text); background: color-mix(in srgb, var(--neon) 13%, trans
 .set-lab b { color: var(--neon); }
 </style>
 
+<style>
+/* Gradebook build (Project 2), added 11/25 */
+.chip.gb-chip { border-style: solid; border-color: var(--good); color: var(--good); font-weight: 700; }
+.chip.gb-chip[aria-current="true"] { --chip: var(--good); }
+.gb-step { display: grid; gap: 12px; }
+.gb-step.gb-passed { border-color: var(--good); box-shadow: 0 0 0 1px var(--good), 0 0 18px color-mix(in srgb, var(--good) 35%, transparent); }
+.gb-step.gb-passed > h3::after { content: " \2713"; color: var(--good); }
+.gb-fns { margin: -6px 0 0; } .gb-fns code { overflow-wrap: anywhere; }
+.gb-why { margin: 0; font-size: 16px; }
+.gb-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .gb-grid { grid-template-columns: minmax(0, 1fr); } }
+.gb-learn, .gb-build { display: grid; gap: 10px; min-width: 0; }
+.gb-concept ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.gb-res { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.gb-res li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.gb-res .ic { flex: none; width: 1.2em; font-weight: 700; text-align: center; }
+.gb-res li.ok .ic { color: var(--good); } .gb-res li.no .ic { color: var(--bad); }
+.gb-res small { display: block; color: var(--ink-2); font-size: 14px; }
+.gb-more { border-top: 1px dashed var(--rule); padding-top: 10px; }
+.gb-more summary { cursor: pointer; font-weight: 700; color: var(--pencil); }
+.gb-more p, .gb-more ol { margin-top: 8px; }
+.gb-track { height: 10px; border-radius: 99px; background: var(--rule); overflow: hidden; max-width: 520px; }
+.gb-track div { height: 100%; width: 0; background: var(--good); box-shadow: 0 0 10px var(--good); transition: width .4s; }
+.gb-asm { display: grid; gap: 12px; }
+.gb-asm .editor textarea { min-height: 18em; }
+@media (prefers-reduced-motion: reduce) { .gb-track div { transition: none; } }
+</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Exo+2:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="cc-skin.css">
 <script>document.documentElement.classList.add('cc')</script>
@@ -2731,10 +2758,375 @@ document.addEventListener('keydown', ev => {
 if (REF && (location.hash === '#dictionary' || store.get('pot.view', null) === 'dict')) showDict(false);
 </script>
 <script>
+/* ---------- Gradebook (Project 2): build the final project step by step, real tests, live coach ---------- */
+const GB_STEPS = [{"id": "setup", "title": "Set up your data", "fns": "records, student_ids", "why": "Every feature reads or changes this data. Your sheet says to store records as a <b>list of tuples<\/b> and use a <b>set<\/b> for IDs.", "concept": "<ul>\n<li><b>List<\/b> <code>[ ]<\/code>: an ordered collection you can add to and remove from. It holds all the students.<\/li>\n<li><b>Tuple<\/b> <code>( )<\/code>: like a list, but it <b>can't be changed<\/b> after it's made. Each student is one tuple: <code>(ID, score1, score2, score3, score4)<\/code>.<\/li>\n<li><b>Set<\/b> <code>{ }<\/code>: unique items only, no order. Perfect for \"is this ID already taken?\"<\/li>\n<li><b>Constant<\/b>: a name in ALL CAPS, like <code>NUM_ASSESSMENTS<\/code>, for a value that never changes. Change it in one place and the whole program follows.<\/li>\n<\/ul>", "example": "# a list of tuples: (name, age)\npeople = [(\"Ana\", 31), (\"Leo\", 28)]\nprint(people[0])      # (\"Ana\", 31)\nprint(people[0][1])   # 31\n\ncolors = {\"red\", \"blue\", \"red\"}\nprint(colors)         # {'red', 'blue'}  (duplicate dropped)", "starter": "# Numeric Gradebook and Performance Analytics System\n# Group members: ____, ____, ____\n\nNUM_ASSESSMENTS = 4   # every record = ID + this many scores\n\n# Each record is a tuple: (student_id, score1, score2, score3, score4)\nrecords = [\n    (1001, 88, 91, 79, 93),\n    ____,   # student 1002: 72, 68, 75, 70\n    ____,   # student 1003: 95, 94, 90, 96\n]\n\n# A set holding every ID in use (so we can block duplicates)\nstudent_ids = ____\n", "hints": ["Copy the pattern of the first record. Same parentheses, ID first, then the 4 scores.", "A set uses curly braces with commas between items, just like the example's <code>colors<\/code>.", "Bonus (shows off a for loop): start with <code>student_ids = set()<\/code>, then loop through <code>records<\/code> and <code>.add()<\/code> each <code>record[0]<\/code>."], "tests": "\ncheck(\"records has 3 students\", lambda: isinstance(records, list) and len(records) == 3)\ncheck(\"every record is a tuple with 5 items\", lambda: all(isinstance(r, tuple) and len(r) == 5 for r in records))\ncheck(\"student 1002 is (1002, 72, 68, 75, 70)\", lambda: records[1] == (1002, 72, 68, 75, 70))\ncheck(\"student 1003 is (1003, 95, 94, 90, 96)\", lambda: records[2] == (1003, 95, 94, 90, 96))\ncheck(\"student_ids is a set of the 3 IDs\", lambda: isinstance(student_ids, set) and student_ids == {1001, 1002, 1003})\n", "say": ["Why store each student as a tuple instead of a list?", "A tuple can't be changed by accident. A record stays exactly as entered until we deliberately replace it, which makes the data more reliable."]}, {"id": "avg", "title": "Average for one student", "fns": "compute_student_average(record)", "why": "Features 5, 6, 7 and 8 all need a student's average. Write it once and reuse it everywhere.", "concept": "<ul>\n<li><b>Accumulator<\/b>: a variable that starts at 0 and grows inside a loop (<code>total += score<\/code>).<\/li>\n<li><b>Slice<\/b>: <code>record[1:]<\/code> means \"from position 1 to the end.\" It skips the ID at position 0.<\/li>\n<li><b>len()<\/b>: counts items. A record has 5 items, but only 4 are scores, so divide by <code>len(record) - 1<\/code>.<\/li>\n<\/ul>", "example": "prices = (4.5, 3.0, 2.5)\ntotal = 0\nfor p in prices:\n    total += p\nprint(total / len(prices))   # 3.333...", "starter": "def compute_student_average(record):\n    \"\"\"Return the average of one student's scores (skip the ID).\"\"\"\n    total = ____\n    for score in record[____:]:\n        total ____ score\n    return total / (____)\n", "hints": ["The total has to start at nothing, before any scores are added.", "Scores start at position 1. The operator that means \"add to myself\" is <code>+=<\/code>.", "Divide by the number of scores: the length of the record minus the one ID."], "tests": "\ncheck(\"(1002, 72, 68, 75, 70) -> 71.25\", lambda: close(compute_student_average((1002, 72, 68, 75, 70)), 71.25))\ncheck(\"(1003, 95, 94, 90, 96) -> 93.75\", lambda: close(compute_student_average((1003, 95, 94, 90, 96)), 93.75))\ncheck(\"works with a single score: (5000, 100) -> 100\", lambda: close(compute_student_average((5000, 100)), 100))\n", "say": ["Why record[1:] and len(record) - 1?", "Position 0 is the student ID, not a score. The slice skips it, and subtracting 1 means we divide by the number of scores only."]}, {"id": "avgdict", "title": "Dictionary of averages", "fns": "build_average_dictionary(records)", "why": "Class statistics need every student's average, with highest and lowest. A dictionary gives you ID → average in one place.", "concept": "<ul>\n<li><b>Dictionary<\/b>: key → value pairs. <code>d[key] = value<\/code> adds a pair. <code>d[key]<\/code> reads one.<\/li>\n<li><b>Reuse<\/b>: call <code>compute_student_average<\/code> here instead of redoing the math. Your rubric grades this as <b>modular design<\/b>.<\/li>\n<\/ul>", "example": "people = [(\"Ana\", 31), (\"Leo\", 28)]\nages = {}\nfor person in people:\n    ages[person[0]] = person[1]\nprint(ages)          # {'Ana': 31, 'Leo': 28}\nprint(ages[\"Leo\"])   # 28", "starter": "def build_average_dictionary(records):\n    \"\"\"Return {student_id: average} for every record.\"\"\"\n    averages = ____\n    for record in records:\n        student_id = ____\n        averages[____] = ____\n    return averages\n", "hints": ["An empty dictionary is two curly braces with nothing inside.", "The ID lives at position 0 of the record.", "The key is the ID. The value comes from calling your Step 2 function on this record."], "tests": "\ncheck(\"sample -> {1001: 87.75, 1002: 71.25, 1003: 93.75}\", lambda: dclose(build_average_dictionary(_sample()), {1001: 87.75, 1002: 71.25, 1003: 93.75}))\ncheck(\"returns a dictionary\", lambda: isinstance(build_average_dictionary(_sample()), dict))\ncheck(\"no records -> empty dictionary {}\", lambda: build_average_dictionary([]) == {})\n", "say": ["Why is a dictionary useful here?", "It lets us grab any student's average instantly by their ID, instead of searching the list and redoing the math every time."]}, {"id": "find", "title": "Find a student by ID", "fns": "find_record_index(records, student_id)", "why": "Update, delete and student reports all start with \"find this ID.\" One helper does it for all three.", "concept": "<ul>\n<li><b>range(len(records))<\/b>: loops over positions 0, 1, 2…, so you know <b>where<\/b> the match is, not just what it is.<\/li>\n<li><b>Return early<\/b>: <code>return<\/code> stops the function the moment you find the match.<\/li>\n<li><b>-1<\/b>: a \"not found\" signal. No real position is negative, so the caller can check <code>if index == -1<\/code>.<\/li>\n<\/ul>", "example": "# position of the first negative number, or -1\ndef first_negative(nums):\n    for i in range(len(nums)):\n        if nums[i] < 0:\n            return i\n    return -1\n\nprint(first_negative([4, 7, -2, 9]))   # 2\nprint(first_negative([1, 2]))          # -1", "starter": "def find_record_index(records, student_id):\n    \"\"\"Return the position of the record with this ID, or -1 if not found.\"\"\"\n    for i in range(len(records)):\n        if ____ == student_id:\n            return ____\n    return ____\n", "hints": ["<code>records[i]<\/code> is a whole record. You need just its ID, at position 0 of that record.", "When it matches, hand back the position (<code>i<\/code>). If the loop finishes with no match, hand back the \"not found\" signal."], "tests": "\ncheck(\"1001 -> 0\", lambda: find_record_index(_sample(), 1001) == 0)\ncheck(\"1003 -> 2\", lambda: find_record_index(_sample(), 1003) == 2)\ncheck(\"9999 (missing) -> -1\", lambda: find_record_index(_sample(), 9999) == -1)\ncheck(\"empty list -> -1\", lambda: find_record_index([], 1001) == -1)\n", "say": ["Why return -1 instead of printing \"not found\" inside this function?", "Each caller handles \"not found\" its own way. This function's only job is finding, which keeps the modules small and reusable."]}, {"id": "display", "title": "Display all records", "fns": "display_all_records(records)", "why": "Feature 4. It also lets you <b>see<\/b> your data while testing every other feature.", "concept": "<ul>\n<li><b>if not records:<\/b> is True when the list is empty. Your sheet requires handling reports with no records.<\/li>\n<li><b>f-string widths<\/b>: <code>f\"{x:&lt;8}\"<\/code> left-aligns <code>x<\/code> in 8 spaces, so the columns line up.<\/li>\n<li>A loop <b>inside<\/b> a loop can print each score on the same line using <code>end=\" \"<\/code>.<\/li>\n<\/ul>", "example": "items = [(\"Coffee\", 4.5), (\"Bagel\", 3.0)]\nif not items:\n    print(\"Nothing here.\")\nprint(f\"{'Item':<10}{'Price':>6}\")\nfor item in items:\n    print(f\"{item[0]:<10}{item[1]:>6.2f}\")", "starter": "def display_all_records(records):\n    \"\"\"Print every record in a readable table. Handle an empty list.\"\"\"\n    # 1. If there are no records: print \"No records yet.\" and return\n    # 2. Print a header line, like:  ID      A1   A2   A3   A4\n    # 3. Loop through records and print each one on its own line\n    pass\n", "hints": ["Step 1 is two lines: the <code>if not records:<\/code> check, then the print and a <code>return<\/code>.", "For the rows, print <code>record[0]<\/code> first. Then loop over <code>record[1:]<\/code> and print each score with <code>end=\" \"<\/code>. Finish with an empty <code>print()<\/code> to end the line.", "Want neat columns? Use widths like <code>f\"{record[0]:&lt;8}\"<\/code> and <code>f\"{score:&lt;5}\"<\/code>."], "tests": "\ncheck(\"empty list prints 'No records'\", lambda: \"no records\" in feed(display_all_records, [], [])[1].lower())\ndef _t():\n    out = feed(display_all_records, [], _sample())[1]\n    return all(x in out for x in [\"1001\", \"1002\", \"1003\", \"88\", \"96\"])\ncheck(\"shows every ID and score\", _t)\n", "say": ["What happens if you skip the empty check?", "The table would just print a header with nothing under it. For the reports that divide, an empty list would crash with a ZeroDivisionError. Checking first keeps every report safe."]}, {"id": "score", "title": "Validate a score", "fns": "get_valid_score(prompt)", "why": "Every score typed in (add and update) must be a number from 0 to 100. Bad input must <b>never crash<\/b> the program.", "concept": "<ul>\n<li><b>float(text)<\/b>: turns text into a decimal number. <code>float(\"abc\")<\/code> raises a <b>ValueError<\/b>, which is Python's \"that's not a number\" error.<\/li>\n<li><b>try / except ValueError<\/b>: try the risky line; if it errors, run the except part instead of crashing.<\/li>\n<li><b>continue<\/b>: jump back to the top of the loop (ask again).<\/li>\n<li><b>return<\/b> inside <code>while True<\/code> exits both the loop and the function, with the good value.<\/li>\n<\/ul>", "example": "def get_tip_percent():\n    while True:\n        text = input(\"Tip % (0-30): \").strip()\n        try:\n            tip = int(text)\n        except ValueError:\n            print(\"Numbers only.\")\n            continue\n        if 0 <= tip <= 30:\n            return tip\n        print(\"Must be 0 to 30.\")", "starter": "def get_valid_score(prompt):\n    \"\"\"Keep asking until the user types a number from 0 to 100. Return it as a float.\"\"\"\n    while True:\n        text = input(prompt).strip()\n        # 1. try to turn text into a float\n        # 2. if that fails (ValueError): print a message, then continue\n        # 3. if the number is from 0 to 100: return it\n        # 4. otherwise: print a message (the loop asks again)\n        pass\n", "hints": ["Your structure matches the tip example. The differences: <code>float<\/code> instead of <code>int<\/code>, and the range 0 to 100.", "Python allows chained comparisons: <code>0 &lt;= score &lt;= 100<\/code>.", "Delete the <code>pass<\/code> when you write your own lines."], "tests": "\ncheck(\"rejects 'abc', -5 and 105, then accepts 88.5\", lambda: close(feed(get_valid_score, [\"abc\", \"-5\", \"105\", \"88.5\"], \"Score: \")[0], 88.5))\ncheck(\"prints a message for bad input\", lambda: len(feed(get_valid_score, [\"abc\", \"50\"], \"Score: \")[1].strip()) > 0)\ncheck(\"0 and 100 are allowed (edges)\", lambda: close(feed(get_valid_score, [\"0\"], \"S: \")[0], 0) and close(feed(get_valid_score, [\"100\"], \"S: \")[0], 100))\ncheck(\"returns a number, not text\", lambda: isinstance(feed(get_valid_score, [\"75\"], \"S: \")[0], (int, float)))\n", "say": ["What would go wrong if this validation were removed?", "Typing letters would crash the program, and impossible scores like 150 or -20 would get stored, which throws off every average and report."]}, {"id": "id", "title": "Validate a new student ID", "fns": "get_valid_student_id(existing_ids)", "why": "Your sheet requires rejecting <b>duplicate IDs<\/b>. This is where your set earns its spot.", "concept": "<ul>\n<li><b>int(text)<\/b>: IDs are whole numbers, so use <code>int<\/code>, not <code>float<\/code>.<\/li>\n<li><b>in<\/b>: <code>1001 in existing_ids<\/code> gives True or False. On a set this check is very fast.<\/li>\n<li>Several checks in a row, each with <code>continue<\/code>, keeps the code flat and easy to read.<\/li>\n<\/ul>", "example": "taken = {\"juelz\", \"angie\"}\nname = \"juelz\"\nif name in taken:\n    print(\"Name already exists.\")", "starter": "def get_valid_student_id(existing_ids):\n    \"\"\"Keep asking until the user types a positive whole number that is NOT already used.\n    Return it as an int.\"\"\"\n    while True:\n        text = input(\"Enter student ID: \").strip()\n        # 1. try int(text); on ValueError: print a message and continue\n        # 2. if the ID is 0 or negative: print a message and continue\n        # 3. if the ID is already in existing_ids: print \"ID already exists.\" and continue\n        # 4. otherwise: return the ID\n        pass\n", "hints": ["Same skeleton as Step 6, just with more checks before the <code>return<\/code>.", "Check 3 is one line: <code>if student_id in existing_ids:<\/code>"], "tests": "\ncheck(\"rejects 'abc', 1001 (taken), -3, then accepts 1004\", lambda: feed(get_valid_student_id, [\"abc\", \"1001\", \"-3\", \"1004\"], {1001, 1002, 1003})[0] == 1004)\ncheck(\"says the ID already exists\", lambda: \"exist\" in feed(get_valid_student_id, [\"1001\", \"1004\"], {1001, 1002, 1003})[1].lower())\ncheck(\"returns an int\", lambda: isinstance(feed(get_valid_student_id, [\"2000\"], set())[0], int))\n", "say": ["Why use a set for IDs instead of searching the list?", "A set can't hold duplicates, and checking 'in' on a set is instant. Searching the list means looping through every record, which gets slow as the class grows."]}, {"id": "add", "title": "Add a record", "fns": "add_record(records, student_ids)", "why": "Feature 1. This is the first function that <b>connects<\/b> others: two validators plus your data.", "concept": "<ul>\n<li><b>Call your helpers<\/b>: the ID from Step 7, each score from Step 6.<\/li>\n<li><b>Build in a list, save as a tuple<\/b>: collect scores in a list (easy to append), then turn it into a tuple at the end.<\/li>\n<li><b>(x,)<\/b>: the comma makes a one-item tuple. <code>(x,) + tuple(scores)<\/code> glues the ID on the front.<\/li>\n<li><b>Mutable<\/b>: lists and sets can be changed inside a function, and the change sticks outside it. No <code>return<\/code> needed.<\/li>\n<\/ul>", "example": "nums = []\nfor n in range(1, 4):\n    nums.append(n * 10)        # [10, 20, 30]\nrow = (\"A\",) + tuple(nums)     # ('A', 10, 20, 30)", "starter": "def add_record(records, student_ids):\n    \"\"\"Ask for a new ID and scores, then store the record.\"\"\"\n    # 1. Get a valid, unused ID with get_valid_student_id(student_ids)\n    # 2. Make an empty list called scores\n    # 3. Loop NUM_ASSESSMENTS times: get each score with get_valid_score(...), append it\n    # 4. Build the tuple: (student_id,) + tuple(scores)\n    # 5. Append it to records, and add the ID to student_ids\n    # 6. Print a confirmation message\n    pass\n", "hints": ["For the loop, <code>for n in range(1, NUM_ASSESSMENTS + 1):<\/code> gives you 1, 2, 3, 4. Use <code>n<\/code> in the prompt, like <code>f\"Assessment {n} score: \"<\/code>.", "Order matters for the tests: ask for the ID first, then the 4 scores.", "Step 5 is two lines: <code>records.append(...)<\/code> and <code>student_ids.add(...)<\/code>."], "tests": "\ndef _t1():\n    recs, ids = _sample(), _ids()\n    feed(add_record, [\"1004\", \"90\", \"80\", \"70\", \"60\"], recs, ids)\n    return len(recs) == 4 and recs[-1] == (1004, 90, 80, 70, 60) and isinstance(recs[-1], tuple)\ncheck(\"adds (1004, 90, 80, 70, 60) as a tuple\", _t1)\ndef _t2():\n    recs, ids = _sample(), _ids()\n    feed(add_record, [\"1004\", \"90\", \"80\", \"70\", \"60\"], recs, ids)\n    return 1004 in ids\ncheck(\"adds 1004 to student_ids\", _t2)\ndef _t3():\n    recs, ids = _sample(), _ids()\n    feed(add_record, [\"1001\", \"1005\", \"90\", \"80\", \"70\", \"60\"], recs, ids)\n    return len(recs) == 4 and recs[-1][0] == 1005\ncheck(\"rejects duplicate 1001, then adds 1005\", _t3)\ndef _t4():\n    recs, ids = _sample(), _ids()\n    feed(add_record, [\"1006\", \"101\", \"90\", \"80\", \"70\", \"60\"], recs, ids)\n    return recs[-1] == (1006, 90, 80, 70, 60)\ncheck(\"rejects score 101, keeps asking\", _t4)\n", "say": ["Walk through the data flow when a record is added.", "The user types an ID, which is checked for format and duplicates against the set. Then 4 scores, each checked for 0 to 100. They're packed into a tuple, saved to the list, and the ID is added to the set."]}, {"id": "update", "title": "Update a score", "fns": "update_record(records)", "why": "Feature 2. Tuples can't change, so you'll learn the \"build a new one and swap it in\" move.", "concept": "<ul>\n<li><b>Tuple → list → tuple<\/b>: <code>temp = list(record)<\/code>, change <code>temp[n]<\/code>, then <code>tuple(temp)<\/code>.<\/li>\n<li><b>Swap it in<\/b>: <code>records[index] = new_tuple<\/code> replaces the old record at the same spot.<\/li>\n<li>Assessment 1 lives at position 1, because the ID is at 0. That works out nicely.<\/li>\n<\/ul>", "example": "t = (1, 2, 3)\ntemp = list(t)\ntemp[1] = 99\nt = tuple(temp)\nprint(t)   # (1, 99, 3)", "starter": "def update_record(records):\n    \"\"\"Change one score for an existing student.\"\"\"\n    # 1. Ask for the student ID and turn it into an int\n    #    (if that fails: print \"Invalid ID.\" and return)\n    # 2. index = find_record_index(...); if it's -1: print \"Student not found.\" and return\n    # 3. Ask which assessment to change (1 to NUM_ASSESSMENTS); keep asking until valid\n    # 4. Get the new score with get_valid_score(...)\n    # 5. Turn the record into a list, change that score, turn it back into a tuple\n    # 6. Put the new tuple back at the same index, then print a confirmation\n    pass\n", "hints": ["Prompt order for the tests: ID, then assessment number, then new score.", "Step 3 is a small <code>while True<\/code> loop like Step 6, but with <code>int<\/code> and the range 1 to <code>NUM_ASSESSMENTS<\/code>.", "Step 5: <code>temp = list(records[index])<\/code>, then <code>temp[assessment] = new_score<\/code>."], "tests": "\ndef _t1():\n    recs = _sample()\n    feed(update_record, [\"1002\", \"2\", \"99\"], recs)\n    return recs[1] == (1002, 72, 99, 75, 70) and isinstance(recs[1], tuple)\ncheck(\"1002, assessment 2 -> 99 gives (1002, 72, 99, 75, 70)\", _t1)\ndef _t2():\n    recs = _sample()\n    out = feed(update_record, [\"9999\"], recs)[1]\n    return recs == _sample() and \"not found\" in out.lower()\ncheck(\"missing ID 9999 -> 'not found', nothing changes\", _t2)\ndef _t3():\n    recs = _sample()\n    feed(update_record, [\"1002\", \"7\", \"2\", \"99\"], recs)\n    return recs[1] == (1002, 72, 99, 75, 70)\ncheck(\"rejects assessment 7, then accepts 2\", _t3)\ndef _t4():\n    recs = _sample()\n    out = feed(update_record, [\"abc\"], recs)[1]\n    return recs == _sample() and \"invalid\" in out.lower()\ncheck(\"ID 'abc' -> 'Invalid ID', no crash\", _t4)\n", "say": ["Your records are tuples, which can't change. So how does update work?", "We copy the tuple into a list, change the one score, convert it back to a tuple, and replace the old record at the same position in the list."]}, {"id": "delete", "title": "Delete a record", "fns": "delete_record(records, student_ids)", "why": "Feature 3. It's short, but there's a classic bug to avoid: keeping the list and the set in sync.", "concept": "<ul>\n<li><b>del records[i]<\/b>: removes the item at position <code>i<\/code>.<\/li>\n<li><b>.discard(x)<\/b>: removes <code>x<\/code> from a set, with no error if it's missing.<\/li>\n<li><b>Sync<\/b>: if you delete from the list but not the set, that ID can never be added again.<\/li>\n<\/ul>", "example": "names = [\"a\", \"b\", \"c\"]\ndel names[1]        # ['a', 'c']\ntags = {\"x\", \"y\"}\ntags.discard(\"y\")   # {'x'}", "starter": "def delete_record(records, student_ids):\n    \"\"\"Remove a student's record if it exists.\"\"\"\n    # 1. Ask for the ID and turn it into an int (if that fails: print \"Invalid ID.\" and return)\n    # 2. Find the index; if it's -1: print \"Student not found.\" and return\n    # 3. Delete the record from the list\n    # 4. Remove the ID from student_ids\n    # 5. Print a confirmation\n    pass\n", "hints": ["Steps 1 and 2 are the same as the start of <code>update_record<\/code>.", "Use <code>del records[index]<\/code> and <code>student_ids.discard(sid)<\/code>."], "tests": "\ndef _t1():\n    recs, ids = _sample(), _ids()\n    feed(delete_record, [\"1002\"], recs, ids)\n    return len(recs) == 2 and all(r[0] != 1002 for r in recs)\ncheck(\"deletes 1002 from records\", _t1)\ndef _t2():\n    recs, ids = _sample(), _ids()\n    feed(delete_record, [\"1002\"], recs, ids)\n    return 1002 not in ids\ncheck(\"removes 1002 from student_ids too\", _t2)\ndef _t3():\n    recs, ids = _sample(), _ids()\n    out = feed(delete_record, [\"9999\"], recs, ids)[1]\n    return len(recs) == 3 and \"not found\" in out.lower()\ncheck(\"missing ID 9999 -> 'not found', nothing deleted\", _t3)\n", "say": ["What bug happens if you forget to update the set on delete?", "The deleted student's ID stays in the set, so the duplicate check blocks anyone from re-adding that ID, even though no record uses it."]}, {"id": "student", "title": "Show one student's average", "fns": "show_student_average(records)", "why": "Feature 5. Pure reuse: find the student, compute the average, print it cleanly.", "concept": "<ul>\n<li><b>:.2f<\/b>: <code>f\"{71.25:.2f}\"<\/code> → <code>71.25<\/code>, and <code>f\"{87:.2f}\"<\/code> → <code>87.00<\/code>. Always 2 decimals.<\/li>\n<li><b>Status<\/b>: an <code>if/else<\/code> on the average (for example, below 75 = \"At Risk\") makes the report match the sample on your sheet.<\/li>\n<\/ul>", "example": "avg = 87\nprint(f\"Average: {avg:.2f}\")   # Average: 87.00", "starter": "def show_student_average(records):\n    \"\"\"Ask for an ID, then print that student's scores and average.\"\"\"\n    # 1. If there are no records: print \"No records yet.\" and return\n    # 2. Ask for the ID (int; if that fails: print \"Invalid ID.\" and return)\n    # 3. Find the index; if it's -1: print \"Student not found.\" and return\n    # 4. Compute the average with compute_student_average(...)\n    # 5. Print the ID, the scores, and the average with 2 decimals\n    # 6. Bonus: print \"Status: At Risk\" if the average is below 75, else \"Status: OK\"\n    pass\n", "hints": ["Check for empty records <b>before<\/b> asking for input.", "Grab the record with <code>record = records[index]<\/code>, then pass it to <code>compute_student_average(record)<\/code>."], "tests": "\ncheck(\"1002 prints 71.25\", lambda: \"71.25\" in feed(show_student_average, [\"1002\"], _sample())[1])\ncheck(\"missing 9999 -> 'not found'\", lambda: \"not found\" in feed(show_student_average, [\"9999\"], _sample())[1].lower())\ncheck(\"no records -> 'No records' (asks nothing)\", lambda: \"no records\" in feed(show_student_average, [], [])[1].lower())\n", "say": ["Which earlier functions does this one reuse?", "find_record_index to locate the student and compute_student_average for the math. It only handles input and printing."]}, {"id": "stats", "title": "Class statistics", "fns": "compute_assessment_averages(records), show_class_statistics(records)", "why": "Feature 6: each assessment's class average, the highest and lowest student average, and the student count.", "concept": "<ul>\n<li><b>Nested loop<\/b>: the outer loop picks an assessment number; the inner loop goes through every student for that assessment.<\/li>\n<li><b>Highest search<\/b>: keep a \"best so far.\" Each time you see a bigger value, replace it and remember who it was.<\/li>\n<li><b>Lowest<\/b>: the same, but start with a high number (like 101) and use <code>&lt;<\/code>.<\/li>\n<li><b>Compute vs. display<\/b>: one function does math and returns, another prints. That's easier to test and explain.<\/li>\n<\/ul>", "example": "temps = {\"Mon\": 81, \"Tue\": 88, \"Wed\": 79}\nbest_day = None\nbest = -1\nfor day in temps:\n    if temps[day] > best:\n        best = temps[day]\n        best_day = day\nprint(best_day, best)   # Tue 88", "starter": "def compute_assessment_averages(records):\n    \"\"\"Return {assessment_number: class average}, like {1: 85.0, 2: 84.33, ...}.\"\"\"\n    # 1. Start an empty dictionary\n    # 2. Outer loop: for n in range(1, NUM_ASSESSMENTS + 1)\n    # 3. Inner loop: add up record[n] for every record\n    # 4. Store total / len(records) at key n\n    # 5. Return the dictionary\n    pass\n\n\ndef show_class_statistics(records):\n    \"\"\"Print the CLASS STATISTICS report.\"\"\"\n    # 1. If no records: print \"No records yet.\" and return\n    # 2. Print \"Number of students: \" and the count\n    # 3. Print each assessment average with 2 decimals (use compute_assessment_averages)\n    # 4. Use build_average_dictionary, then loop to find the highest and lowest average + IDs\n    # 5. Print highest and lowest with 2 decimals and their IDs\n    pass\n", "hints": ["In the outer loop, reset <code>total = 0<\/code> <b>before<\/b> the inner loop, so each assessment starts fresh.", "To print the dictionary: <code>for n in assessment_avgs:<\/code> then <code>print(f\"Assessment {n} Average: {assessment_avgs[n]:.2f}\")<\/code>.", "For highest and lowest, loop over your averages dictionary just like the <code>temps<\/code> example, tracking both at once."], "tests": "\ncheck(\"assessment averages {1: 85.0, 2: 84.33, 3: 81.33, 4: 86.33}\", lambda: dclose(compute_assessment_averages(_sample()), {1: 85.0, 2: 84.333, 3: 81.333, 4: 86.333}))\ndef _t():\n    out = feed(show_class_statistics, [], _sample())[1]\n    return all(x in out for x in [\"85.00\", \"84.33\", \"81.33\", \"86.33\"])\ncheck(\"report shows each assessment average with 2 decimals\", _t)\ndef _t2():\n    out = feed(show_class_statistics, [], _sample())[1]\n    return \"93.75\" in out and \"1003\" in out and \"71.25\" in out and \"1002\" in out\ncheck(\"report shows highest 93.75 (1003) and lowest 71.25 (1002)\", _t2)\ncheck(\"report shows 'Number of students: 3'\", lambda: \"students: 3\" in feed(show_class_statistics, [], _sample())[1].lower())\ncheck(\"no records -> 'No records', no crash\", lambda: \"no records\" in feed(show_class_statistics, [], [])[1].lower())\n", "say": ["Which module should be tested first, and why?", "compute_student_average. Class stats, at-risk and bands all depend on it, so if it's wrong, every report is wrong."]}, {"id": "risk", "title": "At-risk students", "fns": "find_at_risk_students(records, threshold), show_at_risk_students(records, threshold)", "why": "Feature 7. This is the second meaningful use of a set: tracking who's below the line.", "concept": "<ul>\n<li><b>set()<\/b>: an empty set. (<code>{}<\/code> makes an empty <b>dictionary<\/b>, a common trap.)<\/li>\n<li><b>.add()<\/b> puts an ID in. Duplicates are ignored automatically.<\/li>\n<li><b>sorted(my_set)<\/b>: sets have no order, so sort them before printing for a neat report.<\/li>\n<\/ul>", "example": "low_stock = set()\nfor item in [(\"milk\", 2), (\"eggs\", 12), (\"bread\", 1)]:\n    if item[1] < 5:\n        low_stock.add(item[0])\nprint(sorted(low_stock))   # ['bread', 'milk']", "starter": "def find_at_risk_students(records, threshold):\n    \"\"\"Return a SET of IDs whose average is below threshold.\"\"\"\n    # 1. Start an empty set\n    # 2. Loop through records; compute each average\n    # 3. If it's below threshold, add the ID to the set\n    # 4. Return the set\n    pass\n\n\ndef show_at_risk_students(records, threshold):\n    \"\"\"Print the AT-RISK STUDENTS report.\"\"\"\n    # 1. If no records: print \"No records yet.\" and return\n    # 2. Get the set with find_at_risk_students(...)\n    # 3. Print the threshold and how many students are below it\n    # 4. Loop through sorted(at_risk_set): print each ID and their average (2 decimals)\n    #    Tip: build_average_dictionary gives you every average by ID\n    pass\n", "hints": ["Your project sheet shows a version of <code>find_at_risk_students<\/code>. Type it yourself and make sure you can explain each line.", "In the report, <code>len(at_risk)<\/code> gives the count."], "tests": "\ncheck(\"threshold 75 -> {1002}\", lambda: find_at_risk_students(_sample(), 75) == {1002})\ncheck(\"threshold 90 -> {1001, 1002}\", lambda: find_at_risk_students(_sample(), 90) == {1001, 1002})\ncheck(\"returns a set\", lambda: isinstance(find_at_risk_students(_sample(), 75), set))\ndef _t():\n    out = feed(show_at_risk_students, [], _sample(), 75.0)[1]\n    return \"1002\" in out and \"71.25\" in out and \"1003\" not in out\ncheck(\"report lists 1002 with 71.25 (and not 1003)\", _t)\ncheck(\"no records -> 'No records'\", lambda: \"no records\" in feed(show_at_risk_students, [], [], 75.0)[1].lower())\n", "say": ["What assumption does the at-risk feature make?", "That one cutoff (75) fits everyone, and that all assessments count equally in the average. A real instructor might weight exams more."]}, {"id": "bands", "title": "Performance bands", "fns": "build_performance_bands(records), show_performance_bands(records)", "why": "Feature 8: count how many students land in each grade range.", "concept": "<ul>\n<li><b>Counter dictionary<\/b>: keys are the band names, values start at 0, and you do <code>+= 1<\/code> for each student.<\/li>\n<li><b>if/elif order matters<\/b>: check the <b>highest<\/b> band first. If <code>&gt;= 60<\/code> came first, a 95 would land in \"60-69.\"<\/li>\n<li>Use these exact keys: <code>\"90-100\"<\/code>, <code>\"80-89\"<\/code>, <code>\"70-79\"<\/code>, <code>\"60-69\"<\/code>, <code>\"Below 60\"<\/code>.<\/li>\n<\/ul>", "example": "counts = {\"kid\": 0, \"adult\": 0}\nfor age in [8, 34, 12, 51]:\n    if age >= 18:\n        counts[\"adult\"] += 1\n    else:\n        counts[\"kid\"] += 1\nprint(counts)   # {'kid': 2, 'adult': 2}", "starter": "def build_performance_bands(records):\n    \"\"\"Return a dictionary counting students in each band.\"\"\"\n    bands = {\"90-100\": 0, \"80-89\": 0, \"70-79\": 0, \"60-69\": 0, \"Below 60\": 0}\n    # 1. Loop through records; compute each average\n    # 2. if/elif from the highest band down; add 1 to the matching band\n    # 3. Return bands\n    pass\n\n\ndef show_performance_bands(records):\n    \"\"\"Print the PERFORMANCE BANDS report.\"\"\"\n    # 1. If no records: print \"No records yet.\" and return\n    # 2. Get the counts from build_performance_bands(...)\n    # 3. Loop through the dictionary and print each band and its count\n    pass\n", "hints": ["Inside the loop: <code>if avg &gt;= 90:<\/code> then <code>bands[\"90-100\"] += 1<\/code>. Keep going with <code>elif avg &gt;= 80:<\/code> and so on, down to <code>else:<\/code>.", "Watch the edges: an average of exactly 90 belongs in 90-100, and 89.5 belongs in 80-89."], "tests": "\ncheck(\"sample -> 90-100: 1, 80-89: 1, 70-79: 1, 60-69: 0, Below 60: 0\", lambda: build_performance_bands(_sample()) == {\"90-100\": 1, \"80-89\": 1, \"70-79\": 1, \"60-69\": 0, \"Below 60\": 0})\ndef _t():\n    recs = [(1, 90, 90, 90, 90), (2, 89.5, 89.5, 89.5, 89.5), (3, 60, 60, 60, 60), (4, 59.9, 59.9, 59.9, 59.9)]\n    return build_performance_bands(recs) == {\"90-100\": 1, \"80-89\": 1, \"70-79\": 0, \"60-69\": 1, \"Below 60\": 1}\ncheck(\"edges: exactly 90, 89.5, exactly 60, 59.9\", _t)\ncheck(\"no records -> all zeros\", lambda: build_performance_bands([]) == {\"90-100\": 0, \"80-89\": 0, \"70-79\": 0, \"60-69\": 0, \"Below 60\": 0})\ncheck(\"report prints the band names\", lambda: \"90-100\" in feed(show_performance_bands, [], _sample())[1] and \"Below 60\" in feed(show_performance_bands, [], _sample())[1])\ncheck(\"report with no records -> 'No records'\", lambda: \"no records\" in feed(show_performance_bands, [], [])[1].lower())\n", "say": ["Why does the order of the if/elif checks matter?", "Python stops at the first true condition. Checking the highest band first puts each average in the right range. Otherwise a 95 would match '>= 60' first."]}, {"id": "menu", "title": "Menu and main()", "fns": "show_menu(), get_menu_choice(), main()", "why": "The control center. A <b>while loop<\/b> shows the menu, reads a <b>validated<\/b> choice, and calls one of your functions. Picking 0 exits.", "concept": "<ul>\n<li><b>while True + break<\/b>: loop until the user picks 0.<\/li>\n<li><b>if / elif / else<\/b>: one branch per menu option. Each branch calls one function.<\/li>\n<li><b>Passing data<\/b>: <code>main<\/code> hands <code>records<\/code> and <code>student_ids<\/code> to each function. Because lists and sets are mutable, changes stick.<\/li>\n<li><b>if __name__ == \"__main__\":<\/b> runs <code>main()<\/code> only when you run this file directly. It's already written for you at the bottom.<\/li>\n<\/ul>", "example": "def main():\n    while True:\n        print(\"1. Say hi\")\n        print(\"0. Exit\")\n        choice = input(\"Choice: \").strip()\n        if choice == \"1\":\n            print(\"Hi!\")\n        elif choice == \"0\":\n            print(\"Bye!\")\n            break\n        else:\n            print(\"Invalid choice.\")", "starter": "def show_menu():\n    \"\"\"Print the numbered menu (1-8, and 0 = Exit).\"\"\"\n    # Print a title line, then one line per option, matching the menu on your sheet\n    pass\n\n\ndef get_menu_choice():\n    \"\"\"Keep asking until the user types a whole number from 0 to 8. Return it as an int.\"\"\"\n    # Same pattern as get_valid_score: while True, try int(), range check 0-8\n    # Print \"Invalid choice.\" for anything else\n    pass\n\n\ndef main():\n    \"\"\"Run the gradebook until the user picks 0.\"\"\"\n    # Uses the records list and student_ids set from Step 1\n    while True:\n        show_menu()\n        choice = get_menu_choice()\n        # if/elif for each choice 1-8, calling the matching function\n        #   (pass records and/or student_ids; at-risk can use 75.0)\n        # 0: print \"Goodbye!\" and break\n        pass\n\n\nif __name__ == \"__main__\":\n    main()\n", "hints": ["<code>get_menu_choice<\/code> is Step 6 again, with <code>int<\/code> and the range 0 to 8.", "Example branch: <code>elif choice == 3:<\/code> then <code>delete_record(records, student_ids)<\/code>. Note it's the number <code>3<\/code>, not the text <code>\"3\"<\/code>, because your function returns an int.", "For 7: <code>show_at_risk_students(records, 75.0)<\/code>. For 0: print, then <code>break<\/code>."], "tests": "\ncheck(\"menu mentions Exit\", lambda: \"exit\" in feed(show_menu, [])[1].lower())\ncheck(\"get_menu_choice rejects 'x' and 12, accepts 4\", lambda: feed(get_menu_choice, [\"x\", \"12\", \"4\"])[0] == 4)\ncheck(\"get_menu_choice accepts 0\", lambda: feed(get_menu_choice, [\"0\"])[0] == 0)\ndef _t1():\n    out = feed(main, [\"4\", \"0\"])[1]\n    return \"1001\" in out and \"goodbye\" in out.lower()\ncheck(\"main: 4 shows records, 0 says Goodbye and exits\", _t1)\ndef _t2():\n    out = feed(main, [\"1\", \"1004\", \"90\", \"80\", \"70\", \"60\", \"4\", \"0\"])[1]\n    return \"1004\" in out\ncheck(\"main: add 1004, then display shows it\", _t2)\ndef _t3():\n    out = feed(main, [\"8\", \"6\", \"0\"])[1]\n    return \"90-100\" in out and \"93.75\" in out\ncheck(\"main: 8 (bands) and 6 (stats) both run\", _t3)\n", "say": ["How does your project show systems thinking rather than just coding?", "We planned the data flow first, split the work into small modules with one job each, enforced rules at the input stage, and tested each module before connecting them through the menu."]}];
+const GB_HARNESS = "import json as _gb_json\nimport sys as _gb_sys\nimport io as _gb_io\n\nclass _OutOfInput(Exception):\n    pass\n\n_results = []\n\ndef _sample():\n    return [(1001, 88, 91, 79, 93), (1002, 72, 68, 75, 70), (1003, 95, 94, 90, 96)]\n\ndef _ids():\n    return {1001, 1002, 1003}\n\ndef close(a, b):\n    return isinstance(a, (int, float)) and abs(a - b) < 0.01\n\ndef dclose(d, e):\n    return isinstance(d, dict) and set(d) == set(e) and all(close(d[k], e[k]) for k in e)\n\ndef feed(fn, inputs, *args):\n    queue = [str(x) for x in inputs]\n    def fake(prompt=\"\"):\n        if not queue:\n            raise _OutOfInput()\n        return queue.pop(0)\n    g = globals()\n    old_input = g.get(\"input\")\n    g[\"input\"] = fake\n    buf = _gb_io.StringIO()\n    old_out = _gb_sys.stdout\n    _gb_sys.stdout = buf\n    try:\n        res = fn(*args)\n    finally:\n        _gb_sys.stdout = old_out\n        g[\"input\"] = old_input\n    return res, buf.getvalue()\n\ndef check(label, thunk):\n    try:\n        ok = bool(thunk())\n        _results.append([label, ok, \"\" if ok else \"Ran, but the result didn't match what was expected.\"])\n    except _OutOfInput:\n        _results.append([label, False, \"Your code asked for more input than this test types. Check the prompt order, and make sure loops exit with return or break.\"])\n    except Exception as e:\n        n = type(e).__name__\n        m = str(e)\n        if n == \"LoopLimit\":\n            msg = \"Your code ran too long. Is there a loop that never ends?\"\n        elif n == \"NameError\" and \"____\" in m:\n            msg = \"There's still a ____ blank in your code. Fill in every blank.\"\n        elif n == \"NameError\":\n            msg = \"NameError: \" + m + \". Is the function written yet, and spelled exactly right?\"\n        else:\n            msg = n + \": \" + m\n        _results.append([label, False, msg])\n\n__name__ = \"gradebook\"\n";
+let gbCode = store.get('pot.gb.code', {}); if (!gbCode || typeof gbCode !== 'object') gbCode = {};
+let gbPass = store.get('pot.gb.pass', {}); if (!gbPass || typeof gbPass !== 'object') gbPass = {};
+let gbFocus = store.get('pot.gb.focus', 1);
+const gbLast = {};          // step -> { results, error } from the last test run (this visit)
+const gbEd = {};            // step -> textarea
+const gbSaveCode = () => store.set('pot.gb.code', gbCode);
+const gbSavePass = () => store.set('pot.gb.pass', gbPass);
+const gbDone = () => GB_STEPS.filter((_, i) => gbPass[i + 1]).length;
+const gbSrc = n => (gbEd[n] ? gbEd[n].value : (gbCode[n] != null ? gbCode[n] : GB_STEPS[n - 1].starter));
+
+function gbStats() {
+  const el = document.getElementById('gb-stats'); if (!el) return;
+  const d = gbDone();
+  el.innerHTML = '<span><b>' + d + '</b> / ' + GB_STEPS.length + ' steps passed</span><span>Due <b>Wed 12/2</b> · Canvas</span>';
+  const bar = document.getElementById('gb-bar'); if (bar) bar.style.width = (d / GB_STEPS.length * 100) + '%';
+  GB_STEPS.forEach((_, i) => { const s = document.getElementById('gb-s' + (i + 1)); if (s) s.classList.toggle('gb-passed', !!gbPass[i + 1]); });
+  gbChip.querySelector('.done').textContent = d === GB_STEPS.length ? ' ✓' : '';
+}
+
+/* Build one Python program: harness + steps 1..n + this step's tests. Lines are tracked so errors point at the right step. */
+function gbProgram(n) {
+  let src = GB_HARNESS.replace(/\s*$/, '\n');
+  let line = src.split('\n').length;
+  const starts = [];
+  for (let k = 1; k <= n; k++) {
+    src += '# ==== step ' + k + ' ====\n'; line++;
+    starts.push(line);
+    let c = gbSrc(k).replace(/\t/g, '    '); if (!c.endsWith('\n')) c += '\n';
+    src += c; line += c.split('\n').length - 1;
+  }
+  src += '# ==== tests ====\n' + GB_STEPS[n - 1].tests + "\nprint('@@GB@@' + _gb_json.dumps(_results))\n";
+  return { src, starts };
+}
+
+function gbRunTests(n, box, btn) {
+  const sec = document.getElementById('gb-s' + n);
+  const res = sec.querySelector('.gb-results'), note = sec.querySelector('.engine-note');
+  const show = m => { note.hidden = !m; note.textContent = m || ''; };
+  gbCode[n] = gbSrc(n); gbSaveCode();
+  gbFocus = n; store.set('pot.gb.focus', n);
+  btn.disabled = true;
+  ensurePython(show).then(ok => {
+    show('');
+    res.hidden = false;
+    if (!ok) { res.innerHTML = '<div class="errbox"><div class="t">The code runner couldn\'t start here</div><div>' + esc(PY.error) + '</div></div>'; btn.disabled = false; return; }
+    const P = gbProgram(n);
+    const r = runPy(P.src, []);
+    const mk = (r.out || '').split('\n').filter(l => l.indexOf('@@GB@@') === 0).pop();
+    let html = '', results = null, error = null;
+    if (r.err && !mk) {
+      let k = 0; for (let i = 0; i < P.starts.length; i++) if (r.err.line && r.err.line >= P.starts[i]) k = i;
+      const stepNo = k + 1, local = r.err.line ? r.err.line - P.starts[k] + 1 : null;
+      const lines = gbSrc(stepNo).split('\n');
+      const where = r.err.line && r.err.line >= P.starts[0] ? 'Step ' + stepNo + (local ? ', line ' + local : '') : 'Setup';
+      const detail = r.err.type === 'EOFError'
+        ? '<div class="errbox"><div class="t">EOFError</div><div>Your code calls <code>input()</code> outside a function. Keep every <code>input()</code> inside a function.</div></div>'
+        : explainError({ type: r.err.type, msg: r.err.msg, line: local }, lines);
+      error = { step: stepNo, line: local, type: r.err.type, msg: r.err.msg };
+      html = '<p class="verdict no">Python stopped in ' + esc(where) + '.</p>' +
+        (stepNo !== n ? '<p>This error is in an <b>earlier step</b>. Fix Step ' + stepNo + ' first, because each step builds on the ones before it.</p>' : '') +
+        detail;
+      if (stepNo !== n) { gbPass[stepNo] = false; }
+      gbPass[n] = false;
+      gbEd[stepNo] && gbMarkLine(stepNo, local);
+    } else {
+      results = mk ? JSON.parse(mk.slice(6)) : [];
+      const all = results.length > 0 && results.every(x => x[1]);
+      gbPass[n] = all;
+      html = (all ? '<p class="verdict ok">All ' + results.length + ' tests passed. Step ' + n + ' is done.</p>' : '<p class="verdict no">' + results.filter(x => x[1]).length + ' of ' + results.length + ' tests passed.</p>') +
+        '<ul class="gb-res">' + results.map(x => '<li class="' + (x[1] ? 'ok' : 'no') + '"><span class="ic">' + (x[1] ? '✓' : '✗') + '</span><span>' + esc(x[0]) +
+        (x[1] ? '' : '<small>' + esc(x[2]) + '</small>') + '</span></li>').join('') + '</ul>';
+      gbMarkLine(n, null);
+    }
+    gbLast[n] = { results, error, code: gbSrc(n) };
+    res.innerHTML = html;
+    gbSavePass(); gbStats();
+    btn.disabled = false;
+  });
+}
+
+function gbMarkLine(n, line) {
+  const ed = gbEd[n]; if (!ed) return;
+  ed._err = line; ed._paint && ed._paint();
+}
+
+function gbStep(s, n) {
+  const sec = document.createElement('section');
+  sec.className = 'card gb-step'; sec.id = 'gb-s' + n;
+  sec.innerHTML =
+    '<div class="part-label">Step ' + n + ' of ' + GB_STEPS.length + '</div>' +
+    '<h3>Step ' + n + ' · ' + esc(s.title) + '</h3>' +
+    '<p class="gb-fns"><code>' + esc(s.fns) + '</code></p>' +
+    '<p class="muted gb-why">' + s.why + '</p>' +
+    '<div class="gb-grid">' +
+      '<div class="gb-learn"><div class="part-label">Learn it</div><div class="gb-concept">' + s.concept + '</div>' +
+        '<div class="field-label">Example (not your project code)</div><div class="gb-ex"></div></div>' +
+      '<div class="gb-build"><div class="part-label">Your turn</div>' +
+        '<div class="editor"><div class="nums" aria-hidden="true"></div><textarea spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" aria-label="Your code for step ' + n + '"></textarea></div>' +
+        '<div class="controls"><button class="btn" type="button" data-gb="run">Run tests &#9654;</button>' +
+          '<button class="btn ghost" type="button" data-gb="ask" data-coach-only>Ask the coach</button>' +
+          '<button class="btn quiet" type="button" data-gb="reset">Reset step</button></div>' +
+        '<p class="engine-note" hidden></p>' +
+        '<div class="console gb-results" hidden aria-live="polite"></div>' +
+      '</div>' +
+    '</div>' +
+    '<details class="gb-more"><summary>Hints (' + s.hints.length + ')</summary><ol class="hints-list">' + s.hints.map(h => '<li>' + h + '</li>').join('') + '</ol></details>' +
+    '<details class="gb-more"><summary>Say it out loud: ' + esc(s.say[0]) + '</summary><p>' + esc(s.say[1]) + '</p></details>';
+  sec.querySelector('.gb-ex').appendChild(codeBlock(s.example.split('\n')));
+
+  const ta = sec.querySelector('.editor textarea'), nums = sec.querySelector('.nums');
+  gbEd[n] = ta;
+  ta.value = gbCode[n] != null ? gbCode[n] : s.starter;
+  const fit = () => { ta.rows = Math.max(8, ta.value.split('\n').length + 1); };
+  ta._paint = () => { let h = ''; const c = ta.value.split('\n').length; for (let k = 1; k <= c; k++) h += (k === ta._err ? '<span class="err">' + k + '</span>' : k) + '\n'; nums.innerHTML = h; nums.scrollTop = ta.scrollTop; };
+  fit(); ta._paint();
+  let t = null;
+  ta.addEventListener('scroll', () => { nums.scrollTop = ta.scrollTop; });
+  ta.addEventListener('focus', () => { gbFocus = n; store.set('pot.gb.focus', n); });
+  ta.addEventListener('input', () => {
+    ta._err = null; fit(); ta._paint();
+    if (gbPass[n]) { gbPass[n] = false; gbSavePass(); gbStats(); }
+    clearTimeout(t);
+    t = setTimeout(() => { gbCode[n] = ta.value; gbSaveCode(); }, 400);
+  });
+  ta.addEventListener('keydown', e => {
+    const v = ta.value, a = ta.selectionStart;
+    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); ta.setRangeText('    ', a, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input')); }
+    else if (e.key === 'Tab' && e.shiftKey) {
+      e.preventDefault(); const ls = v.lastIndexOf('\n', a - 1) + 1, m = v.slice(ls, ls + 4).match(/^ {1,4}/);
+      if (m) { ta.setRangeText('', ls, ls + m[0].length, 'preserve'); ta.dispatchEvent(new Event('input')); }
+    }
+    else if (e.key === 'Enter' && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+      const ls = v.lastIndexOf('\n', a - 1) + 1, cur = v.slice(ls, a);
+      let ind = cur.match(/^ */)[0]; if (/:\s*(#.*)?$/.test(cur)) ind += '    ';
+      e.preventDefault(); ta.setRangeText('\n' + ind, a, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input'));
+    }
+  });
+  let armed = false;
+  sec.addEventListener('click', e => {
+    const b = e.target.closest('[data-gb]'); if (!b) return;
+    if (b.dataset.gb === 'run') gbRunTests(n, sec, b);
+    if (b.dataset.gb === 'ask') { gbFocus = n; store.set('pot.gb.focus', n); gbCoachApi.ask('I\'m on Step ' + n + ' (' + s.title + '). Help me start it. Give me a hint first, not the code.', 'Help me with Step ' + n); }
+    if (b.dataset.gb === 'reset') {
+      if (!armed) { armed = true; b.textContent = 'Click again to reset'; setTimeout(() => { armed = false; b.textContent = 'Reset step'; }, 3000); return; }
+      armed = false; b.textContent = 'Reset step';
+      ta.value = s.starter; delete gbCode[n]; gbSaveCode(); gbPass[n] = false; gbSavePass();
+      ta._err = null; fit(); ta._paint(); sec.querySelector('.gb-results').hidden = true; gbStats();
+    }
+  });
+  return sec;
+}
+
+/* ---------- Gradebook coach: same live coach, stricter rules because this is graded work ---------- */
+const GB_RULES = [
+  'You are the built-in coach in the Gradebook section of a study page called the Python Output Trainer. The student is Juelz, a beginner in Intro to Python (Gaddis, "Starting Out with Python"). He is building his graded final project, the Numeric Gradebook and Performance Analytics System: a menu-driven program with student records stored as a list of tuples (ID + 4 scores), a set of IDs, dictionaries for averages, input validation, and reports (class stats, at-risk students, performance bands). No classes, no files, no external libraries.',
+  'His course allows AI only for explanations, error help and design suggestions. He may NOT submit AI-written code, and he must be able to explain every line in an oral presentation. So you never write his functions for him.',
+  '',
+  'How to coach:',
+  '- Teach the next move, not the answer. Never give a complete function or more than 2 lines of code from his project. Prefer pointing to the concept and the example on the page, or showing a 1-2 line pattern with different variable names.',
+  '- If he asks for the full code or the answer, say kindly that his class rules don\'t allow it, then give the strongest hint you can.',
+  '- When he asks you to check his code: one line on what works, then the ONE most important fix. Quote his line and explain why it\'s wrong and what idea fixes it. Don\'t rewrite it for him.',
+  '- Failing tests: explain what the test expects, in plain English, and which part of his code doesn\'t do that yet.',
+  '- Errors: name the error type in plain English, point to the step and line, say why it happened, and what to change.',
+  '- Line by line: one short bullet per line of HIS code (skip blank lines and comments), in plain English.',
+  '- Define every technical term right after you use it: plain English first, official term in parentheses.',
+  '- Format: most important point first. Short bullets. Under 150 words unless he asks for line by line. Backticks for code. No tables, no headings, no filler openers.',
+  '- At most one analogy, from trading, cooking, or sports, and only when it helps. Be direct and honest. No flattery.',
+  '',
+  'About the page: each step has an editor and a Run tests button. The tests run his code in the browser with typed inputs filled in automatically, so input() prompts must come in the order the step says. "asked for more input than this test types" means his prompts are out of order or a loop never exits.'
+].join('\n');
+
+function gbCoachContext() {
+  const n = Math.min(Math.max(1, +gbFocus || 1), GB_STEPS.length), s = GB_STEPS[n - 1];
+  const code = gbSrc(n), last = gbLast[n];
+  const numbered = code.trim() ? code.split('\n').map((l, i) => String(i + 1).padStart(3) + ' | ' + l).join('\n') : '(empty)';
+  let lr = '(He has not run the tests for this step yet in this visit.)';
+  if (last) {
+    lr = (last.code !== code ? '(He changed the code after this run.)\n' : '') +
+      (last.error ? 'Error in Step ' + last.error.step + (last.error.line ? ' line ' + last.error.line : '') + ': ' + last.error.type + ': ' + last.error.msg
+        : last.results.map(x => (x[1] ? 'PASS ' : 'FAIL ') + x[0] + (x[1] ? '' : ' -> ' + x[2])).join('\n'));
+  }
+  return [
+    'STEPS (a check means its tests pass):',
+    GB_STEPS.map((x, i) => (i + 1) + '. ' + (gbPass[i + 1] ? '[passed] ' : '') + x.title + ' (' + x.fns + ')').join('\n'),
+    'STEP HE IS ON: ' + n + '. ' + s.title + ' (' + s.fns + ')',
+    'WHAT THIS STEP ASKS FOR (the starter code with its instructions):\n' + s.starter,
+    'HIS CODE FOR THIS STEP (line numbers added for reference):\n' + numbered.slice(0, 9000),
+    'LAST TEST RUN:\n' + lr.slice(0, 3000)
+  ].join('\n\n');
+}
+
+const GB_QUICK = {
+  next: ['What\'s my next move?', 'What\'s my next move on this step? Give me just the next small thing to do, as a hint, not the code.'],
+  check: ['Check my code', 'Check my code for this step. Tell me what\'s working, then the one most important thing to fix and why.'],
+  fail: ['Why is a test failing?', 'Explain my failing test or error in plain English: what the test expects, and what part of my code doesn\'t do that yet.'],
+  lines: ['Explain my code line by line', 'Explain my code for this step line by line in plain English.']
+};
+let gbCoachApi = { ask() {} };
+
+function gbCoach() {
+  const sec = document.createElement('section');
+  sec.className = 'coach card'; sec.id = 'gb-coach';
+  const tkey = 'pot.gb.coach';
+  let thread = store.get(tkey, []); if (!Array.isArray(thread)) thread = [];
+  sec.innerHTML =
+    '<div class="part-label">Live coach</div><h3>Ask your coach</h3>' +
+    '<div class="co-live">' +
+      '<p class="muted" style="font-size:16px">Claude reads the step you\'re on, your code, and your last test run. Because this is graded work, it gives hints and explanations, never your finished functions. <span class="gb-on"></span></p>' +
+      '<div class="co-quick">' + Object.keys(GB_QUICK).map(q => '<button class="chip" type="button" data-q="' + q + '">' + GB_QUICK[q][0] + '</button>').join('') + '</div>' +
+      '<div class="co-thread" aria-live="polite"></div>' +
+      '<div class="co-row"><textarea class="co-ask" rows="2" placeholder="Ask anything about your gradebook (Ctrl or ⌘ + Enter sends)" aria-label="Ask the coach"></textarea>' +
+        '<div class="co-btns"><button class="btn" type="button" data-c="send">Send</button><button class="btn ghost" type="button" data-c="stop" hidden>Stop</button></div></div>' +
+      '<div class="co-foot"><span class="co-status muted"></span><button class="btn quiet" type="button" data-c="clear">Clear chat</button></div>' +
+    '</div>' +
+    '<p class="co-off muted">The live coach works when this page is open in Claude (the app or claude.ai). Hints and tests work everywhere.</p>';
+  const threadEl = sec.querySelector('.co-thread'), ask = sec.querySelector('.co-ask'), status = sec.querySelector('.co-status');
+  const sendB = sec.querySelector('[data-c="send"]'), stopB = sec.querySelector('[data-c="stop"]'), onEl = sec.querySelector('.gb-on');
+  let busy = false, ctl = null;
+  const onLabel = () => { const n = Math.min(Math.max(1, +gbFocus || 1), GB_STEPS.length); onEl.innerHTML = 'Right now it\'s looking at <b>Step ' + n + ': ' + esc(GB_STEPS[n - 1].title) + '</b>.'; };
+  onLabel();
+  function bubble(role, html) {
+    const m = document.createElement('div');
+    m.className = 'co-msg ' + (role === 'user' ? 'you' : 'bot');
+    m.innerHTML = '<div class="who">' + (role === 'user' ? 'You' : 'Coach') + '</div><div class="co-body">' + html + '</div>';
+    threadEl.appendChild(m); return m;
+  }
+  function renderThread() { threadEl.innerHTML = ''; thread.forEach(t => bubble(t.role, t.role === 'user' ? '<p>' + mdInline(t.label || t.content) + '</p>' : mdLite(t.content))); }
+  function save() { thread = thread.slice(-20); store.set(tkey, thread); }
+  function setBusy(v) { busy = v; sec.querySelectorAll('.co-quick .chip').forEach(c => { c.disabled = v; }); sendB.disabled = v; stopB.hidden = !v; }
+  const showState = s => { status.textContent = s === 'wait' ? 'Connecting to Claude…' : ''; };
+  coachHooks.push(showState); showState(document.documentElement.dataset.coach);
+
+  async function send(question, label) {
+    question = String(question || '').trim(); onLabel();
+    if (!question || busy) return;
+    if (!SAMPLE) { status.textContent = document.documentElement.dataset.coach === 'wait' ? 'Still connecting to Claude. Try again in a few seconds.' : ''; return; }
+    setBusy(true); status.textContent = '';
+    const history = thread.slice(-12).map(t => ({ role: t.role, content: t.content }));
+    thread.push({ role: 'user', content: question, label: label || '' });
+    bubble('user', '<p>' + mdInline(label || question) + '</p>');
+    const bot = bubble('assistant', '<p class="co-thinking">Thinking… usually 10 to 30 seconds.</p>');
+    const body = bot.querySelector('.co-body');
+    bot.scrollIntoView({ block: 'nearest' });
+    const turns = [{ role: 'user', content: GB_RULES }].concat(history, [{ role: 'user', content: gbCoachContext() + '\n\nHIS MESSAGE: ' + question }]);
+    ctl = new AbortController();
+    try {
+      const r = await SAMPLE(turns, { cache: false, signal: ctl.signal, onText: ({ text }) => { body.innerHTML = mdLite(text); } });
+      body.innerHTML = mdLite(r.text) + (r.truncated ? '<p class="co-note">(Cut short. Ask about one part at a time.)</p>' : '');
+      thread.push({ role: 'assistant', content: r.text });
+    } catch (e) {
+      const code = (e && e.code) || 'upstream_error';
+      const partial = code !== 'refused' && e && e.text ? e.text : '';
+      if (partial) thread.push({ role: 'assistant', content: partial });
+      if (code === 'cancelled') { if (partial) body.innerHTML = mdLite(partial) + '<p class="co-note">(Stopped.)</p>'; else bot.remove(); }
+      else if (COACH_OFF.includes(code)) {
+        bot.remove();
+        status.textContent = code === 'not_granted' ? 'You didn\'t allow this page to use Claude, so the coach is off. Reload the page to be asked again.' : 'The live coach isn\'t available on this account right now. Hints and tests still work.';
+        SAMPLE = null; setCoachState('off');
+      } else { bot.classList.add('err'); body.innerHTML = (partial ? mdLite(partial) : '') + '<p class="co-note">' + esc(COACH_ERR[code] || COACH_ERR.upstream_error) + '</p>'; }
+    } finally { ctl = null; save(); setBusy(false); }
+  }
+  sec.addEventListener('click', e => {
+    const q = e.target.closest('[data-q]');
+    if (q) { send(GB_QUICK[q.dataset.q][1], GB_QUICK[q.dataset.q][0]); return; }
+    const c = e.target.closest('[data-c]'); if (!c) return;
+    if (c.dataset.c === 'send') { const v = ask.value; if (v.trim() && SAMPLE && !busy) { ask.value = ''; send(v); } else send(v); }
+    if (c.dataset.c === 'stop' && ctl) ctl.abort();
+    if (c.dataset.c === 'clear' && !busy) { thread = []; save(); renderThread(); status.textContent = ''; }
+  });
+  ask.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); sendB.click(); } });
+  gbCoachApi = { ask(question, label) { sec.scrollIntoView({ block: 'start', behavior: 'smooth' }); send(question, label); } };
+  renderThread();
+  return sec;
+}
+
+function showGradebook(focus) {
+  current = -3;
+  store.set('pot.view', 'gradebook');
+  levelEl.innerHTML = '';
+  const head = document.createElement('div');
+  head.className = 'level-head';
+  head.innerHTML = '<div class="eyebrow">Project 2 · Numeric Gradebook and Performance Analytics System</div>' +
+    '<h2 tabindex="-1">Build your Gradebook</h2>' +
+    '<p class="goal">Your final project, one function at a time. Each step teaches one idea, then <b>you write the code</b> and run real tests on it. No answers are shown, only hints, tests, and the coach.</p>' +
+    '<div class="stats" id="gb-stats"></div><div class="gb-track" aria-hidden="true"><div id="gb-bar"></div></div>';
+  levelEl.appendChild(head);
+
+  const how = document.createElement('section');
+  how.className = 'card road-key-card';
+  how.innerHTML = '<h3>How to use the Gradebook build</h3><ul class="road-ul">' +
+    '<li><b>Go in order.</b> Each step uses the ones before it. If an earlier step breaks, the tests tell you which one.</li>' +
+    '<li><b>Learn it, then write it.</b> The example is never your project code. Fill in the <code>____</code> blanks, or follow the numbered comments.</li>' +
+    '<li><b>Run tests</b> after every small change. Green means that step is done. Your code saves in this browser.</li>' +
+    '<li><b>Stuck?</b> Open the hints first, then ask the coach. It explains; it won\'t write your functions.</li>' +
+    '<li><b>Say it out loud.</b> Every step ends with a question your presentation might ask. Answer it before you peek.</li>' +
+    '<li><b>Class rule:</b> AI can explain, but the code has to be yours and you have to be able to explain every line. Keep notes for the report\'s <b>AI Tools Usage</b> section.</li></ul>';
+  levelEl.appendChild(how);
+
+  GB_STEPS.forEach((s, i) => levelEl.appendChild(gbStep(s, i + 1)));
+
+  const asm = document.createElement('section');
+  asm.className = 'card gb-asm';
+  asm.innerHTML = '<div class="part-label">Finish</div><h3>Put it all together</h3>' +
+    '<p>This joins every step into one program, in order. Paste it into <b>Colab</b> or <b>Thonny</b> and run it for real. That\'s where the program actually asks you for input.</p>' +
+    '<div class="controls"><button class="btn" type="button" data-a="build">Assemble my program</button><button class="btn ghost" type="button" data-a="copy">Copy</button><span class="muted gb-cstat" aria-live="polite"></span></div>' +
+    '<div class="editor" hidden><div class="nums" aria-hidden="true"></div><textarea readonly spellcheck="false" wrap="off" rows="18" aria-label="Your full program"></textarea></div>';
+  const full = asm.querySelector('textarea'), cstat = asm.querySelector('.gb-cstat'), fbox = asm.querySelector('.editor');
+  const build = () => {
+    full.value = GB_STEPS.map((_, i) => gbSrc(i + 1).replace(/\s+$/, '')).join('\n\n\n') + '\n';
+    fbox.hidden = false;
+    fbox.querySelector('.nums').textContent = full.value.split('\n').map((_, i) => i + 1).join('\n');
+    const left = GB_STEPS.length - gbDone();
+    cstat.textContent = left ? left + ' step' + (left === 1 ? '' : 's') + ' not passing yet' : 'All steps pass. Ready to run.';
+  };
+  asm.addEventListener('click', async e => {
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    if (b.dataset.a === 'build') build();
+    if (b.dataset.a === 'copy') {
+      build();
+      try { await navigator.clipboard.writeText(full.value); cstat.textContent = 'Copied. Paste it into Colab or Thonny.'; }
+      catch (err) { full.focus(); full.select(); cstat.textContent = 'Selected. Press Ctrl or ⌘ + C to copy.'; }
+    }
+  });
+  levelEl.appendChild(asm);
+
+  levelEl.appendChild(gbCoach());
+
+  const guide = document.createElement('section');
+  guide.className = 'card';
+  guide.innerHTML = '<h3>Study guide: the Gradebook in 8 ideas</h3><ul class="road-ul">' +
+    '<li><b>Data:</b> a list of tuples for records, a set for IDs, a dictionary for averages, and a constant for how many scores.</li>' +
+    '<li><b>Accumulator:</b> start at 0, add inside a loop, divide at the end. <code>record[1:]</code> skips the ID.</li>' +
+    '<li><b>Find:</b> loop over positions, return the index on a match and <code>-1</code> if none. Update, delete and the student report reuse it.</li>' +
+    '<li><b>Validation:</b> <code>while True</code> + <code>try/except ValueError</code> + a range check. Only return good input.</li>' +
+    '<li><b>Tuples:</b> you can\'t change one. To update: list → change → tuple → put it back at the same index.</li>' +
+    '<li><b>Sets:</b> block duplicate IDs with <code>in</code>. <code>.add</code> on create, <code>.discard</code> on delete. An empty set is <code>set()</code>.</li>' +
+    '<li><b>Reports:</b> check <code>if not records</code> first. <code>:.2f</code> for 2 decimals. Bands: check the highest first.</li>' +
+    '<li><b>Menu:</b> <code>while True</code>, a validated choice, one <code>if/elif</code> per option, <code>break</code> on 0.</li></ul>';
+  levelEl.appendChild(guide);
+
+  const foot = document.createElement('div');
+  foot.className = 'nav-foot';
+  foot.innerHTML = '<button class="btn ghost" type="button" data-go="1">&#9664; Back to Level 1</button><button class="btn" type="button" data-go="0">Daily review &#9654;</button>';
+  levelEl.appendChild(foot);
+
+  refresh(); gbStats();
+  navEl.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-current', 'false'));
+  gbChip.setAttribute('aria-current', 'true');
+  if (focus) { head.querySelector('h2').focus({ preventScroll: true }); window.scrollTo({ top: navEl.offsetTop - 12, behavior: 'auto' }); }
+}
+
+const gbChip = document.createElement('button');
+gbChip.type = 'button'; gbChip.className = 'chip gb-chip'; gbChip.dataset.view = 'gradebook';
+gbChip.innerHTML = 'Gradebook · Project 2<span class="done"></span>';
+gbChip.addEventListener('click', () => showGradebook(true));
+navEl.appendChild(gbChip);
+if (gbDone() === GB_STEPS.length) gbChip.querySelector('.done').textContent = ' ✓';
+if (location.hash === '#gradebook' || store.get('pot.view', null) === 'gradebook') showGradebook(false);
+
+</script>
+<script>
 /* ---------- Neon theme: looks only. Colors each section, adds heading icons, marks the takeaway bar. ---------- */
 (function neonTheme() {
   const NEON = ['var(--n1)', 'var(--n2)', 'var(--n3)', 'var(--n4)', 'var(--n5)', 'var(--n6)', 'var(--n7)'];
   const ICON_RULES = [
+    [/^step \d+ \u00b7/i, 'code'], [/put it all together/i, 'rocket'], [/^study guide/i, 'trophy'],
     [/^start here/i, 'rocket'], [/^word bank/i, 'layers'], [/^picture it/i, 'bulb'], [/^traps/i, 'shield'],
     [/^explain it back/i, 'chat'], [/^on the job/i, 'trophy'],
     [/^the idea/i, 'bulb'], [/^how to use/i, 'shield'], [/^how to write/i, 'code'], [/line by line/i, 'layers'],
@@ -2797,5 +3189,5 @@ if (REF && (location.hash === '#dictionary' || store.get('pot.view', null) === '
 
 <script src="nav.js"></script>
 <script src="mt-progress.js" data-id="python"></script>
-<script src="cc-skin.js" data-id="python" data-title="Python Output Trainer" data-short="PYTHON" data-hero="header.top" data-tabs='[{"t":"Levels","sel":"#levels","do":"scroll"},{"t":"Daily review","sel":"#levels .chip.review:not(.pj-chip)","do":"click"},{"t":"Project Lab","sel":"#levels .pj-chip","do":"click"}]'></script>
+<script src="cc-skin.js" data-id="python" data-title="Python Output Trainer" data-short="PYTHON" data-hero="header.top" data-tabs='[{"t":"Levels","sel":"#levels","do":"scroll"},{"t":"Daily review","sel":"#levels .chip.review:not(.pj-chip)","do":"click"},{"t":"Project Lab","sel":"#levels .pj-chip","do":"click"},{"t":"Gradebook","sel":"#levels .gb-chip","do":"click"}]'></script>
 </body></html>

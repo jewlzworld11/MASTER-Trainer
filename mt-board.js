@@ -2,7 +2,7 @@
    - Section Board: a full-screen grid of numbered neon tiles, one per section on the current screen (plus the trainer's main areas).
      Open it with the floating SECTIONS button; tap a tile to jump there.
    - Every section heading gets a matching number badge in its own neon.
-   - Motion: decode effect on the trainer title, sections glide in as you scroll, cards tilt toward the pointer,
+   - Motion: sections glide in as you scroll, cards tilt toward the pointer,
      a neon beam at the top shows how far down the page you are, and soft particles drift in the background.
    It only adds things on top. Trainer content and saved progress are untouched. Reduced-motion settings turn the motion off. */
 (function () {
@@ -307,7 +307,7 @@
   });
   function boot() {
     document.body.appendChild(beam); document.body.appendChild(fab); document.body.appendChild(board);
-    dust(); decode(); scan(); onScroll();
+    dust(); scan(); onScroll();   // (title decode removed 11/26: it looked like a glitch on every open)
     mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'open', 'class', 'aria-selected', 'aria-expanded'] });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

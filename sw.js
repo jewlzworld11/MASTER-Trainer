@@ -3,7 +3,7 @@
    - Online: this app's own pages and scripts always come fresh from the server (network first),
      so updates show up the first time you open the app. Offline: the saved copy is used.
    - Bump VERSION whenever the files change. */
-const VERSION = 'mt-2026-11-25b';
+const VERSION = 'mt-2026-11-26a';
 const LOCAL = [
   './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js', 'mt-voice.js', 'mt-board.js',
   'fde-lab.html', 'python-output.html', 'math-placement.html', 'ai-business.html', 'ethics-octagon.html', 'english-writing.html',
