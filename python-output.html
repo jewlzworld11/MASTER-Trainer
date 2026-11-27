@@ -707,6 +707,51 @@ code { color: var(--text); background: color-mix(in srgb, var(--neon) 13%, trans
 .gb-step.gb-passed > h3::after { content: " \2713"; color: var(--good); }
 .gb-fns { margin: -6px 0 0; } .gb-fns code { overflow-wrap: anywhere; }
 .gb-why { margin: 0; font-size: 16px; }
+   .gb-walk { border: 1.5px solid color-mix(in srgb, var(--n2, #FFD25A) 70%, transparent); border-radius: 14px; padding: 12px; background: color-mix(in srgb, var(--n2, #FFD25A) 5%, transparent); }
+   .gbw-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+   .gbw-tab { all: unset; cursor: pointer; padding: 7px 12px; border-radius: 9px; border: 1px solid var(--rule); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+   .gbw-tab[aria-selected="true"] { background: var(--n2, #FFD25A); color: #0B0822; border-color: transparent; }
+   .gbw-tab:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+   .gbw-tab[disabled] { opacity: .45; cursor: not-allowed; }
+   .gbw-count { font-size: 12px; color: var(--ink-2); letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+   .gbw-goal { margin: 4px 0 2px; font-size: 17px; font-weight: 700; }
+   .gbw-where { margin: 0 0 8px; font-size: 13.5px; color: var(--ink-2); }
+   .gbw-clues { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 6px; }
+   .gbw-clues li { padding: 8px 10px; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--n2, #FFD25A) 45%, transparent); font-size: 15px; line-height: 1.45; }
+   .gbw-clues li b.k { color: var(--n2, #FFD25A); margin-right: 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+   .gbw-nav { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+   .gbw-dots { display: flex; gap: 5px; margin-left: auto; }
+   .gbw-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+   .gbw-dots i.on { background: var(--n2, #FFD25A); box-shadow: 0 0 8px var(--n2, #FFD25A); }
+   .gbw-code { margin: 0 0 8px; max-height: 220px; overflow: auto; border-radius: 10px; background: #070520; padding: 6px 0; font-family: var(--cc-mono, ui-monospace, monospace); font-size: 13px; line-height: 1.55; }
+   .gbw-code div { display: grid; grid-template-columns: 32px minmax(0, 1fr); white-space: pre; padding: 0 8px 0 0; }
+   .gbw-code div span:first-child { color: var(--ink-3, #8A80B4); text-align: right; padding-right: 8px; }
+   .gbw-code div.on { background: color-mix(in srgb, var(--n2, #FFD25A) 18%, transparent); box-shadow: inset 3px 0 0 var(--n2, #FFD25A); }
+   .gbw-explain { margin: 0 0 4px; font-size: 15.5px; line-height: 1.5; }
+   .gbw-inside { margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+   .gbw-recap { margin: 0 0 10px; padding: 10px; border-radius: 10px; border: 1px solid var(--good); font-size: 14.5px; }
+   .gb-build .coach { margin-top: 6px; }
+   .gb-build .coach .co-thread { max-height: 48vh; overflow: auto; }
+   .gb-step { scroll-margin-top: 92px; }
+   .gb-rail { position: sticky; top: 0; z-index: 25; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 14px; padding: 8px 10px; border-radius: 14px;
+     background: rgba(11, 8, 34, .94); border: 1px solid var(--rule); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+   .gb-rail .lab { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); margin-right: 4px; }
+   .gb-dot { all: unset; cursor: pointer; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--rule); font: 700 12.5px/1 var(--cc-mono, ui-monospace, monospace); }
+   .gb-dot.done { background: var(--good); border-color: var(--good); color: #0B0822; box-shadow: 0 0 10px color-mix(in srgb, var(--good) 55%, transparent); }
+   .gb-dot.cur { border-color: var(--cc-main, #FF4FB0); box-shadow: 0 0 0 2px var(--cc-main, #FF4FB0); }
+   .gb-dot:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+   .gb-rail .gbr-so { margin-left: auto; }
+   .gb-so { margin: -6px 0 14px; }
+   .gb-so[hidden] { display: none; }
+   .gb-so ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+   .gb-so li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--rule); font-size: 14.5px; }
+   .gb-so li.done { border-color: color-mix(in srgb, var(--good) 60%, transparent); }
+   .gb-so li .m { font-weight: 800; color: var(--ink-2); }
+   .gb-so li.done .m { color: var(--good); }
+   .gb-so li small { display: block; color: var(--ink-2); font-size: 13px; margin-top: 2px; }
+   .gb-so pre { margin: 6px 0 0; max-height: 240px; overflow: auto; font-size: 12.5px; }
+   @media (max-width: 700px) { .gb-rail { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 5px; padding: 7px 8px; } .gb-rail::-webkit-scrollbar { display: none; } .gb-dot { flex: 0 0 auto; width: 28px; height: 28px; font-size: 11.5px; } .gb-rail .lab { display: none; } .gb-rail .gbr-so { flex: 0 0 auto; white-space: nowrap; padding: 6px 10px; font-size: 11px; } }
+
    .gb-conn { border: 1.5px solid color-mix(in srgb, var(--n3, #2FE6C8) 70%, transparent); border-radius: 14px; padding: 12px 14px; background: color-mix(in srgb, var(--n3, #2FE6C8) 6%, transparent); }
    .gb-conn > summary { padding-right: 40px; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; color: var(--n3, #2FE6C8); font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; }
    .gb-conn > summary::-webkit-details-marker { display: none; }
@@ -2865,6 +2910,7 @@ function gbStats() {
   const bar = document.getElementById('gb-bar'); if (bar) bar.style.width = (d / GB_STEPS.length * 100) + '%';
   GB_STEPS.forEach((_, i) => { const s = document.getElementById('gb-s' + (i + 1)); if (s) s.classList.toggle('gb-passed', !!gbPass[i + 1]); });
   gbChip.querySelector('.done').textContent = d === GB_STEPS.length ? ' ✓' : '';
+  if (typeof gbRailPaint === 'function') gbRailPaint();
 }
 
 /* Build one Python program: harness + steps 1..n + this step's tests. Lines are tracked so errors point at the right step. */
@@ -2922,6 +2968,8 @@ function gbRunTests(n, box, btn) {
       gbMarkLine(n, null);
     }
     gbLast[n] = { results, error, code: gbSrc(n) };
+    if (gbPass[n] && gbWalkState[n]) gbWalkState[n].tab = 'mine';
+    setTimeout(() => { gbWalkPaint(n); gbRailPaint(); }, 0);
     res.innerHTML = html;
     gbSavePass(); gbStats();
     btn.disabled = false;
@@ -2933,6 +2981,174 @@ function gbMarkLine(n, line) {
   ed._err = line; ed._paint && ed._paint();
 }
 
+
+/* ---------- Walk me through it + My code line by line + docked coach + progress strip (11/27) ---------- */
+const GB_MOVES = {"setup": [{"g": "Add student 1002 as one tuple.", "w": "the first <code>____,<\/code> inside <code>records<\/code>", "c": ["Copy the shape of the record above it: parentheses, ID first, then the 4 scores.", "The numbers are in the comment on that same line.", "Pattern with other numbers: <code>(2001, 50, 60, 70, 80),<\/code>. Keep the comma at the end."]}, {"g": "Add student 1003 the same way.", "w": "the second <code>____,<\/code>", "c": ["Same move as the last one, new numbers from its comment."]}, {"g": "Make a set of the 3 IDs.", "w": "<code>student_ids = ____<\/code>", "c": ["A set uses curly braces, like <code>colors<\/code> in the example.", "Only the IDs go in. No scores.", "Pattern: <code>{2001, 2002}<\/code>. Yours has three IDs."]}, {"g": "Put your group's names in.", "w": "<code># Group members:<\/code>", "c": ["Not tested, but your grader reads it."]}], "avg": [{"g": "Start the running total.", "w": "<code>total = ____<\/code>", "c": ["Before any scores are added, how much do you have?", "Same first line as the example: the total starts at nothing."]}, {"g": "Loop over the scores only, skipping the ID.", "w": "<code>record[____:]<\/code>", "c": ["The ID sits at position 0. Where does the first score sit?", "A slice <code>[k:]<\/code> means \"from position k to the end\"."]}, {"g": "Add each score to the total.", "w": "<code>total ____ score<\/code>", "c": ["You want \"add this to myself\" in two characters.", "The example does it on its 4th line."]}, {"g": "Divide by how many scores there are.", "w": "<code>return total / (____)<\/code>", "c": ["<code>len(record)<\/code> counts all 5 items. How many of those are scores?", "Count everything, then take away the one ID."]}], "avgdict": [{"g": "Start an empty dictionary.", "w": "<code>averages = ____<\/code>", "c": ["Empty dictionary = two curly braces with nothing inside.", "The example's first new line does exactly this with <code>ages<\/code>."]}, {"g": "Pull the ID out of this record.", "w": "<code>student_id = ____<\/code>", "c": ["The ID is at position 0 of the record.", "Grab one item by position: <code>thing[0]<\/code>. Here the thing is <code>record<\/code>."]}, {"g": "Use the ID as the key.", "w": "inside <code>averages[____]<\/code>", "c": ["What do you want to look students up by?", "You saved it in a variable one line up."]}, {"g": "Use the average as the value.", "w": "after the <code>=<\/code>", "c": ["Don't redo the math. Which step already computes ONE student's average?", "Call it like any function: <code>name(what_you_hand_it)<\/code>. Hand it this record."]}], "find": [{"g": "Compare this record's ID to the one you want.", "w": "<code>if ____ == student_id:<\/code>", "c": ["<code>records[i]<\/code> is a whole record. You only want its ID.", "Two brackets: first pick the record, then pick position 0 inside it."]}, {"g": "Found it: hand back the position.", "w": "the first <code>return ____<\/code>", "c": ["Which variable is holding the position right now?"]}, {"g": "Never found: hand back the \"not found\" signal.", "w": "the last <code>return ____<\/code>", "c": ["The docstring says what to return.", "It's a negative number no real position can ever be."]}], "display": [{"g": "Empty list? Say so and stop.", "w": "comment #1", "c": ["<code>if not records:<\/code> is True when the list is empty.", "Inside that if: print the message, then <code>return<\/code> to stop the function."]}, {"g": "Print a header line.", "w": "comment #2", "c": ["One <code>print<\/code> with the column names. Spacing is up to you.", "Pattern: <code>print(f\"{'ID':&lt;8}{'A1':&gt;5}\")<\/code>. <code>&lt;8<\/code> pads to 8 characters."]}, {"g": "One line per student.", "w": "comment #3", "c": ["<code>for record in records:<\/code> hands you one tuple per lap.", "Print the ID, then each score. A loop over <code>record[1:]<\/code> with <code>end=\" \"<\/code> keeps them on one line.", "After that inner loop, a plain <code>print()<\/code> ends the line."]}], "score": [{"g": "Turn the text into a number, safely.", "w": "comment #1", "c": ["The risky line is the one that turns text into a float.", "Wrap it: <code>try:<\/code> on one line, the risky line indented under it."]}, {"g": "It wasn't a number: message, then ask again.", "w": "comment #2", "c": ["Under the try, add <code>except ValueError:<\/code>.", "Inside the except: print a message, then <code>continue<\/code> jumps back to the top of <code>while True<\/code>."]}, {"g": "In range? Hand it back.", "w": "comment #3", "c": ["<code>0 &lt;= value &lt;= 100<\/code> checks both edges in one line.", "<code>return<\/code> stops the function, which also ends the loop."]}, {"g": "Out of range: message, loop again.", "w": "comment #4", "c": ["Just print the message. The <code>while True<\/code> loop goes around by itself.", "Delete the <code>pass<\/code> line when you're done."]}], "id": [{"g": "Turn the text into a whole number, safely.", "w": "comment #1", "c": ["Same try / except ValueError move as Step 6, but with <code>int()<\/code>.", "On failure: message, then <code>continue<\/code>."]}, {"g": "Zero or negative? Reject it.", "w": "comment #2", "c": ["An if that checks <code>&lt;= 0<\/code>, then message + <code>continue<\/code>."]}, {"g": "Already used? Reject it.", "w": "comment #3", "c": ["The set of used IDs came in as <code>existing_ids<\/code>.", "<code>x in some_set<\/code> is True when it's already there. Print exactly <code>ID already exists.<\/code>"]}, {"g": "Passed every check: hand it back.", "w": "comment #4", "c": ["If you got past all three checks, the ID is good. Return it."]}], "add": [{"g": "Get a safe, unused ID.", "w": "comment #1", "c": ["Step 7 already does this. Call it and save what it hands back.", "It needs the set of used IDs. Which parameter is that here?"]}, {"g": "Make an empty list for the scores.", "w": "comment #2", "c": ["Empty list = square brackets with nothing inside."]}, {"g": "Get 4 scores in a loop.", "w": "comment #3", "c": ["<code>for k in range(NUM_ASSESSMENTS):<\/code> runs 4 laps.", "Each lap: call Step 6 with a prompt like <code>f\"Score {k + 1}: \"<\/code>, then append what it hands back."]}, {"g": "Glue the ID and scores into one tuple.", "w": "comment #4", "c": ["The comment gives you the exact expression. Save it in a variable.", "<code>(student_id,)<\/code> is a one-item tuple. The comma makes it a tuple."]}, {"g": "Save it in both places.", "w": "comment #5", "c": ["The list gets <code>.append(...)<\/code>.", "The set gets <code>.add(...)<\/code> with just the ID."]}, {"g": "Confirm it worked.", "w": "comment #6", "c": ["One print with the new ID in it."]}], "update": [{"g": "Ask for the ID, safely.", "w": "comment #1", "c": ["Same try / except ValueError as Step 7.", "This time on failure: print <code>Invalid ID.<\/code> and <code>return<\/code> (no loop here)."]}, {"g": "Find the record.", "w": "comment #2", "c": ["Step 4 gives you the position. Save it as <code>index<\/code>.", "If it's <code>-1<\/code>: print <code>Student not found.<\/code> and return."]}, {"g": "Ask which assessment (1 to 4) until it's valid.", "w": "comment #3", "c": ["A <code>while True<\/code> loop like Step 6, but with <code>int()<\/code> and a 1-to-NUM_ASSESSMENTS check.", "Break out (or return the value from a helper) once it's in range."]}, {"g": "Get the new score.", "w": "comment #4", "c": ["Step 6 already does this. Call it."]}, {"g": "Change one spot in a copy.", "w": "comment #5", "c": ["Tuples can't change. <code>list(records[index])<\/code> gives you a copy that can.", "Assessment n lives at position n, because position 0 is the ID."]}, {"g": "Put it back.", "w": "comment #6", "c": ["Turn the list back into a tuple with <code>tuple(...)<\/code>.", "Save it at the same spot: <code>records[index] = ...<\/code>. Then print a confirmation."]}], "delete": [{"g": "Ask for the ID, safely.", "w": "comment #1", "c": ["Copy your move from Step 9: try / except, print <code>Invalid ID.<\/code> and return."]}, {"g": "Find it, or stop.", "w": "comment #2", "c": ["Step 4 for the position. <code>-1<\/code> means print <code>Student not found.<\/code> and return."]}, {"g": "Delete it from the list.", "w": "comment #3", "c": ["<code>del some_list[position]<\/code> removes one item by position."]}, {"g": "Remove the ID from the set.", "w": "comment #4", "c": ["Sets have <code>.remove(value)<\/code>. Forget this and the ID stays \"taken\" forever."]}, {"g": "Confirm.", "w": "comment #5", "c": ["One print saying which ID was deleted."]}], "student": [{"g": "No records? Say so and stop.", "w": "comment #1", "c": ["Same first move as Step 5."]}, {"g": "Ask for the ID, safely.", "w": "comment #2", "c": ["Same as Steps 9 and 10."]}, {"g": "Find it, or stop.", "w": "comment #3", "c": ["Step 4, then the <code>-1<\/code> check."]}, {"g": "Get the average.", "w": "comment #4", "c": ["Step 2 does the math. Hand it the one record at that position.", "The record is <code>records[index]<\/code>."]}, {"g": "Print the report.", "w": "comment #5", "c": ["Print the ID, the scores, and the average.", "<code>f\"{avg:.2f}\"<\/code> shows 2 decimals."]}, {"g": "Bonus: status.", "w": "comment #6", "c": ["An if/else on the average: below 75 means At Risk."]}], "stats": [{"g": "Helper: start an empty dictionary.", "w": "first function, comment #1", "c": ["Same as Step 3's first line."]}, {"g": "Helper: outer loop over assessment numbers.", "w": "comment #2", "c": ["The comment gives you the line exactly. <code>+ 1<\/code> because range stops before the end."]}, {"g": "Helper: add up that score for every student.", "w": "comment #3", "c": ["Start a total at 0 inside the outer loop, before the inner loop.", "Inner loop over records, add <code>record[n]<\/code> each lap."]}, {"g": "Helper: save the average, hand back the dictionary.", "w": "comments #4 and #5", "c": ["Key = <code>n<\/code>, value = total divided by how many students.", "The return goes after the outer loop, not inside it."]}, {"g": "Report: empty check and student count.", "w": "second function, comments #1 and #2", "c": ["<code>len(records)<\/code> is the count."]}, {"g": "Report: each assessment average.", "w": "comment #3", "c": ["Call your helper, then loop through its dictionary.", "Print each with <code>:.2f<\/code>."]}, {"g": "Report: highest and lowest student.", "w": "comments #4 and #5", "c": ["Step 3 gives you <code>{ID: average}<\/code> for everyone.", "Loop through it and keep the best one seen so far, like a running max. Do the same for the lowest."]}], "risk": [{"g": "Start an empty set.", "w": "first function, comment #1", "c": ["Careful: <code>{}<\/code> is an empty <b>dictionary<\/b>. An empty set is <code>set()<\/code>."]}, {"g": "Loop and get each average.", "w": "comment #2", "c": ["Step 2 for each record."]}, {"g": "Below the line? Add the ID.", "w": "comment #3", "c": ["<code>if avg &lt; threshold:<\/code> then <code>.add(...)<\/code> with position 0 of the record."]}, {"g": "Hand back the set.", "w": "comment #4", "c": ["Return goes after the loop."]}, {"g": "Report: empty check, then get the set.", "w": "second function, comments #1 and #2", "c": ["Call the helper you just wrote."]}, {"g": "Report: threshold and how many.", "w": "comment #3", "c": ["<code>len(the_set)<\/code> is how many."]}, {"g": "Report: each student with their average.", "w": "comment #4", "c": ["<code>for sid in sorted(the_set):<\/code> prints them in order.", "Step 3's dictionary gives you each average by ID."]}], "bands": [{"g": "Loop and get each average.", "w": "first function, comment #1", "c": ["Step 2 again."]}, {"g": "Pick the band, top down.", "w": "comment #2", "c": ["Check the highest band first: <code>if avg &gt;= 90:<\/code>, then <code>elif avg &gt;= 80:<\/code>, and so on.", "Add one to that band: <code>bands[\"90-100\"] += 1<\/code>. The last <code>else<\/code> is \"Below 60\"."]}, {"g": "Hand back the counts.", "w": "comment #3", "c": ["Return after the loop."]}, {"g": "Report: empty check, get counts, print each.", "w": "second function", "c": ["Call your helper.", "<code>for band in counts:<\/code> then print the band and <code>counts[band]<\/code>."]}], "menu": [{"g": "Print the menu.", "w": "show_menu()", "c": ["One print per line, matching the menu on your sheet: 1 to 8, then 0 = Exit."]}, {"g": "Get a valid choice.", "w": "get_menu_choice()", "c": ["Same shape as Step 6: <code>while True<\/code>, try <code>int()<\/code>, range check 0 to 8.", "Anything else: print <code>Invalid choice.<\/code> and loop."]}, {"g": "Route each choice.", "w": "main(), under <code>choice = ...<\/code>", "c": ["One <code>if<\/code>/<code>elif<\/code> per number, calling the matching step.", "Example: <code>if choice == 4: display_all_records(records)<\/code>. At-risk can use 75.0."]}, {"g": "0 = goodbye.", "w": "last branch", "c": ["Print <code>Goodbye!<\/code> then <code>break<\/code> to leave the <code>while True<\/code> loop."]}]};
+const gbWalkState = {};   // step -> { tab, move, clues: {moveIndex: shown}, line }
+const gbFnStep = {};      // function name -> step number
+function gbIndexFns() { GB_STEPS.forEach((s, i) => { (s.fns.match(/(\w+)\(/g) || []).forEach(f => { gbFnStep[f.slice(0, -1)] = i + 1; }); }); }
+function gbExplainLine(raw, all, idx) {
+  const L = raw.replace(/\s+$/, ''), t = L.trim(), C = x => '<code>' + esc(x) + '</code>';
+  if (!t) return null;
+  if (t.startsWith('#')) return 'A comment: a note for humans. Python skips it.';
+  if (/^("{3}|'{3})/.test(t)) return 'The docstring: one line describing what this function does. It also shows up in help().';
+  let m;
+  const stepOf = name => gbFnStep[name] ? ' That\'s your Step ' + gbFnStep[name] + '.' : '';
+  if ((m = t.match(/^def (\w+)\((.*)\):/))) return 'Defines ' + C(m[1] + '()') + '. It takes ' + (m[2].trim() ? C(m[2]) : 'nothing') + ' in. Nothing inside runs until some other line calls it.';
+  if ((m = t.match(/^for (\w+) in range\(len\((\w+)\)\):/))) return 'Loops over the positions of ' + C(m[2]) + ': 0, 1, 2… So ' + C(m[1]) + ' is a position number, not a record.';
+  if ((m = t.match(/^for (\w+) in range\((.*)\):/))) return 'Repeats once for each number in ' + C('range(' + m[2] + ')') + '. Each lap, ' + C(m[1]) + ' is the next number (range stops before its end number).';
+  if ((m = t.match(/^for (\w+) in (.+):/))) return 'Loops through ' + C(m[2]) + ' one item at a time. Each lap, ' + C(m[1]) + ' is the next item.';
+  if (/^while True:/.test(t)) return 'Repeats forever, until a ' + C('return') + ' or ' + C('break') + ' gets out. This is the "keep asking until it\'s good" loop.';
+  if ((m = t.match(/^while (.+):/))) return 'Repeats as long as ' + C(m[1]) + ' is True.';
+  if ((m = t.match(/^if not (\w+):/))) return 'True when ' + C(m[1]) + ' is empty. Handles the "nothing here yet" case first.';
+  if ((m = t.match(/^if (.+):/))) return 'Checks ' + C(m[1]) + '. Only if it\'s True does the indented block under it run.';
+  if ((m = t.match(/^elif (.+):/))) return 'Only checked if every check above was False. Then it checks ' + C(m[1]) + '.';
+  if (/^else:/.test(t)) return 'Runs when every check above it was False.';
+  if (/^try:/.test(t)) return 'Tries the risky lines under it. If one crashes, Python jumps to ' + C('except') + ' instead of stopping the program.';
+  if ((m = t.match(/^except\s*(\w+)?/))) return 'Catches ' + (m[1] ? 'a ' + C(m[1]) + (m[1] === 'ValueError' ? ' (what you get when text isn\'t a number)' : '') : 'the crash') + ', so the program keeps going.';
+  if (t === 'return') return 'Stops the function right here, handing nothing back.';
+  if ((m = t.match(/^return (.+)/))) return 'Hands ' + C(m[1]) + ' back to whatever line called this function, and stops the function.';
+  if (t === 'continue') return 'Skips the rest of this lap and jumps back to the top of the loop.';
+  if (t === 'break') return 'Leaves the loop right now.';
+  if (t === 'pass') return 'Does nothing. It\'s a placeholder: once your code is in, delete it.';
+  if ((m = t.match(/^del (.+)/))) return 'Deletes ' + C(m[1]) + '. Everything after it in the list slides up one spot.';
+  if ((m = t.match(/^([\w\[\]\.\"']+)\s*\+=\s*(.+)/))) return 'Adds ' + C(m[2]) + ' onto ' + C(m[1]) + '. Same as ' + C(m[1] + ' = ' + m[1] + ' + ' + m[2]) + '.';
+  if ((m = t.match(/^([\w\[\]\.\"']+)\s*-=\s*(.+)/))) return 'Subtracts ' + C(m[2]) + ' from ' + C(m[1]) + '.';
+  if ((m = t.match(/^(\w+)\.append\((.+)\)$/))) return 'Adds ' + C(m[2]) + ' to the end of the list ' + C(m[1]) + '.';
+  if ((m = t.match(/^(\w+)\.add\((.+)\)$/))) return 'Adds ' + C(m[2]) + ' to the set ' + C(m[1]) + '. If it\'s already there, nothing changes.';
+  if ((m = t.match(/^(\w+)\.remove\((.+)\)$/))) return 'Removes ' + C(m[2]) + ' from ' + C(m[1]) + '.';
+  if (/^print\(/.test(t)) return 'Prints to the screen.' + (/\bf["']/.test(t) ? ' The f-string fills in each {…} with its value.' : '') + (/:\.2f/.test(t) ? ' :.2f shows 2 decimals.' : '') + (/end\s*=/.test(t) ? ' end=… keeps the next print on the same line.' : '') + (/^print\(\)$/.test(t) ? ' Empty print() just ends the line.' : '');
+  if ((m = t.match(/^([\w\[\]\.\"', ]+?)\s*=\s*(.+)$/)) && !/==/.test(t.split('=')[0])) {
+    const name = m[1].trim(), v = m[2].trim();
+    if (/\[.+\]$/.test(name)) { const cm = v.match(/^(\w+)\(/); return 'Saves ' + C(v) + ' into ' + C(name) + '. In a dictionary that\'s key → value; in a list it replaces that one slot.' + (cm ? stepOf(cm[1]) : ''); }
+    if ((m = v.match(/^(\w+)\[(\d+)\]$/))) return 'Grabs the item at position ' + m[2] + ' of ' + C(m[1]) + ' and saves it in ' + C(name) + '.' + (m[2] === '0' ? ' Position 0 is the first item: in a record, that\'s the ID.' : '');
+    if ((m = v.match(/^(\w+)\[(\w+)\]\[(\d+)\]$/))) return 'Two lookups: ' + C(m[1] + '[' + m[2] + ']') + ' picks one item, then ' + C('[' + m[3] + ']') + ' picks position ' + m[3] + ' inside it. Saved in ' + C(name) + '.';
+    if (v === '{}') return 'Makes an empty dictionary called ' + C(name) + ', ready to fill with key → value pairs.';
+    if (v === '[]') return 'Makes an empty list called ' + C(name) + '.';
+    if (v === 'set()') return 'Makes an empty set called ' + C(name) + '. (Careful: ' + C('{}') + ' would be a dictionary.)';
+    if (v === '0' || v === '0.0') return 'Starts ' + C(name) + ' at 0, before anything gets added.';
+    if (/^input\(/.test(v)) return 'Shows the prompt, waits for the user, and saves what they type in ' + C(name) + '. It\'s always text.';
+    if (/^(float|int)\(/.test(v)) return 'Turns text into a ' + (v.startsWith('int') ? 'whole number' : 'decimal number') + ' and saves it in ' + C(name) + '. If the text isn\'t a number, this is the line that crashes.';
+    if (/^list\(/.test(v)) return 'Makes a changeable list copy and calls it ' + C(name) + '.';
+    if (/^tuple\(/.test(v)) return 'Locks it into a tuple and calls it ' + C(name) + '.';
+    if ((m = v.match(/^(\w+)\(/)) && gbFnStep[m[1]]) return 'Calls ' + C(m[1] + '()') + ' and saves what it hands back in ' + C(name) + '.' + stepOf(m[1]);
+    if (/^\{/.test(v) && /\}$/.test(v)) return 'Makes ' + C(name) + ': ' + (/:/.test(v) ? 'a dictionary' : 'a set') + ' with these items.';
+    if (/^\[/.test(v)) return 'Makes the list ' + C(name) + '.';
+    if (/^[A-Z_0-9]+$/.test(name)) return 'A constant (ALL CAPS): ' + C(name) + ' is ' + C(v) + ' everywhere in the program.';
+    return 'Works out ' + C(v) + ' and saves the result in ' + C(name) + '.';
+  }
+  if ((m = t.match(/^(\w+)\(/)) && gbFnStep[m[1]]) return 'Runs ' + C(m[1] + '()') + '.' + stepOf(m[1]);
+  return 'Runs ' + C(t) + '.';
+}
+function gbInside(lines, idx) {
+  const ind = l => l.match(/^\s*/)[0].length;
+  let cur = ind(lines[idx]); const chain = [];
+  for (let k = idx - 1; k >= 0 && cur > 0; k--) {
+    const l = lines[k]; if (!l.trim() || l.trim().startsWith('#')) continue;
+    if (ind(l) < cur && /:\s*(#.*)?$/.test(l)) { chain.unshift(l.trim().replace(/:\s*(#.*)?$/, '')); cur = ind(l); }
+  }
+  return chain;
+}
+function gbWalkHTML(n) {
+  const s = GB_STEPS[n - 1], st = gbWalkState[n] || (gbWalkState[n] = { tab: gbPass[n] ? 'mine' : 'plan', move: 0, clues: {}, line: 0 });
+  const moves = GB_MOVES[s.id] || [];
+  const tabs = '<div class="gbw-tabs" role="tablist">' +
+    '<button type="button" class="gbw-tab" role="tab" data-gbw="tab" data-t="plan" aria-selected="' + (st.tab === 'plan') + '">Walk me through it</button>' +
+    '<button type="button" class="gbw-tab" role="tab" data-gbw="tab" data-t="mine" aria-selected="' + (st.tab === 'mine') + '">My code, line by line</button></div>';
+  if (st.tab === 'plan') {
+    const mv = moves[st.move]; if (!mv) return tabs;
+    const shown = st.clues[st.move] || 0;
+    return tabs + '<div class="gbw-count">Move ' + (st.move + 1) + ' of ' + moves.length + '</div>' +
+      '<p class="gbw-goal">' + mv.g + '</p><p class="gbw-where">Where: ' + mv.w + '</p>' +
+      (shown ? '<ol class="gbw-clues">' + mv.c.slice(0, shown).map((c, i) => '<li><b class="k">Clue ' + (i + 1) + '</b>' + c + '</li>').join('') + '</ol>' : '') +
+      '<div class="gbw-nav"><button type="button" class="btn quiet" data-gbw="prev"' + (st.move ? '' : ' disabled') + '>◂ Back</button>' +
+        (shown < mv.c.length ? '<button type="button" class="btn ghost" data-gbw="clue">' + (shown ? 'Another clue' : 'Give me a clue') + ' (' + (mv.c.length - shown) + ' left)</button>' : '') +
+        '<button type="button" class="btn" data-gbw="next"' + (st.move < moves.length - 1 ? '' : ' disabled') + '>Next move ▸</button>' +
+        '<span class="gbw-dots" aria-hidden="true">' + moves.map((_, i) => '<i class="' + (i <= st.move ? 'on' : '') + '"></i>').join('') + '</span></div>';
+  }
+  const lines = gbSrc(n).split('\n'), real = lines.map((l, i) => i).filter(i => lines[i].trim() && !lines[i].trim().startsWith('#'));
+  if (!real.length) return tabs + '<p class="gbw-explain">Write some code first, then come back here.</p>';
+  st.line = Math.min(st.line, real.length - 1);
+  const li = real[st.line], ex = gbExplainLine(lines[li], lines, li), inside = gbInside(lines, li);
+  return tabs + (gbPass[n] ? '<div class="gbw-recap"><b>Step ' + n + ' passed.</b> Walk your own code one line at a time. If you can say each line out loud, you can defend it in the presentation.</div>' :
+      '<div class="gbw-recap" style="border-color:var(--rule)">Not passed yet. This explains what your code says right now, so you can spot the line that doesn\'t do what you meant.</div>') +
+    '<div class="gbw-count">Line ' + (li + 1) + ' · ' + (st.line + 1) + ' of ' + real.length + '</div>' +
+    '<div class="gbw-code" aria-hidden="true">' + lines.map((l, i) => '<div class="' + (i === li ? 'on' : '') + '"><span>' + (i + 1) + '</span><span>' + esc(l || ' ') + '</span></div>').join('') + '</div>' +
+    '<p class="gbw-explain">' + ex + '</p>' +
+    (inside.length ? '<p class="gbw-inside">Inside: ' + inside.map(x => '<code>' + esc(x) + '</code>').join(' → ') + '</p>' : '') +
+    '<div class="gbw-nav"><button type="button" class="btn quiet" data-gbw="lprev"' + (st.line ? '' : ' disabled') + '>◂ Back</button>' +
+      '<button type="button" class="btn" data-gbw="lnext"' + (st.line < real.length - 1 ? '' : ' disabled') + '>Next line ▸</button></div>';
+}
+function gbWalkPaint(n) {
+  const sec = document.getElementById('gb-s' + n); if (!sec) return;
+  const w = sec.querySelector('.gb-walk'); if (!w) return;
+  w.innerHTML = gbWalkHTML(n);
+  const on = w.querySelector('.gbw-code .on'); if (on) on.scrollIntoView({ block: 'nearest' });
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-gbw]'); if (!b || b.disabled) return;
+  const sec = b.closest('.gb-step'); if (!sec) return;
+  const n = +sec.id.replace('gb-s', ''), st = gbWalkState[n], moves = GB_MOVES[GB_STEPS[n - 1].id] || [];
+  const a = b.dataset.gbw;
+  if (a === 'tab') { st.tab = b.dataset.t; st.line = 0; }
+  if (a === 'clue') st.clues[st.move] = (st.clues[st.move] || 0) + 1;
+  if (a === 'next') st.move = Math.min(moves.length - 1, st.move + 1);
+  if (a === 'prev') st.move = Math.max(0, st.move - 1);
+  if (a === 'lnext') st.line++;
+  if (a === 'lprev') st.line = Math.max(0, st.line - 1);
+  gbFocus = n; gbHere = n; store.set('pot.gb.focus', n); gbRailPaint();
+  gbWalkPaint(n);
+});
+
+/* progress strip + "My program so far" */
+function gbRail() {
+  const wrap = document.createElement('div');
+  wrap.innerHTML = '<nav class="gb-rail" aria-label="Gradebook steps"><span class="lab">Steps</span>' +
+    GB_STEPS.map((s, i) => '<button type="button" class="gb-dot" data-gbr="' + (i + 1) + '" title="Step ' + (i + 1) + ': ' + esc(s.title) + '">' + (i + 1) + '</button>').join('') +
+    '<button type="button" class="btn ghost gbr-so" data-gbr="so" aria-expanded="false">My program so far</button></nav>' +
+    '<section class="card gb-so" hidden aria-label="My program so far"></section>';
+  const frag = document.createDocumentFragment(); frag.append(...wrap.childNodes);   // sticky needs the rail to sit straight in the page, not in a wrapper
+  return frag;
+}
+let gbHere = 0, gbObs = null;
+function gbWatchSteps() {   // the highlighted dot follows the step you're looking at
+  if (!('IntersectionObserver' in window)) return;
+  if (!gbObs) gbObs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { gbHere = +e.target.id.replace('gb-s', ''); gbRailPaint(); } });
+  }, { rootMargin: '-110px 0px -60% 0px' });
+  document.querySelectorAll('.gb-step:not([data-gbw-obs])').forEach(el => { el.dataset.gbwObs = '1'; gbObs.observe(el); });
+}
+function gbRailPaint() {
+  gbWatchSteps();
+  const f = Math.min(Math.max(1, +(gbHere || gbFocus) || 1), GB_STEPS.length);
+  document.querySelectorAll('.gb-dot').forEach(d => {
+    const k = +d.dataset.gbr; d.classList.toggle('done', !!gbPass[k]); d.classList.toggle('cur', k === f);
+    d.setAttribute('aria-label', 'Step ' + k + (gbPass[k] ? ', passed' : '') + (k === f ? ', you are here' : ''));
+  });
+  const cur = document.querySelector('.gb-dot.cur'), rail = document.querySelector('.gb-rail');
+  if (cur && rail && rail.scrollWidth > rail.clientWidth) rail.scrollLeft = Math.max(0, cur.offsetLeft - rail.clientWidth / 2);
+  const so = document.querySelector('.gb-so'); if (so && !so.hidden) gbSoPaint(so);
+}
+function gbSoPaint(so) {
+  const done = gbDone(), C = typeof GB_CONNECT !== 'undefined' ? GB_CONNECT : {};
+  so.innerHTML = '<h3>My program so far · ' + done + ' of ' + GB_STEPS.length + ' steps</h3>' +
+    '<p class="muted">Each passed step is a working piece. The ones below it plug into it.</p><ol>' +
+    GB_STEPS.map((s, i) => {
+      const k = i + 1, c = C[s.id] || {}, ok = !!gbPass[k];
+      return '<li class="' + (ok ? 'done' : '') + '"><span class="m">' + (ok ? '✓' : '○') + '</span><span><b>Step ' + k + ' · ' + esc(s.title) + '</b> <code>' + esc(s.fns) + '</code>' +
+        (c.gives ? '<small>Gives back ' + c.gives + (c.uses && c.uses.length ? ' · uses Step ' + c.uses.join(', ') : '') + '</small>' : '') +
+        (ok ? '<details><summary>Show my code</summary><pre>' + esc(gbSrc(k).replace(/\s+$/, '')) + '</pre></details>' : '') + '</span></li>';
+    }).join('') + '</ol>';
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-gbr]'); if (!b) return;
+  if (b.dataset.gbr === 'so') {
+    const so = document.querySelector('.gb-so'); so.hidden = !so.hidden; b.setAttribute('aria-expanded', String(!so.hidden));
+    if (!so.hidden) gbSoPaint(so); return;
+  }
+  const k = +b.dataset.gbr, t = document.getElementById('gb-s' + k);
+  if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); gbHere = k; gbFocus = k; store.set('pot.gb.focus', k); gbRailPaint(); }
+});
 function gbStep(s, n) {
   const sec = document.createElement('section');
   sec.className = 'card gb-step'; sec.id = 'gb-s' + n;
@@ -2952,11 +3168,14 @@ function gbStep(s, n) {
           '<button class="btn quiet" type="button" data-gb="reset">Reset step</button></div>' +
         '<p class="engine-note" hidden></p>' +
         '<div class="console gb-results" hidden aria-live="polite"></div>' +
+        '<div class="gb-walk" aria-live="polite"></div>' +
       '</div>' +
     '</div>' +
     '<details class="gb-more"><summary>Hints (' + s.hints.length + ')</summary><ol class="hints-list">' + s.hints.map(h => '<li>' + h + '</li>').join('') + '</ol></details>' +
     '<details class="gb-more"><summary>Say it out loud: ' + esc(s.say[0]) + '</summary><p>' + esc(s.say[1]) + '</p></details>';
   sec.querySelector('.gb-ex').appendChild(codeBlock(s.example.split('\n')));
+  if (!Object.keys(gbFnStep).length) gbIndexFns();
+  setTimeout(() => gbWalkPaint(n), 0);
 
   const ta = sec.querySelector('.editor textarea'), nums = sec.querySelector('.nums');
   gbEd[n] = ta;
@@ -2970,6 +3189,7 @@ function gbStep(s, n) {
   ta.addEventListener('input', () => {
     ta._err = null; fit(); ta._paint();
     if (gbPass[n]) { gbPass[n] = false; gbSavePass(); gbStats(); }
+    if (gbWalkState[n] && gbWalkState[n].tab === 'mine') { clearTimeout(ta._wt); ta._wt = setTimeout(() => gbWalkPaint(n), 500); }
     clearTimeout(t);
     t = setTimeout(() => { gbCode[n] = ta.value; gbSaveCode(); }, 400);
   });
@@ -2990,7 +3210,7 @@ function gbStep(s, n) {
   sec.addEventListener('click', e => {
     const b = e.target.closest('[data-gb]'); if (!b) return;
     if (b.dataset.gb === 'run') gbRunTests(n, sec, b);
-    if (b.dataset.gb === 'ask') { gbFocus = n; store.set('pot.gb.focus', n); gbCoachApi.ask('I\'m on Step ' + n + ' (' + s.title + '). Help me start it. Give me a hint first, not the code.', 'Help me with Step ' + n); }
+    if (b.dataset.gb === 'ask') { gbFocus = n; store.set('pot.gb.focus', n); gbRailPaint(); if (gbCoachApi.el) { sec.querySelector('.gb-build').appendChild(gbCoachApi.el); gbCoachApi.el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } gbCoachApi.ask('I\'m on Step ' + n + ' (' + s.title + '). Help me start it. Give me a hint first, not the code.', 'Help me with Step ' + n); }
     if (b.dataset.gb === 'reset') {
       if (!armed) { armed = true; b.textContent = 'Click again to reset'; setTimeout(() => { armed = false; b.textContent = 'Reset step'; }, 3000); return; }
       armed = false; b.textContent = 'Reset step';
@@ -3119,7 +3339,7 @@ function gbCoach() {
     if (c.dataset.c === 'clear' && !busy) { thread = []; save(); renderThread(); status.textContent = ''; }
   });
   ask.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); sendB.click(); } });
-  gbCoachApi = { ask(question, label) { sec.scrollIntoView({ block: 'start', behavior: 'smooth' }); send(question, label); } };
+  gbCoachApi = { el: sec, ask(question, label) { send(question, label); } };
   renderThread();
   return sec;
 }
@@ -3135,6 +3355,7 @@ function showGradebook(focus) {
     '<p class="goal">Your final project, one function at a time. Each step teaches one idea, then <b>you write the code</b> and run real tests on it. No answers are shown, only hints, tests, and the coach.</p>' +
     '<div class="stats" id="gb-stats"></div><div class="gb-track" aria-hidden="true"><div id="gb-bar"></div></div>';
   levelEl.appendChild(head);
+  levelEl.appendChild(gbRail());
 
   const how = document.createElement('section');
   how.className = 'card road-key-card';
@@ -3142,7 +3363,7 @@ function showGradebook(focus) {
     '<li><b>Go in order.</b> Each step uses the ones before it. If an earlier step breaks, the tests tell you which one.</li>' +
     '<li><b>Learn it, then write it.</b> The example is never your project code. Fill in the <code>____</code> blanks, or follow the numbered comments.</li>' +
     '<li><b>Run tests</b> after every small change. Green means that step is done. Your code saves in this browser.</li>' +
-    '<li><b>Stuck?</b> Open the hints first, then ask the coach. It explains; it won\'t write your functions.</li>' +
+    '<li><b>Stuck?</b> Use <b>Walk me through it</b> under your editor: one small move at a time, with clues that get more specific. Then ask the coach: it opens right under the step you\'re on.</li>' +
     '<li><b>Say it out loud.</b> Every step ends with a question your presentation might ask. Answer it before you peek.</li>' +
     '<li><b>Class rule:</b> AI can explain, but the code has to be yours and you have to be able to explain every line. Keep notes for the report\'s <b>AI Tools Usage</b> section.</li></ul>';
   levelEl.appendChild(how);
