@@ -966,6 +966,67 @@ SEMS.forEach(sem => {
   });
 });
 
+/* ---------------- the dust plane: warm, swirling orbital dust lit by the sun, with planet shadows ---------------- */
+const DISC_IN = SUN_R * 1.05, DISC_OUT = RING_R(SEMS.length - 1) + 12, MAXPL = 16;
+const discMat = new THREE.ShaderMaterial({
+  uniforms: { uTime: { value: 0 }, uBoost: { value: 0 }, uFade: { value: 1 }, uNear: { value: 10 }, uN: { value: 0 }, uPl: { value: Array.from({ length: MAXPL }, () => new THREE.Vector4()) }, uOut: { value: DISC_OUT } },
+  defines: { OCT: MOBILE ? 3 : 5, MAXPL },
+  vertexShader: `varying vec2 vP; varying float vD; void main(){ vP=position.xy; vec4 mv=modelViewMatrix*vec4(position,1.); vD=-mv.z; gl_Position=projectionMatrix*mv; }`,
+  fragmentShader: `uniform float uTime,uBoost,uFade,uOut,uNear; uniform int uN; uniform vec4 uPl[MAXPL]; varying vec2 vP; varying float vD;
+    float h3(vec3 p){p=fract(p*.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+    float n3(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}
+    float fbm(vec3 p){float s=0.,a=.5;for(int i=0;i<OCT;i++){s+=a*n3(p);p*=2.03;a*=.5;}return s;}
+    void main(){
+      vec2 q=vec2(vP.x,-vP.y); float r=length(q), a=atan(q.y,q.x);
+      float sw=a+r*.09-uTime*.012;
+      float n=fbm(vec3(cos(sw)*r*.32,sin(sw)*r*.32,r*.15));
+      float bands=.5+.5*sin(r*2.6+n*5.);
+      bands*=.55+.45*sin(r*.85+n*2.6+1.3);
+      float fine=fbm(vec3(q*1.7,4.2));
+      float dens=(.25+.75*bands)*(.45+.8*n)*(.65+.55*fine);
+      float fall=1./(1.+pow(r/5.5,2.1));
+      float edge=smoothstep(uOut,uOut*.62,r)*smoothstep(${(SUN_R * 1.05).toFixed(2)},${(SUN_R * 1.9).toFixed(2)},r);
+      vec3 warm=mix(vec3(1.,.86,.66),vec3(.95,.6,.34),smoothstep(2.,12.,r));
+      float sh=1.;
+      for(int i=0;i<MAXPL;i++){ if(i>=uN) break; vec2 p=uPl[i].xy; float pr=uPl[i].z; float L=max(length(p),.001); vec2 d=p/L;
+        float along=dot(q,d), perp=abs(q.x*d.y-q.y*d.x);
+        if(along>L-pr*.3){ float w=pr*(1.+(along-L)*.025); float s=smoothstep(w,w*.55,perp)*exp(-(along-L)*.05)*smoothstep(L-pr*.3,L+pr*.4,along); sh*=1.-s*.88; } }
+      float glow=(1.5+uBoost*.8)*fall;
+      vec3 col=warm*dens*glow*sh*edge;
+      gl_FragColor=vec4(col*uFade*.85*smoothstep(uNear*.12,uNear,vD),1.);
+    }`,
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide
+});
+const disc = new THREE.Mesh(new THREE.RingGeometry(DISC_IN, DISC_OUT, 192, 24), discMat);
+disc.rotation.x = -Math.PI / 2; disc.position.y = -.18; disc.renderOrder = -1; system.add(disc);
+// warm sun haze that spreads across the plane
+// warm bounce light from the glowing dust, so planets show their colour like a real photo
+const fillLight = new THREE.DirectionalLight(0xffe0bc, 0); scene.add(fillLight); scene.add(fillLight.target);
+let discFade = 1;
+const haze = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: sRGB('#ff9a4a').multiplyScalar(.75), blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+haze.scale.set(SUN_R * 26, SUN_R * 12, 1); system.add(haze);
+/* asteroids: a belt between the semester rings plus scattered debris, each a lit rock */
+const rocks = new THREE.Group(); system.add(rocks);
+{
+  const r = rng(808), n = MOBILE ? 650 : 1900, geo = new THREE.DodecahedronGeometry(1, 0);
+  const pos = geo.attributes.position; for (let i = 0; i < pos.count; i++) pos.setXYZ(i, pos.getX(i) * (.75 + r() * .5), pos.getY(i) * (.6 + r() * .5), pos.getZ(i) * (.75 + r() * .5)); geo.computeVertexNormals();
+  const im = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ color: 0xd8c4a8, roughness: .95, metalness: 0, flatShading: true, emissive: 0x2a1c12, emissiveIntensity: .6 }), n);
+  const m4 = new THREE.Matrix4(), qq = new THREE.Quaternion(), ee = new THREE.Euler(), vv = new THREE.Vector3(), ss = new THREE.Vector3(), cc = new THREE.Color();
+  const beltIn = RING_R(0) + 1.6, beltOut = RING_R(1) - 1.6;
+  for (let i = 0; i < n; i++) {
+    const inBelt = r() < .7, rad = inBelt ? beltIn + Math.pow(r(), .9) * (beltOut - beltIn) : 3.5 + Math.pow(r(), .7) * (DISC_OUT - 5), a = r() * Math.PI * 2;
+    const big = r() < .025, sc = big ? .07 + r() * .08 : .01 + Math.pow(r(), 2.6) * .05;
+    vv.set(Math.cos(a) * rad, (r() - .5) * .35 - .05, Math.sin(a) * rad); ee.set(r() * 6, r() * 6, r() * 6); qq.setFromEuler(ee); ss.setScalar(sc);
+    m4.compose(vv, qq, ss); im.setMatrixAt(i, m4); cc.setHSL(.07 + r() * .04, .14 + r() * .16, .45 + r() * .25); im.setColorAt(i, cc);
+  }
+  rocks.add(im);
+  // fine glittering dust
+  const dp = [], dc = [], ds = [], dr = [], dn = MOBILE ? 2500 : 8000, warmC = sRGB('#ffd9a8');
+  for (let i = 0; i < dn; i++) { const rad = 2.4 + Math.pow(r(), 1.3) * (DISC_OUT - 3), a = r() * Math.PI * 2, b = (.25 + r() * .75) * (1 / (1 + Math.pow(rad / 9, 2)));
+    dp.push(Math.cos(a) * rad, (r() - .5) * .25, Math.sin(a) * rad); const c = warmC.clone().multiplyScalar(b); dc.push(c.r, c.g, c.b); ds.push(.03 + r() * .05); dr.push(0); }
+  rocks.add(new THREE.Points(pointsGeo({ pos: dp, col: dc, size: ds, rot: dr }), pointsMat({ max: 3 * renderer.getPixelRatio(), near0: .1, near1: .6, opacity: 1 })));
+}
+
 /* ---------------- business sector (Phase 3 placeholder) ---------------- */
 const biz = new THREE.Group(); biz.position.copy(BIZ); scene.add(biz);
 const gate = new THREE.Group(); biz.add(gate);
@@ -1021,7 +1082,7 @@ FUT.forEach(f => {
 const galaxyMats = [];
 const skyMat = buildSky();
 buildGalaxy();
-scene.traverse(o => { if (o.material && o.material.uniforms && o.material.uniforms.uScale) galaxyMats.push(o.material); });
+scene.traverse(o => { if (o.material && o.material.uniforms && o.material.uniforms.uScale && !rocks.children.includes(o)) { galaxyMats.push(o.material); o.material.userData.baseOpacity = o.material.uniforms.uOpacity.value; } });
 
 /* ---------------- textures for planets + moons, built in the background ---------------- */
 async function buildTextures() {
@@ -1072,6 +1133,7 @@ function stepFlight(now) {
   if (t >= 1) { flight = null; controls.enabled = true; camera.fov = BASE_FOV; camera.updateProjectionMatrix(); f.done && f.done(); }
 }
 const aspK = () => camera.aspect < 1 ? clamp(.78 / camera.aspect, 1, 1.75) : 1;
+const lowAngle = (d, y) => { const v = d.clone(); v.y = 0; if (v.lengthSq() < 1e-4) v.set(0, 0, 1); v.normalize().multiplyScalar(Math.sqrt(1 - y * y)); v.y = y; return v; };
 const elevated = (d, minY = .35) => { const v = d.clone(); v.y = Math.max(v.y, minY); return v.normalize(); };
 function planetDir(p) {
   const pw = wpos(p.mesh), toSun = SYS.clone().sub(pw).normalize(), tan = new THREE.Vector3(-toSun.z, 0, toSun.x);
@@ -1086,7 +1148,7 @@ function goGalaxy() {
 function goSystem(fromGalaxy) {
   closePanel(); const was = level; level = 'system'; focus.planet = focus.moon = null; follow = sysWorld; setLimits(); ui();
   if (was === 'galaxy' || fromGalaxy) fx('warp');
-  flyTo(sysWorld, 38 * aspK(), { dir: elevated(camera.position.clone().sub(controls.target).normalize(), .55), dur: was === 'galaxy' ? 3.2 : 1.8, kick: was === 'galaxy' ? 20 : 0 });
+  flyTo(sysWorld, 34 * aspK(), { dir: lowAngle(camera.position.clone().sub(controls.target).normalize(), camera.aspect < 1 ? .55 : .3), dur: was === 'galaxy' ? 3.2 : 1.8, kick: was === 'galaxy' ? 20 : 0 });
 }
 function goSun(land = true) {
   closePanel(); level = 'sun'; focus.planet = focus.moon = null; follow = sysWorld; setLimits(); ui();
@@ -1514,7 +1576,10 @@ function loop(now) {
   corona.scale.setScalar(SUN_R * (5.5 + sunBoost * 5 + SUN_ENT.hover * 1.5) * (1 + Math.sin(T * 1.3) * .015));
   corona.material.opacity = .65 + sunBoost * .35; sunLight.intensity = 3 + sunBoost * 1.2;
   const near = smooth(260, 60, dSys);
-  SEMS.forEach(s => { s.ring.material.opacity = .55 * near; });
+  SEMS.forEach(s => { s.ring.material.opacity = .24 * near; });
+  discMat.uniforms.uTime.value = T; discMat.uniforms.uBoost.value = sunBoost; discFade += (((level === 'planet' || level === 'moon') ? .22 : 1) - discFade) * Math.min(1, dt * 2); discMat.uniforms.uFade.value = smooth(420, 90, dSys) * discFade; discMat.uniforms.uNear.value = clamp(camD * (level === 'planet' || level === 'moon' ? 2.6 : 1.4), 4, 30); discMat.uniforms.uN.value = Math.min(planets.length, MAXPL);
+  planets.forEach((p, i) => { if (i < MAXPL) discMat.uniforms.uPl.value[i].set(p.group.position.x, p.group.position.z, p.R, 0); });
+  haze.material.opacity = (.5 + sunBoost * .3) * smooth(400, 80, dSys) * discFade; rocks.rotation.y += dt * .006; rocks.visible = dSys < 600;
   planets.forEach(p => {
     const pct = p.pct || 0, pw = wpos(p.mesh, tmpW);
     p.shell.material.uniforms.uI.value = (pct * .75 + p.hover * .35) * (1 + Math.sin(T * 2 + p.ring) * .06) * smooth(p.R * 2.4, p.R * 4.5, pw.distanceTo(camera.position));
@@ -1530,7 +1595,10 @@ function loop(now) {
       m.halo.material.opacity = (m.haloBase || 0) * (.85 + Math.sin(T * 2.4 + m.index) * .15) + m.hover * .8;
     });
   });
-  galaxyMats.forEach(m => { m.uniforms.uScale.value = pxScale(); });
+  const inside = smooth(260, 70, dSys);
+  galaxyMats.forEach(m => { m.uniforms.uScale.value = pxScale(); m.uniforms.uOpacity.value = m.userData.baseOpacity * (1 - inside * .93); });
+  fillLight.position.copy(camera.position).add(new THREE.Vector3(0, 6, 0)); fillLight.target.position.copy(controls.target); fillLight.intensity = inside * (level === 'planet' || level === 'moon' ? .22 : .55);
+  rocks.children.forEach(o => { if (o.material.uniforms) o.material.uniforms.uScale.value = pxScale(); });
   skyMat.uniforms.uTime.value = T;
   if (frameN % 2 === 0) hoverStep();
   tagStep(); flareStep();
