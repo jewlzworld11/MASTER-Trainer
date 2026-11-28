@@ -17,7 +17,8 @@ After the first visit it works offline. Progress saves on the device you use.
 
 | Page | Class |
 |---|---|
-| `index.html` | 3D home (holographic command center) |
+| `index.html` | 3D home: the AI Journey galaxy (click a planet to land in its trainer) |
+| `hub.html` | Command center (holographic dashboard) |
 | `classic.html` | 2D home |
 | `fde-lab.html` | FDE Lab (end goal) |
 | `python-output.html` | Intro to Python |
@@ -25,5 +26,7 @@ After the first visit it works offline. Progress saves on the device you use.
 | `ai-business.html` | GEB 1432 · Applied AI in business |
 | `ethics-octagon.html` | PHI 2680 · AI Ethics |
 | `english-writing.html` | ENC 1101 · English Comp |
+
+Each trainer lands on its own world (`mt-world.js`, loaded by `cc-skin.js`): a scene behind the lessons, a playable world panel with lesson markers, rank/XP and achievements.
 
 `sw.js` saves everything for offline use. When files change, bump `VERSION` at the top of `sw.js` so phones pick up the update.

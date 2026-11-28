@@ -3,9 +3,9 @@
    - Online: this app's own pages and scripts always come fresh from the server (network first),
      so updates show up the first time you open the app. Offline: the saved copy is used.
    - Bump VERSION whenever the files change. */
-const VERSION = 'mt-2026-11-27b';
+const VERSION = 'mt-2026-11-27c';
 const LOCAL = [
-  './', 'index.html', 'classic.html', 'nav.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js', 'mt-voice.js', 'mt-board.js',
+  './', 'index.html', 'hub.html', 'classic.html', 'nav.js', 'mt-world.js', 'theme.css', 'manifest.webmanifest', 'mt-progress.js', 'cc-skin.css', 'cc-skin.js', 'mt-voice.js', 'mt-board.js',
   'fde-lab.html', 'python-output.html', 'math-placement.html', 'ai-business.html', 'ethics-octagon.html', 'english-writing.html',
   'miami-backdrop.svg', 'bg-home.jpg', 'bg-fde.jpg', 'bg-python.jpg', 'bg-math.jpg', 'bg-business.jpg', 'bg-ethics.jpg',
   'card-fde.jpg', 'card-python.jpg', 'card-math.jpg', 'card-business.jpg', 'card-ethics.jpg',
@@ -16,7 +16,7 @@ const REMOTE = [
   THREE + 'build/three.module.min.js',
   ...['postprocessing/EffectComposer.js', 'postprocessing/MaskPass.js', 'postprocessing/OutputPass.js', 'postprocessing/Pass.js',
     'postprocessing/RenderPass.js', 'postprocessing/ShaderPass.js', 'postprocessing/UnrealBloomPass.js', 'objects/Reflector.js',
-    'environments/RoomEnvironment.js', 'shaders/CopyShader.js', 'shaders/LuminosityHighPassShader.js', 'shaders/OutputShader.js']
+    'environments/RoomEnvironment.js', 'controls/OrbitControls.js', 'shaders/CopyShader.js', 'shaders/LuminosityHighPassShader.js', 'shaders/OutputShader.js']
     .map(f => THREE + 'examples/jsm/' + f),
   'https://cdn.jsdelivr.net/npm/brython@3.14.3/brython.min.js',
   'https://cdn.jsdelivr.net/npm/brython@3.14.3/brython_stdlib.js'

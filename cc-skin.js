@@ -34,9 +34,9 @@
   var top = document.createElement('header');
   top.className = 'cc-top';
   top.innerHTML =
-    '<a class="cc-brand" href="index.html" aria-label="Back to the command center"><span>' + MARK + '</span><span><b>JEWLZ WORLD</b><small>' + esc(D.title || '') + '</small></span></a>' +
+    '<a class="cc-brand" href="index.html" aria-label="Back to the galaxy"><span>' + MARK + '</span><span><b>JEWLZ WORLD</b><small>' + esc(D.title || '') + '</small></span></a>' +
     '<div class="cc-clock"><small id="cc-date"></small><b id="cc-time">--:--</b></div>' +
-    '<nav class="cc-tabs" aria-label="Trainer sections"><a class="cc-tab" href="index.html">Command center</a>' +
+    '<nav class="cc-tabs" aria-label="Trainer sections"><a class="cc-tab" href="index.html">Galaxy</a><a class="cc-tab" href="hub.html">Command center</a>' +
       tabs.map(function (t, i) { return '<button class="cc-tab" type="button" data-t="' + i + '"' + (i === 0 ? ' aria-current="page"' : '') + '>' + esc(t.t) + '</button>'; }).join('') + '</nav>' +
     '<div class="cc-stat"><i></i><span><small>Module status</small><b id="cc-pct">Online</b></span></div>' +
     '<div class="cc-who"><span class="cc-av" aria-hidden="true">JP</span></div>';
@@ -78,7 +78,7 @@
   bot.innerHTML =
     '<div class="cc-sb" style="--c:#FFD25A"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 L20 16 L12 21 L4 16 Z"/></svg><span><small>Jewlz World</small><b>v3</b></span></div>' +
     '<div class="cc-sb cc-sm cc-md" style="--c:#2FE6C8"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/></svg><span><small>Progress</small><b>Saved on this device</b></span></div>' +
-    '<a class="cc-home" href="index.html"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 L12 4 L21 11"/><path d="M5 10v10h14V10"/></svg>Command center</a>' +
+    '<a class="cc-home" href="index.html"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 L12 4 L21 11"/><path d="M5 10v10h14V10"/></svg>Galaxy</a>' +
     '<div class="cc-sb cc-sm" style="--c:#6FC3FF"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1"/></svg><span><small>Network</small><b id="cc-net">Online</b></span></div>' +
     '<div class="cc-sb cc-sm"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><span><small>Module</small><b id="cc-mod">' + esc(D.short || '') + '</b></span></div>';
   document.body.appendChild(bot);
@@ -114,4 +114,11 @@
 (function () {
   if (document.querySelector('script[src$="mt-board.js"]')) return;
   var s = document.createElement('script'); s.src = 'mt-board.js'; document.body.appendChild(s);
+})();
+
+/* Planet worlds add-on (11/27/2026): each trainer lands on its own world (scene behind the page,
+   live world panel with clickable lesson markers, arrival from the galaxy). All of it lives in mt-world.js. */
+(function () {
+  if (document.querySelector('script[src$="mt-world.js"]')) return;
+  var s = document.createElement('script'); s.src = 'mt-world.js'; document.body.appendChild(s);
 })();
