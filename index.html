@@ -35,25 +35,116 @@ window.JW_CONFIG = {
   ],
 
   /* PLANETS: one per class. status: 'active' (trainer ready) or 'soon' (coming soon).
+     For classes with a trainer, the moons are that trainer's real units (levels, units, chapters, fighters).
+     The trainer keeps this list fresh by itself (localStorage 'mt.units'), so new levels show up as new moons.
      world: the name of the planet's world (its theme inside the trainer).
      surface: the realistic look of the planet (ocean, desert, hub, forge, veil, origin, gene, city, jungle, gas, ice, rock). size: 1 = normal.
      units: the moons. Plain text = placeholder name; or { id: 'u1', name: 'Real unit name' }. */
   classes: [
     { id: 'python',   name: 'Python Output',  code: 'COP 1047C · Intro to Python', semester: 'fa26', color: '#FF4FB0', status: 'active', world: 'Tidehold',
       trainer: 'python-output.html',  surface: 'ocean',  size: 1.0,
-      units: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'] },
+      units: [
+        { id: "level-1", name: "Level 1 · print and strings" },
+        { id: "level-2", name: "Level 2 · Variables" },
+        { id: "level-3", name: "Level 3 · Math operators" },
+        { id: "level-4", name: "Level 4 · F-strings and constants" },
+        { id: "level-5", name: "Level 5 · if and else" },
+        { id: "level-6", name: "Level 6 · elif chains, and, or, not" },
+        { id: "level-7", name: "Level 7 · for loops and range" },
+        { id: "level-8", name: "Level 8 · while loops" },
+        { id: "level-9", name: "Level 9 · Running totals, counters, break, continue" },
+        { id: "level-10", name: "Level 10 · Nested loops" },
+        { id: "level-11", name: "Level 11 · Functions: def, call, return" },
+        { id: "level-12", name: "Level 12 · Local vs. global variables" },
+        { id: "level-13", name: "Level 13 · Exam mix: Monday's format" },
+        { id: "level-14", name: "Level 14 · Parameter rules: defaults, / and *" },
+        { id: "level-15", name: "Level 15 · Lists and indexing" },
+        { id: "level-16", name: "Level 16 · Looping over a list" },
+        { id: "level-17", name: "Level 17 · Changing and joining lists" },
+        { id: "level-18", name: "Level 18 · List slicing" },
+        { id: "level-19", name: "Level 19 · Finding items with in" },
+        { id: "level-20", name: "Level 20 · List methods and built-in functions" },
+        { id: "level-21", name: "Level 21 · Copying lists" },
+        { id: "level-22", name: "Level 22 · Processing lists" },
+        { id: "level-23", name: "Level 23 · List comprehensions" },
+        { id: "level-24", name: "Level 24 · Two-dimensional lists" },
+        { id: "level-25", name: "Level 25 · Tuples" },
+        { id: "level-26", name: "Level 26 · Dictionaries: make and read" },
+        { id: "level-27", name: "Level 27 · Changing a dictionary" },
+        { id: "level-28", name: "Level 28 · Looping and dictionary methods" },
+        { id: "level-29", name: "Level 29 · Sets: unique items" },
+        { id: "level-30", name: "Level 30 · Set math: union, intersection, difference" },
+        { id: "level-31", name: "Level 31 · Lists, tuples, dicts, and sets together" },
+        { id: "level-32", name: "Level 32 · Mission: Trade Journal" },
+        { id: "level-33", name: "Level 33 · Mission: Session Stats" },
+        { id: "level-34", name: "Level 34 · Test First, Build Deep" }
+      ] },
     { id: 'math',     name: 'Math Placement', code: 'Placement test prep',          semester: 'fa26', color: '#FF9E45', status: 'active', world: 'Emberdune',
       trainer: 'math-placement.html', surface: 'desert', size: 0.82,
-      units: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4'] },
+      units: [
+        { id: "ops", name: "Unit 1 · Numbers and order of operations" },
+        { id: "pct", name: "Unit 2 · Percents, ratios and proportions" },
+        { id: "data", name: "Unit 3 · Stats, probability and shapes" },
+        { id: "expr", name: "Unit 4 · Expressions" },
+        { id: "exp", name: "Unit 5 · Exponents" },
+        { id: "lin", name: "Unit 6 · Linear equations" },
+        { id: "ineq", name: "Unit 7 · Inequalities" },
+        { id: "word", name: "Unit 8 · Word problems" },
+        { id: "poly", name: "Unit 9 · Polynomials" },
+        { id: "fact", name: "Unit 10 · Factoring" },
+        { id: "quad", name: "Unit 11 · Quadratic equations" },
+        { id: "line", name: "Unit 12 · Lines and graphs" },
+        { id: "sys", name: "Unit 13 · Systems of equations" },
+        { id: "stretch", name: "Unit 14 · College Algebra preview" }
+      ] },
     { id: 'business', name: 'AI Business',    code: 'GEB 1432',                     semester: 'fa26', color: '#2FE6C8', status: 'active', world: 'Waypoint Prime',
       trainer: 'ai-business.html',    surface: 'hub',    size: 1.2,
-      units: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4', 'Unit 5'] },
+      units: [
+        { id: "ch1", name: "Ch 1 · Foundations" },
+        { id: "ch2", name: "Ch 2 · Management" },
+        { id: "ch3", name: "Ch 3 · Decision Making" },
+        { id: "ch4", name: "Ch 4 · Ethics" },
+        { id: "ch5", name: "Ch 5 · HR" },
+        { id: "ch6", name: "Ch 6 · Marketing" },
+        { id: "ch7", name: "Ch 7 · Operations" },
+        { id: "ch8", name: "Ch 8 · Finance" }
+      ] },
     { id: 'ethics',   name: 'Ethics Octagon', code: 'PHI 2680 · AI Ethics',         semester: 'fa26', color: '#6FC3FF', status: 'active', world: 'Forgefall',
       trainer: 'ethics-octagon.html', surface: 'forge',  size: 0.95,
-      units: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4'] },
+      units: [
+        { id: "rand", name: "Ayn Rand" },
+        { id: "aristotle", name: "Aristotle" },
+        { id: "bentham", name: "Jeremy Bentham" },
+        { id: "mill", name: "John Stuart Mill" },
+        { id: "kant", name: "Immanuel Kant" },
+        { id: "ross", name: "W. D. Ross" },
+        { id: "hobbes", name: "Thomas Hobbes" },
+        { id: "locke", name: "John Locke" },
+        { id: "rousseau", name: "Jean-Jacques Rousseau" },
+        { id: "smith", name: "Adam Smith" },
+        { id: "care", name: "Care Ethics" },
+        { id: "beauvoir", name: "Simone de Beauvoir" },
+        { id: "sartre", name: "Jean-Paul Sartre" },
+        { id: "han", name: "Byung-Chul Han" },
+        { id: "foucault", name: "Michel Foucault" },
+        { id: "gramsci", name: "Antonio Gramsci" },
+        { id: "latour", name: "Bruno Latour" },
+        { id: "lanierweyl", name: "The WIRED Article: AI Is an Ideology" },
+        { id: "partovi", name: "The Podcast: AI Is Not Above the Law" },
+        { id: "ortega", name: "José Ortega y Gasset" },
+        { id: "bates", name: "The Bates Reading: A Crisis of Decision" },
+        { id: "nietzsche", name: "Friedrich Nietzsche" }
+      ] },
     { id: 'english',  name: 'Writing Room',   code: 'ENC 1101 · English Comp',      semester: 'fa26', color: '#B48CFF', status: 'active', world: 'Veilhaven',
       trainer: 'english-writing.html', surface: 'veil',  size: 1.05,
-      units: ['Unit 1', 'Unit 2', 'Unit 3', 'Unit 4'] },
+      units: [
+        { id: "thesis", name: "Claim, Evidence, So What" },
+        { id: "sources", name: "Source Detective" },
+        { id: "summary", name: "Summary Sprint" },
+        { id: "surgery", name: "Sentence Surgery" },
+        { id: "audience", name: "Audience Switch" },
+        { id: "mla", name: "MLA + Annotated Bib" }
+      ] },
 
     { id: 'cai1001c', name: 'AI Thinking',                 code: 'CAI 1001C', semester: 'sp27', color: '#E84BFF', status: 'soon', world: 'Firstlight',
       trainer: '', surface: 'origin', size: 0.95, units: ['Unit 1', 'Unit 2', 'Unit 3'] },
@@ -209,6 +300,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .seg button[aria-pressed=true][data-s=progress]{background:rgba(255,158,69,.22);color:#FFC28A}
 .seg button[aria-pressed=true][data-s=mastered]{background:color-mix(in srgb,var(--a) 28%,#000);color:#fff;text-shadow:0 0 6px var(--a)}
 .note{font-size:12.5px;color:var(--dim);margin:10px 0 0}
+.ubar{display:flex;align-items:center;gap:9px}.ubar .track{flex:1;height:5px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}.ubar .track i{display:block;height:100%;background:var(--a);box-shadow:0 0 8px var(--a)}
+.ubar b{font:700 11px/1 Orbitron,sans-serif;color:var(--a);min-width:34px;text-align:right}
+.ugo{min-height:32px;padding:0 10px;border:1px solid var(--a);background:#000;border-radius:3px;font:700 10px/1 Orbitron,sans-serif;letter-spacing:.08em;color:#fff}.ugo:hover{background:color-mix(in srgb,var(--a) 22%,#000)}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .acts .nbtn{--c:var(--a)}
 .bars{display:grid;gap:8px}
@@ -342,12 +436,18 @@ const trainerSync = () => { const p = store.get('mt.progress', {}); return p && 
 
 /* ---------------- normalize config ---------------- */
 const SEMS = CFG.semesters.map((s, i) => ({ ...s, index: i }));
+/* live units: each trainer writes its real units + progress to localStorage 'mt.units' (see mt-world.js) */
+const SYNC = (() => { const v = store.get('mt.units', {}); return v && typeof v === 'object' ? v : {}; })();
+const GOMAP = { python: k => ({ h: '#' + k }), math: k => ({ h: '#u-' + k }), business: k => ({ set: { k: 'geb1432-trainer-v1', f: 'level', v: k } }), ethics: k => ({ h: '#f-' + k }), english: k => ({ set: { k: 'writing-room-v1', f: 'last', v: k } }) };
 const CLASSES = CFG.classes.map(c => {
-  const sem = SEMS.find(s => s.id === c.semester) || SEMS[0];
-  const units = (c.units || []).map((u, i) => typeof u === 'string' ? { id: 'u' + (i + 1), name: u } : { id: u.id || 'u' + (i + 1), name: u.name || 'Unit ' + (i + 1) });
-  return { ...c, sem, units, soon: c.status !== 'active' || !c.trainer };
+  const sem = SEMS.find(s => s.id === c.semester) || SEMS[0], soon = c.status !== 'active' || !c.trainer;
+  let units = (c.units || []).map((u, i) => typeof u === 'string' ? { id: 'u' + (i + 1), name: u } : { id: String(u.id || 'u' + (i + 1)), name: u.name || 'Unit ' + (i + 1) });
+  const live = !soon && SYNC[c.id] && Array.isArray(SYNC[c.id].list) ? SYNC[c.id].list.filter(u => u && u.id != null) : null;
+  if (live && live.length) units = live.map(u => ({ id: String(u.id), name: String(u.name || u.id), frac: Math.max(0, Math.min(1, +u.frac || 0)), go: u.go && typeof u.go === 'object' ? u.go : null }));
+  if (!soon) units.forEach(u => { if (!u.go && GOMAP[c.id]) u.go = GOMAP[c.id](u.id); if (u.frac == null) u.frac = 0; });
+  return { ...c, sem, units, soon, synced: !!(live && live.length) };
 });
-const stateOf = (c, u) => PROG.moons[c.id + ':' + u.id] || 'locked';
+const stateOf = (c, u) => !c.soon ? (u.frac >= 1 ? 'mastered' : u.frac > 0 ? 'progress' : 'locked') : (PROG.moons[c.id + ':' + u.id] || 'locked');
 const classStats = c => { const s = { mastered: 0, progress: 0, locked: 0 }; c.units.forEach(u => s[stateOf(c, u)]++); s.total = c.units.length; s.pct = s.total ? s.mastered / s.total : 0; return s; };
 const totalStats = () => { let m = 0, t = 0; CLASSES.forEach(c => { const s = classStats(c); m += s.mastered; t += s.total; }); return { mastered: m, total: t, pct: t ? m / t : 0 }; };
 
@@ -823,20 +923,22 @@ SEMS.forEach(sem => {
     const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.BufferAttribute(bpos, 3)); bg.setAttribute('aU', new THREE.BufferAttribute(bu, 1));
     const beam = new THREE.Line(bg, beamMat(c.color)); beam.frustumCulled = false; system.add(beam); p.beam = beam;
     // moons
+    const nM = c.units.length, many = nM > 8;
     c.units.forEach((u, i) => {
-      const mr = pr * (.17 + ((seed + i) % 3) * .03), dist = pr * (1.85 + i * .5) + (c.rings ? pr * 1.1 : 0);
-      const pivot = new THREE.Group(); pivot.rotation.x = ((i * 37 + seed) % 11 - 5) * .035; pivot.rotation.y = i * 1.9; group.add(pivot);
-      const mm = new THREE.Mesh(new THREE.SphereGeometry(mr, 32, 24), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }));
+      const mr = many ? pr * clamp(.55 / Math.sqrt(nM), .065, .14) : pr * (.17 + ((seed + i) % 3) * .03);
+      const dist = (many ? pr * (1.7 + 1.9 * i / Math.max(1, nM - 1)) : pr * (1.85 + i * .5)) + (c.rings ? pr * 1.1 : 0);
+      const pivot = new THREE.Group(); pivot.rotation.x = ((i * 37 + seed) % 11 - 5) * (many ? .06 : .035); pivot.rotation.y = i * (many ? 2.399 : 1.9); group.add(pivot);
+      const mm = new THREE.Mesh(new THREE.SphereGeometry(mr, many ? 16 : 32, many ? 12 : 24), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }));
       mm.position.set(dist, 0, 0); pivot.add(mm);
       const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xffffff, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0 }));
       halo.scale.setScalar(mr * 3.4); mm.add(halo);
       const op = []; for (let a = 0; a <= 128; a++) { const t = a / 128 * Math.PI * 2; op.push(new THREE.Vector3(Math.cos(t) * dist, 0, Math.sin(t) * dist)); }
       const orbit = new THREE.Line(new THREE.BufferGeometry().setFromPoints(op), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .2, blending: THREE.AdditiveBlending, depthWrite: false }));
-      pivot.add(orbit);
-      const m = { kind: 'moon', planet: p, unit: u, index: i, obj: mm, radius: mr, pivot, halo, orbit, speed: .25 / (1 + i * .45), hover: 0 };
+      pivot.add(orbit); if (many) orbit.visible = false;
+      const m = { kind: 'moon', planet: p, unit: u, index: i, obj: mm, radius: mr, pivot, halo, orbit, speed: .25 / (1 + (dist / pr - 1.7) * .9), hover: 0, many };
       p.moons.push(m);
-      pickables.push({ ent: m, levels: ['planet', 'moon'], minPx: 18, when: () => focus.planet === p });
-      m.tag = addTag(u.name.toUpperCase(), mm, ['planet', 'moon'], { color: c.color, dy: 14, when: () => focus.planet === p });
+      pickables.push({ ent: m, levels: ['planet', 'moon'], minPx: many ? 13 : 18, when: () => focus.planet === p });
+      m.tag = addTag(u.name.toUpperCase(), mm, ['planet', 'moon'], { color: c.color, dy: 14, when: () => focus.planet === p && (!many || focus.moon === m) });
     });
     system.add(group); planets.push(p);
     pickables.push({ ent: p, levels: ['system', 'planet', 'moon', 'sun'], minPx: 20 });
@@ -1021,7 +1123,7 @@ const HINTS = {
   system: TOUCH ? 'Tap a planet to land in its trainer · Tap the sun for FDE Lab' : 'Click a planet to land in its trainer · Click the sun for FDE Lab',
   sun: 'Click the sun to dock at FDE Lab',
   planet: TOUCH ? 'Tap the planet to land · Tap a moon to open a unit' : 'Click the planet to land · Click a moon to open a unit',
-  moon: 'Mark this unit in the panel',
+  moon: 'Launch this unit from the panel · Prev / Next to browse moons',
   business: 'Business Sector · stations go live in Phase 3'
 };
 function crumbs() {
@@ -1095,31 +1197,39 @@ function openClass(p) {
     `<div class="stats"><div class="ringm" style="--p:${pct}"><b>${pct}%</b></div><ul>
       <li><span class="dot" style="--c:${c.color}"></span>${s.mastered} mastered</li><li><span class="dot" style="--c:#FF9E45"></span>${s.progress} in progress</li><li><span class="dot" style="--c:#5d6673"></span>${s.locked} locked</li></ul></div>` +
     (c.soon ? `<p class="sync">This trainer is coming soon. When it's ready, add its file name to this class in <span class="mono">CONFIG.classes</span>.</p>` : syncLine(c.id)) +
-    `<div class="sec">MOONS · UNITS</div><ol class="steps">${c.units.map((u, i) => `<li class="step ${stateOf(c, u)}"><span class="num">${two(i + 1)}</span>
-      <button class="uname" type="button" data-moon="${i}">${esc(u.name)} ${svg('go')}</button>${seg(c, u)}</li>`).join('')}</ol>
-    <p class="note">These moons are placeholders. Your real units replace them in Phase 2.</p>
+    `<div class="sec">MOONS · ${c.units.length} UNITS</div><ol class="steps">${c.units.map((u, i) => `<li class="step ${stateOf(c, u)}"><span class="num">${two(i + 1)}</span>
+      <button class="uname" type="button" data-moon="${i}">${esc(u.name)} ${svg('go')}</button>${c.soon ? seg(c, u) : unitBar(u, i)}</li>`).join('')}</ol>
+    <p class="note">${c.soon ? 'Placeholder moons. The real units arrive with this class\'s trainer.' : 'Every moon is a real unit from your trainer. They light up by themselves as you study' + (c.synced ? '.' : ' (open the trainer once to sync your progress).')}</p>
     <div class="acts">${c.soon ? `<button class="nbtn primary" type="button" disabled>${svg('flask')}Trainer coming soon</button>` : `<button class="nbtn primary" type="button" data-act="launch" data-file="${esc(c.trainer)}" data-id="${esc(c.id)}">${svg('flask')}Launch trainer</button>`}
       <button class="nbtn" type="button" data-act="close">${svg('moon')}Explore moons</button></div>`, c.color);
 }
+function unitBar(u, i) { const pc = Math.round((u.frac || 0) * 100); return `<div class="ubar"><span class="track"><i style="width:${pc}%"></i></span><b>${pc}%</b><button class="ugo" type="button" data-unit="${i}">Launch</button></div>`; }
 function openMoon(m) {
   setTimeout(() => { curPanel = [openMoon, m]; });
-  const c = m.planet.cls, u = m.unit, n = c.units.length;
+  const c = m.planet.cls, u = m.unit, n = c.units.length, st = stateOf(c, u), lab = { locked: 'Not started', progress: 'In progress', mastered: 'Mastered' }[st];
   openPanel(head('MOON ' + two(m.index + 1) + ' OF ' + two(n) + ' · ' + c.name.toUpperCase(), u.name, c.code, 'moon') +
-    `<div class="sec">UNIT STATUS</div>${seg(c, u)}
-    <p class="note">Placeholder unit. In Phase 2 this moon becomes a real unit from the ${esc(c.name)} trainer.</p>
-    <div class="acts"><button class="nbtn" type="button" data-act="prev">‹ Prev moon</button><button class="nbtn" type="button" data-act="next">Next moon ›</button>
-    <button class="nbtn primary" type="button" data-act="planet">${svg('orbit')}${esc(c.name)} panel</button></div>`, c.color);
+    (c.soon ? `<div class="sec">UNIT STATUS</div>${seg(c, u)}<p class="note">Placeholder unit. The real units arrive with the ${esc(c.name)} trainer.</p>`
+      : `<div class="sec">UNIT STATUS · ${esc(lab.toUpperCase())}</div>${unitBar(u, m.index)}<p class="note">Synced from your ${esc(c.name)} trainer. Finish it there and this moon lights up.</p>`) +
+    `<div class="acts">${c.soon ? '' : `<button class="nbtn primary" type="button" data-unit="${m.index}">${svg('flask')}Launch this unit</button>`}<button class="nbtn" type="button" data-act="prev">‹ Prev moon</button><button class="nbtn" type="button" data-act="next">Next moon ›</button>
+    <button class="nbtn" type="button" data-act="planet">${svg('orbit')}${esc(c.name)} panel</button></div>`, c.color);
 }
 function openSun() {
   setTimeout(() => { curPanel = [openSun]; });
   const t = totalStats(), pct = Math.round(t.pct * 100);
   openPanel(head('THE SUN · END GOAL', CFG.sun.name, CFG.sun.code, 'flask', `<span class="chip">Everything orbits this</span>`) +
     `<div class="stats"><div class="ringm" style="--p:${pct}"><b>${pct}%</b></div><ul><li><b>${t.mastered}</b> of ${t.total} units mastered</li><li style="color:var(--dim)">The sun burns brighter as this grows.</li></ul></div>` +
-    syncLine(CFG.sun.id) + `<p class="note">${esc(CFG.sun.note)}</p>` +
+    syncLine(CFG.sun.id) + `<p class="note">${esc(CFG.sun.note)}</p>` + fdeLanes() +
     SEMS.map(sem => `<div class="sec" style="--a:${sem.color}">${esc(sem.name.toUpperCase())} · ${esc(sem.term.toUpperCase())}</div><div class="bars">${CLASSES.filter(c => c.sem === sem).map(c => {
       const s = classStats(c), pc = Math.round(s.pct * 100);
       return `<button class="barrow" type="button" style="--c:${c.soon ? '#8b98a8' : c.color}" data-planet="${esc(c.id)}"><span class="num">${two(CLASSES.indexOf(c) + 1)}</span><span><em>${esc(c.name)}</em><span class="track"><i style="width:${pc}%"></i></span></span><b>${c.soon ? 'SOON' : pc + '%'}</b></button>`; }).join('')}</div>`).join('') +
     `<div class="acts"><button class="nbtn primary" type="button" data-act="launch" data-file="${esc(CFG.sun.trainer)}" data-id="${esc(CFG.sun.id)}">${svg('flask')}Launch FDE Lab</button></div>`, CFG.sun.color);
+}
+function fdeLanes() {
+  const L = SYNC.fde && Array.isArray(SYNC.fde.list) ? SYNC.fde.list : null; if (!L || !L.length) return '';
+  const N = { S: 'Software', A: 'AI engineering', I: 'Infrastructure', L: 'Liaison' }, C = { S: '#FF4FB0', A: '#2FE6C8', I: '#6FC3FF', L: '#B48CFF' }, t = { S: [0, 0], A: [0, 0], I: [0, 0], L: [0, 0] };
+  L.forEach(u => (Array.isArray(u.lanes) ? u.lanes : ['S']).forEach(k => { if (t[k]) { t[k][1]++; if (+u.frac >= 1) t[k][0]++; } }));
+  return `<div class="sec">FDE LAB · 4 LANES · ${L.length} LESSONS</div><div class="bars">${'SAIL'.split('').map((k, i) => { const pc = t[k][1] ? Math.round(t[k][0] / t[k][1] * 100) : 0;
+    return `<div class="barrow" style="--c:${C[k]}"><span class="num">${k}</span><span><em>${N[k]}</em><span class="track"><i style="width:${pc}%"></i></span></span><b>${t[k][0]}/${t[k][1]}</b></div>`; }).join('')}</div>`;
 }
 function openBusiness() {
   setTimeout(() => { curPanel = [openBusiness]; });
@@ -1130,6 +1240,7 @@ function openBusiness() {
 pbody.addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.set) { setState(b.dataset.c, b.dataset.u, b.dataset.set); return; }
+  if (b.dataset.unit != null && focus.planet) { const c = focus.planet.cls, u = c.units[+b.dataset.unit]; if (u) launch(c.trainer, c.id, u.go); return; }
   if (b.dataset.moon != null && focus.planet) { goMoon(focus.planet.moons[+b.dataset.moon]); return; }
   if (b.dataset.planet) { const p = planets.find(x => x.id === b.dataset.planet); if (p) goPlanet(p); return; }
   const a = b.dataset.act;
@@ -1143,10 +1254,15 @@ function setState(cid, uid, s) {
   const k = cid + ':' + uid; if (s === 'locked') delete PROG.moons[k]; else PROG.moons[k] = s;
   saveProg(); paintProgress(); ui(); refreshPanel();
 }
-function launch(file, id) {
+function launch(file, id, go) {
   if (!file) return;
   try { sessionStorage.setItem('jw.resume', JSON.stringify({ kind: id === CFG.sun.id ? 'sun' : 'planet', id })); sessionStorage.setItem('jw.arrive', id); } catch (e) {}
-  fx('entry'); setTimeout(() => { location.href = file; }, REDUCED ? 0 : 450);
+  let hash = '';
+  if (go && typeof go === 'object') {
+    if (go.set && typeof go.set.k === 'string') { const o = store.get(go.set.k, {}) || {}; o[go.set.f] = go.set.v; store.set(go.set.k, o); }
+    if (typeof go.h === 'string' && /^#[\w.-]+$/.test(go.h)) hash = go.h;
+  }
+  fx('entry'); setTimeout(() => { location.href = file + hash; }, REDUCED ? 0 : 450);
 }
 
 /* ---------------- progress visuals ---------------- */
@@ -1184,7 +1300,8 @@ function holoHTML(e) {
   if (e.kind === 'planet') { const s = classStats(e.cls), pc = Math.round(s.pct * 100);
     return { c: e.soon ? '#8b98a8' : e.color, h: `<div class="k">${e.soon ? 'PLANET · COMING SOON' : 'PLANET · CLICK TO LAND'}</div><h4>${esc(e.name)}</h4><div class="c">${esc(e.code)}</div>${e.world ? `<div class="c">World: ${esc(e.world)}</div>` : ''}<div class="c">${esc(e.sem.name)} · ${esc(e.sem.term)}</div><div class="bar"><i style="width:${pc}%"></i></div><div class="p">${pc}% mastered · ${s.mastered}/${s.total} moons</div>` }; }
   if (e.kind === 'moon') { const st = stateOf(e.planet.cls, e.unit), lab = { locked: 'Locked', progress: 'In progress', mastered: 'Mastered' }[st];
-    return { c: e.planet.color, h: `<div class="k">MOON ${two(e.index + 1)} · UNIT</div><h4>${esc(e.unit.name)}</h4><div class="c">${esc(e.planet.name)} · ${esc(e.planet.code)}</div><div class="p">Status: ${lab}</div>` }; }
+    const pc = e.planet.cls.soon ? null : Math.round((e.unit.frac || 0) * 100);
+    return { c: e.planet.color, h: `<div class="k">MOON ${two(e.index + 1)} · UNIT</div><h4>${esc(e.unit.name)}</h4><div class="c">${esc(e.planet.name)} · ${esc(e.planet.code)}</div>${pc == null ? '' : `<div class="bar"><i style="width:${pc}%"></i></div>`}<div class="p">Status: ${lab}${pc == null ? '' : ' · ' + pc + '%'}</div>` }; }
   if (e.kind === 'sun' || e.kind === 'system') { const t = totalStats(), pc = Math.round(t.pct * 100);
     return { c: CFG.sun.color, h: e.kind === 'sun' ? `<div class="k">THE SUN · CLICK TO DOCK</div><h4>${esc(CFG.sun.name)}</h4><div class="c">${esc(CFG.sun.code)}</div><div class="c">World: ${esc(CFG.sun.world || '')}</div><div class="bar"><i style="width:${pc}%"></i></div><div class="p">${pc}% of all units mastered</div>`
       : `<div class="k">STAR SYSTEM · CLICK TO WARP</div><h4>Applied AI</h4><div class="c">${esc(CFG.journey)}</div><div class="c">${SEMS.length} semester rings · ${CLASSES.length} planets</div><div class="bar"><i style="width:${pc}%"></i></div><div class="p">${pc}% mastered</div>` }; }
@@ -1272,13 +1389,16 @@ const dlP = (window.claude && typeof window.claude.use === 'function') ? Promise
 const modal = $('#modal'), mbox = $('#mbox');
 function closeModal() { modal.hidden = true; }
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-function exportJSON() { return JSON.stringify({ app: 'jewlz-world', kind: 'galaxy-progress', version: 1, exportedAt: new Date().toISOString(), moons: PROG.moons, trainerSync: trainerSync() }, null, 2); }
+function exportJSON() {
+  const storage = {}; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); storage[k] = localStorage.getItem(k); } } catch (e) {}
+  return JSON.stringify({ app: 'jewlz-world', kind: 'full-backup', version: 2, exportedAt: new Date().toISOString(), moons: PROG.moons, storage }, null, 2);
+}
 function openProgress() {
   const t = totalStats();
-  mbox.innerHTML = `<h3 id="mTitle">PROGRESS BACKUP</h3><p>${t.mastered} of ${t.total} units mastered. Progress saves on this device by itself. Export a backup to keep it safe or move it to your desktop app later.</p>
+  mbox.innerHTML = `<h3 id="mTitle">PROGRESS BACKUP</h3><p>${t.mastered} of ${t.total} units mastered. Progress saves on this device by itself. Export backs up everything at once: the galaxy plus every trainer's progress. Use it to keep a safe copy or move to another device or your desktop app.</p>
     <div class="row"><button class="nbtn primary" type="button" data-m="export">${svg('go')}Export progress</button><button class="nbtn" type="button" data-m="import" style="--c:var(--violet)">Import progress</button><button class="nbtn" type="button" data-m="close" style="--c:#8b98a8">Close</button></div>
     <div id="mArea"></div><div class="msg" id="mMsg"></div>
-    <div class="row" style="margin-top:22px"><button class="nbtn" type="button" data-m="reset" style="--c:#FF6B6B">Reset all units</button></div>`;
+    <div class="row" style="margin-top:22px"><button class="nbtn" type="button" data-m="reset" style="--c:#FF6B6B">Reset coming-soon moons</button></div>`;
   modal.hidden = false;
 }
 $('#btnProg').addEventListener('click', openProgress);
@@ -1301,16 +1421,20 @@ mbox.addEventListener('click', async e => {
   }
   if (m === 'doimport') {
     let data = null; try { data = JSON.parse($('#mPaste').value); } catch (err) { msg.textContent = 'That text is not a valid backup.'; return; }
+    if (data && typeof data.storage === 'object' && data.storage) {
+      let n = 0; try { for (const [k, v] of Object.entries(data.storage)) if (typeof k === 'string' && typeof v === 'string' && k.length < 200) { localStorage.setItem(k, v); n++; } } catch (err) {}
+      msg.textContent = 'Restored ' + n + ' saved items (galaxy + every trainer). Reloading…'; setTimeout(() => location.reload(), 900); return;
+    }
     const src = data && typeof data === 'object' ? (data.moons || null) : null;
-    if (!src || typeof src !== 'object') { msg.textContent = 'No unit progress found in that backup.'; return; }
+    if (!src || typeof src !== 'object') { msg.textContent = 'No progress found in that backup.'; return; }
     const clean = {}; let n = 0;
     for (const [k, v] of Object.entries(src)) if (/^[\w-]+:[\w-]+$/.test(k) && (v === 'progress' || v === 'mastered')) { clean[k] = v; n++; }
     PROG.moons = clean; saveProg(); paintProgress(); ui(); msg.textContent = 'Imported ' + n + ' unit' + (n === 1 ? '' : 's') + '.';
     refreshPanel();
   }
   if (m === 'reset') {
-    if (Date.now() - resetArmed > 4000) { resetArmed = Date.now(); b.textContent = 'Tap again to reset every unit'; return; }
-    PROG.moons = {}; saveProg(); paintProgress(); ui(); refreshPanel(); msg.textContent = 'All units set back to locked.'; b.textContent = 'Reset all units'; resetArmed = 0;
+    if (Date.now() - resetArmed > 4000) { resetArmed = Date.now(); b.textContent = 'Tap again to reset them'; return; }
+    PROG.moons = {}; saveProg(); paintProgress(); ui(); refreshPanel(); msg.textContent = 'Coming-soon moons set back to locked. Trainer progress was not touched.'; b.textContent = 'Reset coming-soon moons'; resetArmed = 0;
   }
 });
 

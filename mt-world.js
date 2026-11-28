@@ -354,27 +354,27 @@
       if (ID === 'python') { var D = typeof DATA !== 'undefined' ? DATA : null; if (!D || !D.levels) return [];
         var s = get('pot.solved', {}), w = get('pot.wsolved', {});
         return D.levels.map(function (l) { var d = 0, n = 0; (l.practice || []).forEach(function (p) { n++; if (s[p.id]) d++; }); (l.write || []).forEach(function (x) { n++; if (w[x.id]) d++; });
-          return { label: 'Level ' + l.num, title: l.title, frac: n ? d / n : 0, go: { h: '#level-' + l.num } }; }); }
+          return { key: 'level-' + l.num, label: 'Level ' + l.num, title: l.title, frac: n ? d / n : 0, go: { h: '#level-' + l.num } }; }); }
       if (ID === 'math') { var C = typeof CONTENT !== 'undefined' ? CONTENT : null; if (!C || !C.units) return [];
         var u = (get('mpt.v1', {}) || {}).u || {};
         return C.units.map(function (x) { var r = (u[x.id] && u[x.id].r) || '', ones = (r.match(/1/g) || []).length, ready = r.length >= 10 && ones >= 8;
-          return { label: 'Unit ' + x.n, title: x.title, frac: ready ? 1 : Math.min(.9, ones / 8), go: { h: '#u-' + x.id } }; }); }
+          return { key: x.id, label: 'Unit ' + x.n, title: x.title, frac: ready ? 1 : Math.min(.9, ones / 8), go: { h: '#u-' + x.id } }; }); }
       if (ID === 'business') { var B = window.TRAINER_DATA; if (!B || !B.chapters) return [];
         var q = (get('geb1432-trainer-v1', {}) || {}).q || {};
         return B.chapters.map(function (ch) { var ids = (ch.quiz || []).concat(ch.practice || []).map(function (z) { return z.id; }), d = ids.filter(function (i) { return q[i] && q[i].ok; }).length;
-          return { label: 'Ch ' + ch.num, title: ch.short, frac: ids.length ? d / ids.length : 0, go: { set: { k: 'geb1432-trainer-v1', f: 'level', v: ch.id } } }; }); }
+          return { key: ch.id, label: 'Ch ' + ch.num, title: ch.short, frac: ids.length ? d / ids.length : 0, go: { set: { k: 'geb1432-trainer-v1', f: 'level', v: ch.id } } }; }); }
       if (ID === 'ethics') { var F = typeof FIGHTERS !== 'undefined' ? FIGHTERS : null; if (!F) return [];
         var an = (get('phi2680-octagon-v1', {}) || {}).answers || {};
         return F.filter(function (f) { return f.status !== 'preview'; }).map(function (f) { var ids = (f.quiz || []).map(function (z) { return z.id; }), d = ids.filter(function (i) { return an[i] && an[i].last === 1; }).length;
-          return { label: f.name, title: f.status === 'covered' ? 'Fighter' : 'Bonus round', frac: ids.length ? d / ids.length : 0, go: { h: '#f-' + f.id } }; }); }
+          return { key: f.id, label: f.name, title: f.status === 'covered' ? 'Fighter' : 'Bonus round', frac: ids.length ? d / ids.length : 0, go: { h: '#f-' + f.id } }; }); }
       if (ID === 'english') { var btns = [].slice.call(document.querySelectorAll('#levels .lv[data-id]')).filter(function (b) { return b.dataset.id !== 'mixed'; });
         var best = (get('writing-room-v1', {}) || {}).best || {};
         return btns.map(function (b, i) { var sc = typeof best[b.dataset.id] === 'number' ? best[b.dataset.id] : 0, t = b.querySelector('strong');
-          return { label: 'Floor ' + (i + 1), title: t ? t.textContent : b.dataset.id, frac: sc >= 90 ? 1 : Math.min(.9, sc / 100), go: { set: { k: 'writing-room-v1', f: 'last', v: b.dataset.id } } }; }); }
+          return { key: b.dataset.id, label: 'Floor ' + (i + 1), title: t ? t.textContent : b.dataset.id, frac: sc >= 90 ? 1 : Math.min(.9, sc / 100), go: { set: { k: 'writing-room-v1', f: 'last', v: b.dataset.id } } }; }); }
       if (ID === 'fde') { var ids2 = typeof LESSON_IDS !== 'undefined' ? LESSON_IDS : null, DD = typeof DATA !== 'undefined' ? DATA : null; if (!ids2 || !DD) return [];
         var ps = (get('fdelab.v1', {}) || {}).passes || {}, ORDER = 'SAIL';
         var list = ids2.map(function (i) { var arr = ps[i] || [], d = arr.filter(Boolean).length, L = (DD.lessons[i] && DD.lessons[i].lanes) || ['S'];
-          return { label: i, title: (DD.lessons[i] && DD.lessons[i].title) || '', frac: d / 4, lane: L[0], lanes: L, go: { h: '#l-' + i } }; });
+          return { key: i, label: i, title: (DD.lessons[i] && DD.lessons[i].title) || '', frac: d / 4, lane: L[0], lanes: L, go: { h: '#l-' + i } }; });
         list.sort(function (a, b) { return ORDER.indexOf(a.lane) - ORDER.indexOf(b.lane); });
         return list; }
     } catch (e) { return []; }
@@ -527,7 +527,8 @@
   }
   function paintMarks() {
     U = units(); summary(); if (!scene) return;
-    var n = U.length, pts = n ? scene.marks(n) : [], sz = n > 24 ? 13 : n > 12 ? 18 : 24; PTS = pts; if (typeof paintHud === 'function') { paintHud(); checkAch(); }
+    var n = U.length, pts = n ? scene.marks(n) : [], sz = n > 24 ? 13 : n > 12 ? 18 : 24; PTS = pts;
+    if (n) { var all = get('mt.units', {}) || {}; all[ID] = { at: Date.now(), list: U.map(function (u) { return { id: String(u.key), name: ID === 'english' || ID === 'ethics' ? (ID === 'ethics' ? u.label : u.title) : u.label + (u.title && u.title !== u.label ? ' · ' + u.title : ''), frac: Math.round(u.frac * 100) / 100, go: u.go, lanes: u.lanes }; }) }; setLS('mt.units', all); } if (typeof paintHud === 'function') { paintHud(); checkAch(); }
     marksEl.innerHTML = U.map(function (u, i) {
       var st = u.frac >= 1 ? 'done' : u.frac > 0 ? 'part' : '', now = u === nextU ? ' now' : '', p = pts[i] || { x: 0, y: 0 };
       return '<button type="button" class="mtw-m ' + st + now + '" data-i="' + i + '" style="--sz:' + sz + 'px;left:' + p.x.toFixed(1) + 'px;top:' + p.y.toFixed(1) + 'px" aria-label="' + esc(u.label + ' ' + (u.title || '') + ', ' + Math.round(u.frac * 100) + '%') + '">' + (sz >= 18 ? (i + 1) : '') + '</button>';
