@@ -176,7 +176,21 @@ window.JW_CONFIG = {
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link id="gfonts" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" media="print">
+<script>(function () { var l = document.getElementById('gfonts'); function on() { l.media = 'all'; } if (l.sheet) on(); else l.addEventListener('load', on); })();</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/RenderPass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/OutputPass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/Pass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/ShaderPass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/MaskPass.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/shaders/CopyShader.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/shaders/LuminosityHighPassShader.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/shaders/OutputShader.js">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
@@ -340,7 +354,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 #toast b{font:700 11px/1 Orbitron,sans-serif;letter-spacing:.14em;color:var(--c,var(--teal));display:block;margin-bottom:5px}
-#loader{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:#000;transition:opacity 1.1s}
+#loader{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:#000;transition:opacity .35s}
 #loader.done{opacity:0;pointer-events:none}
 #loader div{text-align:center}
 #loader b{display:block;font:900 18px/1 Orbitron,sans-serif;letter-spacing:.3em;text-shadow:0 0 14px var(--pink)}
@@ -784,7 +798,9 @@ function surfacePixel(type, pal, N, x, y, z, lat) {
   let c = mix3(pal[0], pal[1], smooth(.25, .5, h)); c = mix3(c, pal[2], smooth(.45, .7, h)); c = mix3(c, pal[3], smooth(.68, .85, h) * .8);
   c = mix3(c, pal[0], smooth(.06, .0, cr) * .5); return c;
 }
-function makeSurface(type, seed, W, H, desat = 0) {
+const nextFrame = () => new Promise(r => requestAnimationFrame(() => r()));
+const sliceMs = () => (level === 'galaxy' && !flight ? 4 : 9);
+async function makeSurface(type, seed, W, H, desat = 0) {
   const pal = (SURF[type] || SURF.rock).pal.map(hexRGB), N = noiseGen(seed);
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data;
@@ -792,7 +808,9 @@ function makeSurface(type, seed, W, H, desat = 0) {
   if (rc) { rc.width = W; rc.height = H; rimg = rc.getContext('2d').createImageData(W, H); }
   const lc = (SURF[type] || {}).lights ? document.createElement('canvas') : null; let limg = null;
   if (lc) { lc.width = W; lc.height = H; limg = lc.getContext('2d').createImageData(W, H); }
+  let t0 = performance.now();
   for (let j = 0; j < H; j++) {
+    if (performance.now() - t0 > sliceMs()) { await nextFrame(); t0 = performance.now(); }
     const lat = (.5 - (j + .5) / H) * Math.PI, cl = Math.cos(lat), sl = Math.sin(lat);
     for (let i = 0; i < W; i++) {
       const lon = (i + .5) / W * Math.PI * 2, c = surfacePixel(type, pal, N, cl * Math.cos(lon), sl, cl * Math.sin(lon), lat);
@@ -808,10 +826,11 @@ function makeSurface(type, seed, W, H, desat = 0) {
   if (lc) { lc.getContext('2d').putImageData(limg, 0, 0); t.lights = new THREE.CanvasTexture(lc); t.lights.colorSpace = THREE.SRGBColorSpace; }
   return t;
 }
-function makeClouds(seed, W, H) {
+async function makeClouds(seed, W, H) {
   const N = noiseGen(seed + 9), cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data;
-  for (let j = 0; j < H; j++) { const lat = (.5 - (j + .5) / H) * Math.PI, cl = Math.cos(lat), sl = Math.sin(lat);
+  let t0 = performance.now();
+  for (let j = 0; j < H; j++) { if (performance.now() - t0 > sliceMs()) { await nextFrame(); t0 = performance.now(); } const lat = (.5 - (j + .5) / H) * Math.PI, cl = Math.cos(lat), sl = Math.sin(lat);
     for (let i = 0; i < W; i++) { const lon = (i + .5) / W * Math.PI * 2, x = cl * Math.cos(lon), z = cl * Math.sin(lon);
       const wx = N.fbm(x * 1.5, sl * 1.5, z * 1.5, 3) * 1.2, f = N.fbm(x * 3.4 + wx + 4, sl * 6.5 + wx, z * 3.4 - wx, 7), a = smooth(.1, .42, f) * (.55 + .45 * smooth(.1, .5, N.fbm(x * 9, sl * 14, z * 9, 3) + .3));
       const k = (j * W + i) * 4; d[k] = d[k + 1] = d[k + 2] = 255; d[k + 3] = a * 215; } }
@@ -1007,17 +1026,16 @@ scene.traverse(o => { if (o.material && o.material.uniforms && o.material.unifor
 /* ---------------- textures for planets + moons, built in the background ---------------- */
 async function buildTextures() {
   const W = Q.tex, H = Q.tex / 2;
-  for (let k = 0; k < 3; k++) rockTex.push(makeSurface(['rock', 'desert', 'ice'][k], 300 + k, 256, 128, k === 1 ? .7 : k === 2 ? .45 : 0));
+  for (let k = 0; k < 3; k++) rockTex.push(await makeSurface(['rock', 'desert', 'ice'][k], 300 + k, 256, 128, k === 1 ? .7 : k === 2 ? .45 : 0));
   for (const p of planets) {
-    await new Promise(r => setTimeout(r, 0));
     const s = 1000 + planets.indexOf(p) * 31;
-    const mt = p.mesh.material, tx = makeSurface(p.surface || 'rock', s, W, H, p.soon ? .12 : 0);
+    const mt = p.mesh.material, tx = await makeSurface(p.surface || 'rock', s, W, H, p.soon ? .12 : 0);
     mt.map = tx; mt.color.set(p.soon ? 0xc4c8d0 : 0xffffff);
     if (!(p.surface || '').startsWith('gas')) { mt.bumpMap = tx; mt.bumpScale = p.surface && p.surface.startsWith('ocean') ? 1.2 : 2.4; }
     if (tx.rough) { mt.roughnessMap = tx.rough; mt.roughness = 1; mt.metalness = 0; }
     if (tx.lights) { mt.emissiveMap = tx.lights; mt.emissive.set(0xffffff); mt.emissiveIntensity = { forge: .9, gene: .6, hub: .7 }[p.surface] || 1.3; }
     mt.needsUpdate = true;
-    if (p.clouds) { p.clouds.material.map = makeClouds(s, W, H); p.clouds.material.needsUpdate = true; p.clouds.visible = true; }
+    if (p.clouds) { p.clouds.material.map = await makeClouds(s, W, H); p.clouds.material.needsUpdate = true; p.clouds.visible = true; }
     p.moons.forEach((m, i) => { const rt = rockTex[(i + planets.indexOf(p)) % 3]; m.obj.material.map = rt; m.obj.material.bumpMap = rt; m.obj.material.bumpScale = 3; m.obj.material.needsUpdate = true; });
   }
 }
@@ -1049,7 +1067,7 @@ function stepFlight(now) {
   const tgt = f.t0.clone().lerp(f.getTarget(), e);
   const d = Math.exp(Math.log(f.d0) + (Math.log(f.d1) - Math.log(f.d0)) * e);
   const dir = f.dir0.clone().lerp(f.dir1, e); if (dir.lengthSq() < 1e-6) dir.copy(f.dir1); dir.normalize();
-  controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, d);
+  controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, d); camera.lookAt(tgt);
   camera.fov = BASE_FOV + f.kick * Math.sin(Math.PI * e); camera.updateProjectionMatrix();
   if (t >= 1) { flight = null; controls.enabled = true; camera.fov = BASE_FOV; camera.updateProjectionMatrix(); f.done && f.done(); }
 }
@@ -1366,10 +1384,11 @@ function tagStep() {
 
 /* ---------------- intro drift ---------------- */
 function startIntro() {
-  controls.target.set(0, 0, 0); camera.position.set(0, 3900, 1500);
-  if (REDUCED) { camera.position.copy(GAL_HOME).addScaledVector(GAL_DIR, 2050 * aspK()); controls.target.copy(GAL_HOME); controls.enabled = true; return; }
+  controls.target.copy(GAL_HOME);
+  if (REDUCED) { camera.position.copy(GAL_HOME).addScaledVector(GAL_DIR, 2050 * aspK()); camera.lookAt(GAL_HOME); controls.enabled = true; return; }
+  camera.position.copy(GAL_HOME).addScaledVector(new THREE.Vector3(-.42, .86, .3).normalize(), 2450 * aspK()); camera.lookAt(GAL_HOME);
   intro = true;
-  flyTo(() => GAL_HOME, 2050 * aspK(), { dir: GAL_DIR, dur: 7.5, done: () => { intro = null; } });
+  flyTo(() => GAL_HOME, 2050 * aspK(), { dir: GAL_DIR, dur: 3.6, done: () => { intro = null; } });
 }
 function endIntro() { if (!intro) return; intro = null; flight = null; controls.enabled = true; camera.fov = BASE_FOV; camera.updateProjectionMatrix(); }
 function resume() {
@@ -1523,7 +1542,7 @@ function loop(now) {
 paintProgress(); ui();
 const resumed = resume();
 if (!resumed) startIntro();
-requestAnimationFrame(t => { last = t; loop(t); setTimeout(() => $('#loader').classList.add('done'), 250); });
+requestAnimationFrame(t => { last = t; loop(t); $('#loader').classList.add('done'); });
 buildTextures();
 window.JW = { CLASSES, planets, goSystem, goPlanet, goMoon, goSun, goBusiness, goGalaxy, back, get level() { return level; }, setState };
 }
